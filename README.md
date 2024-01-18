@@ -23,12 +23,12 @@ Have you ever wanted to replace your car? Not just sell your car for cash and se
 
 I am going to use the required technologies in the following ways.
 
-- HTML - Makes correct structure for my application. I will have the following HTML pages: home/login page, personal dashboard, create listing, browse listings, chat window, and about/contact.
-- CSS - Application styling that looks good on different screen sizes, uses good whitespace, color choice and contrast.
-- JavaScript - Provides login, listing display (browsing, editing, and posting), backend endpoint calls.
+- HTML - To make correct structure for my application. I will have the following HTML pages: home/login page, personal dashboard, create listing, browse listings, chat window, and about/contact.
+- CSS - To make application styling that looks good on different screen sizes, uses good whitespace, color choice and contrast.
+- JavaScript - To provide login, chat functionality, listing display (browsing, editing, and posting), backend endpoint calls.
 - Service - Backend service with endpoints for:
-  - login
+  - login and creating accounts
   - retrieving and submitting listing, chat, and analytics data
 - DB/Login - Store users, chat data, and listings (+analytics) in database. Register and login users. Credentials securely stored in database.
-- WebSocket - As users browse listings, analytics are updated to owner.
+- WebSocket - As users browse listings, analytics are updated to owner. As owners post, listings are updated to users. Chat messages are instantly relayed to the other person.
 - React - Application ported to use the React web framework.
