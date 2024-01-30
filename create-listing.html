@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Swap Cars: the Trading Marketplace</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="The best place to exchange vehicles with other car owners.">
+        <style>
+            h1, h2, h3, h4, h5, h6, p.center, li, i {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1><a href="index.html">Swap Cars: the Trading Marketplace</a></h1>
+            <nav>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="authenticate.html">Sign in</a></li>
+                <li><a href="about.html">About</a></li>
+            </nav>
+        </header>
+        <main>
+            <h2>What car do you have?</h2>
+            <label for="text">Enter your VIN: </label>
+            <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" />
+            <p>Year: [autofills from VIN]</p>
+            <p>Make/Mode: [autofills from VIN]</p>
+            <label for="number">Mileage: </label>
+            <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" />
+            <label for="select">Drivetrain: </label>
+            <select id="select" name="varSelect">
+                <option>FWD (front-wheel drive)</option>
+                <option>RWD (rear-wheel drive)</option>
+                <option>AWD (all-wheel drive)</option>
+                <option>4x4 (four-wheel drive)</option>
+            </select>
+                <label for="select">Transmission: </label>
+            <select id="select" name="varSelect">
+                <option>Automatic</option>
+                <option>Manual</option>
+                <option>Automanual</option>
+                <option>CVT (Continuously variable transmission)</option>
+                <option>Single-speed (EV transmission)</option>
+            </select>
+                <label for="select">Fuel type: </label>
+            <select id="select" name="varSelect">
+                <option>Gasoline</option>
+                <option>Electric</option>
+                <option>Hybrid</option>
+                <option>Diesel</option>
+                <option>Fuel cell</option>
+            </select>
+                <label for="number">Cylinders: </label>
+            <input type="number" name="varNumber" id="number" min="3" max="12" step="1" />
+            <label for="select">Title status: </label>
+            <select id="select" name="varSelect">
+                <option>Clean</option>
+                <option>Rebuilt</option>
+                <option>Salvage</option>
+            </select>
+            <label for="textarea">Description: </label>
+            <textarea id="textarea" name="varTextarea"></textarea>
+            </select>
+            <li><label for="file">Upload pictures: </label>
+            <input type="file" id="file" name="varFile" accept="image/*" multiple /></li>
+            <button type="submit">Save and post</button>
+            <button onlick="window.location.href='create-listing.html'">Add another car to garage</button>
+            <li><button onlick="window.location.href='browse.html'">Tour the marketplace! [Only show once car is added]</button></li>
+        </main>
+        <footer>
+            <p class="center">Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
+        </footer>
+    </body>
+</html>
