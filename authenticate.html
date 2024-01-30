@@ -23,7 +23,16 @@
             </nav>
         </header>
         <main>
-            <h2>Sign up today to trade your car!</h2>
+            <h3>Have an account? Sign in here!</h3>
+            <li>
+                <label for="email">Email: </label>
+                <input type="email" id="email" name="varEmail" placeholder=""/>
+                <label for="password">Password: </label>
+                <input type="password" id="password" name="varPassword" />
+                <button type="submit">Sign me in</button>
+            </li>
+            
+            <h3>No account yet? Join us today!</h3>
             <label for="text">First name: </label>
             <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
             <label for="text">Last name: </label>
@@ -33,11 +42,18 @@
             <label for="tel">Phone number: </label>
             <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" />
             <label for="zip">Zip code: </label>
-            <input type="zip" id="zip" name="zip" placeholder="" required pattern="/d{5}" />
+            <input type="zip" id="zip" name="zip" placeholder="XXXXX" required pattern="/d{5}" />
             <label for="password">Password: </label>
             <input type="password" id="password" name="varPassword" />
             <button type="submit">Start trading!</button>
-            <hr>
+
+            <h3>Don't remember your password? Reset it here.</h3>
+            <li>
+                <label for="email">Email: </label>
+                <input type="email" id="email" name="varEmail" placeholder=""/>
+                <button type="submit">Recover my password</button>
+            </li>
+
         </main>
         <footer>
             <p>Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
