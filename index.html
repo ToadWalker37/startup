@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Swap Cars: the Trading Marketplace</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="The best place to exchange vehicles with other car enthusiasts.">
+        <style>
+            h1, h2, h3, h4, h5, h6, li, p {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1 text-align="center">Swap Cars: the Trading Marketplace</h1>
+            <nav>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="login.html">Sign up</a></li>
+                <li><a href="about.html">About</a></li>
+              </nav>
+        </header>
+        <main>
+            <h2>Sign up today to trade your car!</h2>
+            <label for="text">First name: </label>
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <label for="text">Last name: </label>
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <label for="email">Email: </label>
+            <input type="email" id="email" name="varEmail" placeholder="you@example.com"/>
+            <label for="tel">Phone number: </label>
+            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" />
+            <label for="zip">Zip code: </label>
+            <input type="zip" id="zip" name="zip" placeholder="" required pattern="/d{5}" />
+            <label for="password">Password: </label>
+            <input type="password" id="password" name="varPassword" />
+            <button type="submit">Start trading!</button>
+            <hr>
+        </main>
+        <footer>
+            <p>Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
+        </footer>
+    </body>
+</html>

@@ -2,7 +2,7 @@
 ## Description deliverable
 ### Elevator pitch
 
-Have you ever wanted to replace your car? Not just sell your car for cash and separately hunt for a new vehicle? This website will allow you to save money compared to a trade-in at the dealership, because you can connect with other car owners who want to trade their car for yours.
+Have you ever wanted to replace your car? Not just sell your car for cash and hunt separately for a new vehicle? This website will allow you to save money compared to a trade-in at the dealership, because you can connect with other car owners who want to trade their car for yours.
 
 ### Design
 
