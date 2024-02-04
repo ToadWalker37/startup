@@ -1,5 +1,5 @@
 # startup
-## Description deliverable
+## Specification deliverable
 ### Elevator pitch
 
 Have you ever wanted to replace your car? Not just sell your car for cash and hunt separately for a new vehicle? This website will allow you to save money compared to a trade-in at the dealership, because you can connect with other car owners who want to trade their car for yours.
@@ -32,3 +32,13 @@ I am going to use the required technologies in the following ways.
 - DB/Login - Store users, chat data, and listings (+analytics) in database. Register and login users. Credentials securely stored in database.
 - WebSocket - As users browse listings, analytics are updated to owner. As owners post, listings are updated to users. Chat messages are instantly relayed to the other person.
 - React - Application ported to use the React web framework.
+
+## HTML Deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+- HTML pages - seven HTML pages that represent the homepage and the ability to login, browse listings, create listings, chat with users, manage listings and chats, and contact the developer (me).
+- Links - Five of the seven pages are accessible from the nav bar at the top of the screen. The Create Listing page is accessible from the Browse and Dashboard pages. And the Chat page is accessible from the Dashboard page.
+- Text - Includes necessary text on all pages, such as (but not only) text representing the choices of which car(s) to search for on the Browse page.
+- Images - There are two images on the homepage as well as several images in the Dashboard and Browse pages from sample listings.
+- DB/Login - Input box and submit button for login. The listing information represents data pulled from the database.
+- WebSocket - The dashboard and browse statistics for saves and views represent real-time user data. The chat data also represents real-time data from other users.
