@@ -26,31 +26,31 @@
             <h3>Have an account? Sign in here!</h3>
             <li>
                 <label for="email">Email: </label>
-                <input type="email" id="email" name="varEmail" placeholder=""/>
+                <input type="email" id="email" name="varEmail" placeholder="" required />
                 <label for="password">Password: </label>
-                <input type="password" id="password" name="varPassword" />
+                <input type="password" id="password" name="varPassword" required />
                 <button type="submit">Sign me in</button>
             </li>
             
             <h3>No account yet? Join us today!</h3>
             <label for="text">First name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
             <label for="text">Last name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
             <label for="email">Email: </label>
-            <input type="email" id="email" name="varEmail" placeholder="you@example.com"/>
+            <input type="email" id="email" name="varEmail" placeholder="you@example.com" required />
             <label for="tel">Phone number: </label>
-            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" />
+            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" required />
             <label for="zip">Zip code: </label>
-            <input type="zip" id="zip" name="zip" placeholder="XXXXX" required pattern="/d{5}" />
+            <input type="zip" id="zip" name="zip" placeholder="XXXXX" required pattern="/d{5}" required />
             <label for="password">Password: </label>
-            <input type="password" id="password" name="varPassword" />
+            <input type="password" id="password" name="varPassword" required />
             <button type="submit">Start trading!</button>
 
             <h3>Don't remember your password? Reset it here.</h3>
             <li>
                 <label for="email">Email: </label>
-                <input type="email" id="email" name="varEmail" placeholder=""/>
+                <input type="email" id="email" name="varEmail" placeholder="" required />
                 <button type="submit">Recover my password</button>
             </li>
 

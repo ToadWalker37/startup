@@ -32,17 +32,17 @@
             <p>If you don't want to make an account just yet, you can also <a href="browse.html">browse the listings</a> without an account. When you're ready, create an account to message the owner of the perfect car for you.</p>
             <h2>Sign up today to trade your car!</h2>
             <label for="text">First name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
             <label for="text">Last name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" />
+            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
             <label for="email">Email: </label>
-            <input type="email" id="email" name="varEmail" placeholder="you@example.com"/>
+            <input type="email" id="email" name="varEmail" placeholder="you@example.com" required />
             <label for="tel">Phone number: </label>
-            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" />
+            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" required />
             <label for="zip">Zip code: </label>
-            <input type="zip" id="zip" name="zip" placeholder="" required pattern="/d{5}" />
+            <input type="zip" id="zip" name="zip" placeholder="" required pattern="/d{5}" required />
             <label for="password">Password: </label>
-            <input type="password" id="password" name="varPassword" />
+            <input type="password" id="password" name="varPassword" required />
             <button type="submit">Start trading!</button>
             <p>Or <a href="browse.html">browse all listings</a> without an account.</p>
         </main>

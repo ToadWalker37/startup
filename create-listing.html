@@ -25,20 +25,20 @@
         <main>
             <h2>What car do you have?</h2>
             <label for="text">Enter your VIN: </label>
-            <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" />
+            <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
             <p>Year: [autofills from VIN]</p>
             <p>Make/Mode: [autofills from VIN]</p>
             <label for="number">Mileage: </label>
-            <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" />
+            <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
             <label for="select">Drivetrain: </label>
-            <select id="select" name="varSelect">
+            <select id="select" name="varSelect" required>
                 <option>FWD (front-wheel drive)</option>
                 <option>RWD (rear-wheel drive)</option>
                 <option>AWD (all-wheel drive)</option>
                 <option>4x4 (four-wheel drive)</option>
             </select>
                 <label for="select">Transmission: </label>
-            <select id="select" name="varSelect">
+            <select id="select" name="varSelect" required>
                 <option>Automatic</option>
                 <option>Manual</option>
                 <option>Automanual</option>
@@ -46,7 +46,7 @@
                 <option>Single-speed (EV transmission)</option>
             </select>
                 <label for="select">Fuel type: </label>
-            <select id="select" name="varSelect">
+            <select id="select" name="varSelect" required>
                 <option>Gasoline</option>
                 <option>Electric</option>
                 <option>Hybrid</option>
@@ -54,21 +54,20 @@
                 <option>Fuel cell</option>
             </select>
                 <label for="number">Cylinders: </label>
-            <input type="number" name="varNumber" id="number" min="3" max="12" step="1" />
+            <input type="number" name="varNumber" id="number" min="3" max="12" step="1" required />
             <label for="select">Title status: </label>
-            <select id="select" name="varSelect">
+            <select id="select" name="varSelect" required>
                 <option>Clean</option>
                 <option>Rebuilt</option>
                 <option>Salvage</option>
             </select>
             <label for="textarea">Description: </label>
-            <textarea id="textarea" name="varTextarea"></textarea>
-            </select>
+            <textarea id="textarea" name="varTextarea" required></textarea>
             <li><label for="file">Upload pictures: </label>
-            <input type="file" id="file" name="varFile" accept="image/*" multiple /></li>
+            <input type="file" id="file" name="varFile" accept="image/*" multiple required /></li>
             <button type="submit">Save and post</button>
-            <button onlick="window.location.href='create-listing.html'">Add another car to garage</button>
-            <li><button onlick="window.location.href='browse.html'">Tour the marketplace! [Only show once car is added]</button></li>
+            <button onlick="window.location.href='create-listing.html'">Add another car to my garage</button>
+            <li><button onlick="window.location.href='browse.html'">Tour the marketplace! [Only show once at least one car is added]</button></li>
         </main>
         <footer>
             <p class="center">Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
