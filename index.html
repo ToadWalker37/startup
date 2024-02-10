@@ -7,26 +7,39 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="The best place to exchange vehicles with other car owners.">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            h1, h2, h3, h4, h5, h6, li, p {
-                text-align: center;
-            }
-        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <header>
-            <h1><a href="index.html">Swap Cars: the Trading Marketplace</a></h1>
+            <h1 class="home-banner"><a href="index.html">Swap Cars: the Trading Marketplace</a></h1>
+            <div>
+                <p style="text-align:right">ToadWalker37</p>
+                <p style="text-align:right">Sign out</p>
+            </div>
             <nav>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="browse.html">Browse</a></li>
-                <li><a href="authenticate.html">Sign in</a> / <a href="dashboard.html">Dashboard</a></li>
-                <li><a href="about.html">About</a></li>
+                <li class="nav"><a href="index.html">Home</a></li>
+                <li class="nav"><a href="browse.html">Browse</a></li>
+                <li class="nav"><a href="authenticate.html">Sign in</a> / <a href="dashboard.html">Dashboard</a></li>
+                <li class="nav"><a href="about.html">About</a></li>
             </nav>
-            <p style="text-align:right">ToadWalker37</p>
-            <p style="text-align:right">Sign out</p>
-        </header>
+            </header>
         <main>
-            <h2>Turn this</h2><img width="500" src="ford.jpg" /><h2> into that </h2><img width="500" src="mazda.jpg" /><h2>by trading your vehicle with fellow car owners!</h2>
+            <div id="entry">
+                <div class="entryExample">
+                    <h2>Turn this</h2>
+                    <img height="300vh" src="ford.jpg" />
+                </div>
+                <i class="fa fa-exchange" style="font-size:5vh"></i>
+                <div class="entryExample">
+                    <h2>into that</h2>
+                    <img height="300vh" src="mazda.jpg" />
+                </div>
+                <div class="entryExample" style="align-items: top">
+                    <h2>by trading your vehicle with fellow car owners!</h2>
+                </div>
+            </div>
             <p>How it works:</p>
             <li>1. Create an account.</li>
             <li>2. Find what you want.</li>
