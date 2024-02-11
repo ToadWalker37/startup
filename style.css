@@ -2,9 +2,16 @@
     font-family: sans-serif;
     box-sizing: border-box;
   }
+
+  .responsive {
+    width: 85%;
+    height: auto;
+  }
   
   html {
     height: 100%;
+    width: 100%;
+    scrollbar-color: hsl(54, 100%, 50%);
   }
   
   body {
@@ -12,6 +19,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
   }
   
   header {
@@ -22,7 +30,7 @@
     align-items: center;
     font-size: 20px;
     background: hsl(54, 100%, 50%);
-    color: white;  
+    color:black;  
     
   }
 
@@ -35,21 +43,27 @@
     color:black;
   }
 
+  span.login {
+    text-align: right;
+  }
+
   nav {
-    flex: 0 50px;
+    flex: 1;
     flex-direction: row;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     list-style-type:none;
-    margin:0;
-    padding:4vh;
+    width: 100%;
+    padding:4vw;
     overflow:hidden;
     background-color:hsl(54, 100%, 50%);
   }
 
   li.nav  {
     float:left;
+    display: flex;
+    align-items: center;
 
   }
   li a    {
@@ -74,10 +88,11 @@
     align-items: center;
     justify-content: center;*/
     height: 100%;
+    width: 100%;
     color: white;
   }
 
-  #entry {
+  #entry  {
     flex: 1;
     /*font-size: 30px;*/
     display: flex;
@@ -89,21 +104,18 @@
   div.entryExample {
     flex: 1;
     /*font-size: 30px;*/
-    padding: 0vh;
+    padding: 4vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
   
-  div.wait {
-    padding: 0 0.5em;
-  }
-  
   footer {
     /*flex: 0 50px;*/
-    padding: 2vh;
+    padding: 4vh;
     background: hsl(54, 100%, 50%);
+    text-align: center;
     /*color: white;
   
     display: flex;
