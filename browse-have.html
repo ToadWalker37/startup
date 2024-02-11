@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Swap Cars: the Trading Marketplace</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="The best place to exchange vehicles with other car owners.">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header class="sticky-top">
+            <h1 class="home-banner"><a href="index.html">Swap Cars: the Trading Marketplace</a></h1>
+            <div id="login">
+                <span class="login">ToadWalker37</span>
+                <span class="login">Sign out</span>
+            </div>
+            <nav>
+                <li class="nav"><a href="index.html">Home</a></li>
+                <li class="nav"><a href="browse-want.html">Browse</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
+                <li class="nav"><a href="about.html">About</a></li>
+            </nav>
+        </header>
+        <main>
+            <h2 style="text-align: center;">What car do you have?</h2>
+            <fieldset>
+                <legend><a href="browse-want.html">Browse listings based on what I want</a></legend>
+                <span class="option">
+                    <input type="checkbox" id="tradeCheckbox" name="varCheckbox" value="wantsToTrade" />
+                    <label for="checkbox">Just listings that match with the type of car I want</label>
+                </span>
+            </fieldset>
+            <fieldset>
+                <legend>Make</legend>
+                <div style="column-count: 12;">
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Acura" />
+                        <label for="checkbox">Acura</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Alfa Romeo" />
+                        <label for="checkbox">Alfa Romeo</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Aston Martin" />
+                        <label for="checkbox">Aston Martin</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Audi" />
+                        <label for="checkbox">Audi</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="BMW" />
+                        <label for="checkbox">BMW</label>
+                    </div>    
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Bentley" />
+                        <label for="checkbox">Bentley</label>
+                    </div>
+                    <div>    
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Buick" />
+                        <label for="checkbox">Buick</label>
+                    </div>   
+                    <div>    
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Coda" />
+                        <label for="checkbox">Coda</label>
+                    </div>
+                    <div>    
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Cadillac" />
+                        <label for="checkbox">Cadillac</label>
+                    </div>
+                    <div>    
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Chevrolet" />
+                        <label for="checkbox">Chevrolet</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Chrysler" />
+                        <label for="checkbox">Chrysler</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Daewoo" />
+                        <label for="checkbox">Daewoo</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Daihatsu" />
+                        <label for="checkbox">Daihatsu</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Dodge" />
+                        <label for="checkbox">Dodge</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Eagle" />
+                        <label for="checkbox">Eagle</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Ferrari" />
+                        <label for="checkbox">Ferrari</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Fiat" />
+                        <label for="checkbox">Fiat</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Fisker" />
+                        <label for="checkbox">Fisker</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Ford" />
+                        <label for="checkbox">Ford</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Freightliner" />
+                        <label for="checkbox">Freightliner</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="GMC" />
+                        <label for="checkbox">GMC</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Genesis" />
+                        <label for="checkbox">Genesis</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Geo" />
+                        <label for="checkbox">Geo</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Honda" />
+                        <label for="checkbox">Honda</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Hummer" />
+                        <label for="checkbox">Hummer</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Hyundai" />
+                        <label for="checkbox">Hyundai</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Infiniti" />
+                        <label for="checkbox">Infiniti</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Isuzu" />
+                        <label for="checkbox">Isuzu</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Jaguar" />
+                        <label for="checkbox">Jaguar</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Jeep" />
+                        <label for="checkbox">Jeep</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Kia" />
+                        <label for="checkbox">Kia</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Lamborghini" />
+                        <label for="checkbox">Lamborghini</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Land Rover" />
+                        <label for="checkbox">Land Rover</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Lexus" />
+                        <label for="checkbox">Lexus</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Lincoln" />
+                        <label for="checkbox">Lincoln</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Lotus" />
+                        <label for="checkbox">Lotus</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Lucid" />
+                        <label for="checkbox">Lucid</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mini" />
+                        <label for="checkbox">Mini</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Maserati" />
+                        <label for="checkbox">Maserati</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Maybach" />
+                        <label for="checkbox">Maybach</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mazda" />
+                        <label for="checkbox">Mazda</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mclaren" />
+                        <label for="checkbox">Mclaren</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mercedes-Benz" />
+                        <label for="checkbox">Mercedes-Benz</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mercury" />
+                        <label for="checkbox">Mercury</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Mitsubishi" />
+                        <label for="checkbox">Mitsubishi</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Nissan" />
+                        <label for="checkbox">Nissan</label>
+                    </div>   
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Oldsmobile" />
+                        <label for="checkbox">Oldsmobile</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Panoz" />
+                        <label for="checkbox">Panoz</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Plymouth" />
+                        <label for="checkbox">Plymouth</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Polestar" />
+                        <label for="checkbox">Polestar</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Pontiac" />
+                        <label for="checkbox">Pontiac</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Porsche" />
+                        <label for="checkbox">Porsche</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Ram" />
+                        <label for="checkbox">Ram</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Rivian" />
+                        <label for="checkbox">Rivian</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Rolls-Royce" />
+                        <label for="checkbox">Rolls-Royce</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="SRT" />
+                        <label for="checkbox">SRT</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Saab" />
+                        <label for="checkbox">Saab</label>
+                    </div>
+                    <div>   
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Saturn" />
+                        <label for="checkbox">Saturn</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Scion" />
+                        <label for="checkbox">Scion</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Smart" />
+                        <label for="checkbox">Smart</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Subaru" />
+                        <label for="checkbox">Subaru</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Suzuki" />
+                        <label for="checkbox">Suzuki</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Tesla" />
+                        <label for="checkbox">Tesla</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Toyota" />
+                        <label for="checkbox">Toyota</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Volkswagen" />
+                        <label for="checkbox">Volkswagen</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Volvo" />
+                        <label for="checkbox">Volvo</label>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Year</legend>
+                <label for="number">From </label>
+                <input type="number" min="1900" max="2099" step="1"/>
+                <label for="number"> to </label>
+                <input type="number" min="1900" max="2099" step="1"/>
+            </fieldset>
+            <fieldset>
+                <legend>Mileage</legend>
+                <label for="number">From </label>
+                <input type="number" min="0" max="999999" step="1"/>
+                <label for="number"> to </label>
+                <input type="number" min="0" max="999999" step="1"/>
+            </fieldset>
+            <fieldset>
+                <legend>Distance</legend>
+                <input type="number" min="0" max="9999" step="1" placeholder="Miles"/>
+                <label for="number"> from </label>
+                <input type="zip" id="zip" name="zip" placeholder="Zip code" required pattern="/d{5}" />
+            </fieldset>
+            <fieldset>
+                <legend>Fuel type</legend>
+                <span class="option">
+                    <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Gasoline" />
+                    <label for="checkbox">Gasoline</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Electric" />
+                    <label for="checkbox">Electric</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Hybrid" />
+                    <label for="checkbox">Hybrid</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Diesel" />
+                    <label for="checkbox">Diesel</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Fuel Cell" />
+                    <label for="checkbox">Fuel Cell</label>
+                </span>
+            </fieldset>
+            <fieldset>
+                <legend>Drivetrain</legend>
+                <span class="option">
+                    <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="FWD" />
+                    <label for="checkbox">FWD (front-wheel drive)</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="RWD" />
+                    <label for="checkbox">RWD (rear-wheel drive)</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="AWD" />
+                    <label for="checkbox">AWD (all-wheel drive)</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="4X4" />
+                    <label for="checkbox">4x4 (four-wheel drive)</label>
+                </span>
+            </fieldset>
+            <fieldset>
+                <legend>Transmission</legend>
+                <span class="option">
+                    <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Automatic" />
+                    <label for="checkbox">Automatic</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Manual" />
+                    <label for="checkbox">Manual</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Automanual" />
+                    <label for="checkbox">Automanual</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="transCheckbox" name="varCheckbox" value="CVT" />
+                    <label for="checkbox">CVT (Continuously variable transmission)</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Single-speed" />
+                    <label for="checkbox">Single-speed (EV transmission)</label>
+                </span>
+            </fieldset>
+            <fieldset>
+                <legend>Cylinders</legend>
+                <label for="number">From </label>
+                <input type="number" min="3" max="12" step="1"/>
+                <label for="number"> to </label>
+                <input type="number" min="3" max="12" step="1"/>
+            </fieldset>
+            <fieldset>
+                <legend>Title status</legend>
+                <span class="option">
+                    <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Clean" />
+                    <label for="checkbox">Clean</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Rebuilt" />
+                    <label for="checkbox">Rebuilt</label>
+                </span>
+                <span class="option">
+                    <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Salvage" />
+                    <label for="checkbox">Salvage</label>
+                </span>
+            </fieldset>
+            <button class="btn" type="submit">Find the car of my dreams!</button>
+            <p>No car added yet to trade for? <a href="create-listing.html">Add it now</a> and find your match!</p>
+            <hr><hr><hr><hr><hr>
+            <i>Sample listing when search button is clicked</i>
+            <fieldset>
+                <h3>1995 Chevrolet K1500</h3>
+                <img width="300" src="Truck 1.jpg">
+                <img width="300" src="Truck 2.jpg">
+                <img width="300" src="Truck 3.jpg">
+                <img width="300" src="Truck 4.jpg">
+                <img width="300" src="Truck 5.jpg">
+                <fieldset>
+                    <h4>Facts and Figures</h4>
+                    <h5>Posted 31 January 2024, &middot; 31 &starf; &middot; 800 <span class="fa">&#xf06e;</h5>
+                    <h5>Miles: 200,000</h5>
+                    <h5>Transmission: Automatic</h5>
+                    <h5>Drivetrain: 4x4 (four-wheel drive)</h5>
+                    <h5>Cylinders: 8</h5>
+                    <h5>Fuel type: Gasoline</h5>
+                    <h5>Title: Clean</h5>
+                    <h5>VIN: EXAMPLEVIN17CHARS</h5>
+                    <h5>11 miles from zip code 99999</h5>
+                    <h5>Looking for a car that has: </h5>
+                </fieldset>
+                <h5>Description</h5>
+                <fieldset>
+                    <p>Here is a solid 4x4 work/play truck. It has:</p>
+                    <ul>
+                        <li>The Z71 off-road package</li>
+                        <li>Tow hitch for 7500 lbs of towing</li>
+                        <li>Lockable toolbox</li>
+                        <li>5.7L V8 (350), the legendary Chevy small block engine</li>
+                        <li>The cool burgundy interior</li>
+                        <li>Light bar with an aftermarket grille guard (not currently working)</li>
+                    </ul>
+                    <p>The current quirks:</p>
+                    <ul>
+                        <li>Temporary random electrical issues, mainly with the turn signals</li>
+                        <li>A/C doesn't work</li>
+                        <li>A few other minor things I can show you when you check it out</li>
+                    </ul>
+                </fieldset>
+            <button class="btn" type="submit">Message Thomas</button>
+            </fieldset>
+        </main>
+        <footer>
+            <p>Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
+        </footer>
+    </body>
+</html>

@@ -20,18 +20,20 @@
             </div>
             <nav>
                 <li class="nav"><a href="index.html">Home</a></li>
-                <li class="nav"><a href="browse.html">Browse</a></li>
+                <li class="nav"><a href="browse-want.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
                 <li class="nav"><a href="about.html">About</a></li>
             </nav>
         </header>
         <main>
-            <h2>What car do you want?</h2>
+            <h2 style="text-align: center;">What car do you want?</h2>
             <fieldset>
-                <legend>Only for signed-in users</legend>
-                <input type="checkbox" id="tradeCheckbox" name="varCheckbox" value="wantsToTrade" />
-                <label for="checkbox">Just listings that match with the type of car I have</label>
+                <legend><a href="browse-have.html">Browse listings based on what I have</a></legend>
+                <span class="option">
+                    <input type="checkbox" id="tradeCheckbox" name="varCheckbox" value="wantsToTrade" />
+                    <label for="checkbox">Just listings that match with the type of car I have</label>
+                </span>
             </fieldset>
             <fieldset>
                 <legend>Make</legend>

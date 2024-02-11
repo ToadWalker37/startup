@@ -124,6 +124,10 @@
     color: black;
   }
 
+  fieldset {
+    padding: 2vh;
+  }
+
   span.option {
     padding-left: 0.5em;
     padding-right: 0.5em;
