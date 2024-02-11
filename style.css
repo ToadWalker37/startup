@@ -82,21 +82,19 @@
   
   main {
     padding: 2vh;
-    /*flex: 1;
-    font-size: 30px;*/
+    flex: 1;
     background-color: black;
-    /*display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;*/
+    justify-content: center;
     height: 100%;
     width: 100%;
     color: white;
   }
 
-  #entry  {
+  div.entry  {
     flex: 1;
-    /*font-size: 30px;*/
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -105,7 +103,6 @@
 
   div.entryExample {
     flex: 1;
-    /*font-size: 30px;*/
     padding-left: 2vw;
     padding-right: 2vw;
     padding-top: 2vh;
@@ -117,12 +114,11 @@
   }
   
   footer {
-    /*flex: 0 50px;*/
+    flex: 0 50px;
     padding: 4vh;
     background: hsl(54, 100%, 50%);
     text-align: center;
-    /*color: white;
-  
+    color: black;
     display: flex;
     flex-direction: row;
     justify-content: center;

@@ -22,12 +22,12 @@
                 <li class="nav"><a href="index.html">Home</a></li>
                 <li class="nav"><a href="browse.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
-                <li class="nav"><a href="authenticate.html">Sign in</a></li>
+                <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
                 <li class="nav"><a href="about.html">About</a></li>
             </nav>
         </header>
         <main>
-            <div id="entry">
+            <div class="entry">
                 <div class="entryExample">
                     <h2 style="padding-bottom:1vh">Turn this</h2>
                     <img class="responsive" src="ford.jpg" />
@@ -41,27 +41,17 @@
                     <h2>by trading your vehicle with fellow car owners!</h2>
                 </div>
             </div>
-            <p>How it works:</p>
-            <li>1. Create an account.</li>
-            <li>2. Find what you want.</li>
-            <li>3. List what you have.</li>
-            <li>4. Browse the matches and message the owners!</li>
-            <p>If you don't want to make an account just yet, you can also <a href="browse.html">browse the listings</a> without an account. When you're ready, create an account to message the owner of the perfect car for you.</p>
-            <h2>Sign up today to trade your car!</h2>
-            <label for="text">First name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
-            <label for="text">Last name: </label>
-            <input type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
-            <label for="email">Email: </label>
-            <input type="email" id="email" name="varEmail" placeholder="you@example.com" required />
-            <label for="tel">Phone number: </label>
-            <input type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" required />
-            <label for="zip">Zip code: </label>
-            <input type="zip" id="zip" name="zip" placeholder="" required pattern="/d{5}" required />
-            <label for="password">Password: </label>
-            <input type="password" id="password" name="varPassword" required />
-            <button type="submit">Start trading!</button>
-            <p>Or <a href="browse.html">browse all listings</a> without an account.</p>
+            <div class="entry">
+                <div class="entryExample">
+                    <h2><a href="browse.html">browse the listings</a></p>
+                </div>
+                <div class="entryExample">
+                    <h2><a href="authenticate.html">Sign up today to trade your car!</a></h2>
+                </div>
+            </div>
+            <div class="entryExample">
+                <h2>Or <a href="browse.html">browse all listings</a> without an account.</h2>
+            </div>
         </main>
         <footer>
             <span>Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></span>
