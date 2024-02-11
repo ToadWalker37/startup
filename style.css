@@ -95,6 +95,10 @@
     color: hsl(54, 100%, 50%);
   }
 
+  main a:hover {
+    color: white;
+  }
+
   div.entry  {
     flex: 1;
     display: flex;
@@ -103,7 +107,7 @@
     justify-content: center;
   }
 
-  div.entryExample {
+  div.entry-example {
     flex: 1;
     padding-left: 2vw;
     padding-right: 2vw;
@@ -118,6 +122,11 @@
   button.btn {
     background-color: hsl(54, 100%, 50%);
     color: black;
+  }
+
+  span.option {
+    padding-left: 1em;
+    padding-right: 1em;
   }
   
   footer {
