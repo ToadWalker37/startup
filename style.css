@@ -132,6 +132,13 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
   }
+
+  input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding:5px;
+    margin:5px;
+  }
   
   footer {
     flex: 1;
@@ -148,3 +155,10 @@
     bottom:0;
   }
   
+  footer a {
+    color:black;
+  }
+
+  footer a:hover {
+    color:gray;
+  }
