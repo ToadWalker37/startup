@@ -139,6 +139,13 @@
     padding:5px;
     margin:5px;
   }
+
+  *.long-text {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin:5px;
+    padding: 10px;
+  }
   
   footer {
     flex: 1;
