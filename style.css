@@ -75,12 +75,9 @@
     float:left;
     color:black;
     text-align:center;
-    padding-left:2vw;
+    padding-left:1vw;
+    padding-right:1vw;
     text-decoration:none;
-  }
-
-  li a:hover {
-    background-color:blue;
   }
   
   main {
