@@ -16,8 +16,6 @@
   
   body {
     margin: 0;
-    display: flex;
-    flex-direction: column;
     height: 100%;
     width: 100%;
     background-color: black;
@@ -79,6 +77,10 @@
     padding-right:1vw;
     text-decoration:none;
   }
+
+  li a:hover {
+    color:gray;
+  }
   
   main {
     padding: 2vh;
@@ -111,6 +113,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  
+  button.btn {
+    background-color: hsl(54, 100%, 50%);
+    color: black;
   }
   
   footer {
