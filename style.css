@@ -29,6 +29,7 @@
     align-items: center;
     font-size: 20px;
     background: hsl(54, 100%, 50%);
+    width: 100%;
     color:black;
   }
 

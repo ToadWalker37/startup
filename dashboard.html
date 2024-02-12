@@ -11,14 +11,26 @@
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="style.css">
         <style>
-            main {
+            div.dashboard {
+                flex: 1;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
             }
-            div.card {
-                padding: 1vw;
+            div.display {
+                padding: 2vw;
+                padding-left: 4vw;
+                padding-right: 4vw;
+                display: flex;
+                flex-direction: column;
+            }
+            div.display-card {
+                padding: 1vh;
+            }
+            div.split-left-right {
+                display: flex;
+                flex-direction: row;
             }
         </style>
     </head>
@@ -38,38 +50,48 @@
             </nav>
         </header>
         <main>
-            <div class="card">
-                <h2>Dashboard</h2>
-                <div style="border:10px solid white;">
-                    <h3>My Garage</h3>
-                    <h4><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
-                    <div style="border:10px solid white;">
-                        <h4>2012 Scion iQ &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e;</h4>
-                        <p><span>112k mi</span> &middot; <span>CVT</span> &middot; <span>gas</span> &middot; <span>FWD</span></span></p>
-                        <p>1BC26G89VKF325818</p>
-                        <img width="150" src="Scion iQ.jpg" />
+            <div class="dashboard">
+                <div class="display">
+                    <div>
+                        <h3>My Garage</h3>
+                        <h4><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
+                        <div class="display-card">
+                            <h4>2012 Scion iQ &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e;</h4>
+                            <p><span>112k mi</span> &middot; <span>CVT</span> &middot; <span>gas</span> &middot; <span>FWD</span></span></p>
+                            <p>1BC26G89VKF325818</p>
+                            <img width="150" src="Scion iQ.jpg" />
+                        </div>
+                        <div class="display-card">
+                            <h4>2008 Toyota Prius &middot; 13 &starf; &middot; 200 <span class="fa">&#xf06e;</h4>
+                            <p><span>205k mi</span> &middot; <span>CVT</span> &middot; <span>hybrid</span> &middot; <span>FWD</span></span></p>
+                            <p>5T128GHT182DB8182</p>
+                            <img width="150" src="Toyota Prius.jpg" />
+                        </div>
                     </div>
-                    <div style="border:10px solid white;">
-                        <h4>2008 Toyota Prius &middot; 13 &starf; &middot; 200 <span class="fa">&#xf06e;</h4>
-                        <p><span>205k mi</span> &middot; <span>CVT</span> &middot; <span>hybrid</span> &middot; <span>FWD</span></span></p>
-                        <p>5T128GHT182DB8182</p>
-                        <img width="150" src="Toyota Prius.jpg" />
+                </div>
+                <div class="display">
+                    <div class="split-left-right">
+                        <h3>Chats</h3>
+                        <h5 style="text-align: right; margin-left: 100%"><a href="chat.html">View all</a></h5>
                     </div>
-                </div>
-            </div>
-            <div class="card" style="border:10px solid white;">
-                <h3><a href="chat.html">Chats</a></h3>
-                <div style="border:10px solid white;">
-                    <h4>Jim &middot; 2009 Toyota FJ Cruiser <span class="fa">&#xf0ec;</span> 2012 Scion iQ</h4>
-                    <p>You: Okay, sounds like a plan!</p>
-                </div>
-                <div style="border:10px solid white;">
-                    <h4>Enrique &middot; 2013 Jeep Wrangler <span class="fa">&#xf0ec;</span> 2008 Toyota Prius <span class="fa">&#xf0e0;</span></h4>
-                    <p>I'm interested in your Toyota Prius...</p>
-                </div>
-                <div style="border:10px solid white;">
-                    <h4>Timothy &middot; 1996 Ford Bronco <span class="fa">&#xf0ec;</span> 2012 Scion iQ <span class="fa">&#xf192;</span></h4>
-                    <p>Where do you want to meet up?</p>
+                    <div class="display-card">
+                        <h4>Jim &middot; 2009 Toyota FJ Cruiser <span class="fa">&#xf0ec;</span> 2012 Scion iQ</h4>
+                        <p>You: Okay, sounds like a plan!</p>
+                    </div>
+                    <div class="display-card">
+                        <div class="split-left-right">
+                            <h4>Enrique &middot; 2013 Jeep Wrangler <span class="fa">&#xf0ec;</span> 2008 Toyota Prius &nbsp;</h4>
+                            <p class="fa" style="position: sticky">&#xf0e0;</p>
+                        </div>
+                        <p>I'm interested in your Toyota Prius...</p>
+                    </div>
+                    <div class="display-card">
+                        <div class="split-left-right">
+                            <h4>Timothy &middot; 1996 Ford Bronco <span class="fa">&#xf0ec;</span> 2012 Scion iQ &nbsp;</h4>
+                            <p class="fa" style="text-align: right; float: right">&#xf192;</p>
+                        </div>
+                        <p>Where do you want to meet up?</p>
+                    </div>
                 </div>
             </div>
         </main>
