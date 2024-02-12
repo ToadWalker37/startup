@@ -134,7 +134,7 @@
     padding-right: 0.5em;
   }
 
-  input {
+  input, select, option {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding:5px;
