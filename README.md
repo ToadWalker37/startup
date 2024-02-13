@@ -6,8 +6,8 @@ Have you ever wanted to replace your car? Not just sell your car for cash and hu
 
 ### Design
 
-![First three HTML pages](IMG_20240117_202959931.jpg)
-![Last three HTML pages](IMG_20240117_203016085.jpg)
+![First three HTML pages](images/specs_front.jpg)
+![Last three HTML pages](images/specs_back.jpg)
 
 
 ### Key features
