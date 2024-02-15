@@ -11,16 +11,24 @@
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="style.css">
         <style>
+            div.listing-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
             label {
                 padding-top: 1vh;
                 padding-bottom: 2vh;
-                width: 7%;
+                width: 30%;
             }
             select, input, textarea {
-                width: 13%;
+                width: 50%;
             }
             div.listing {
                 text-align: center;
+                width:350px;
             }
         </style>
     </head>
@@ -32,7 +40,7 @@
                 <span class="login">Sign out</span>
             </div>
             <nav>
-                <li class="nav"><a href="index.html">Home</a></li>
+                <li class="nav"><a href="index.html" id="home">Home</a></li>
                 <li class="nav"><a href="browse-want.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
@@ -40,67 +48,69 @@
             </nav>
         </header>
         <main>
-            <div class="listing">
-                <h2 style="text-align: center; padding: 1vh;">What car do you have?</h2>
-                <div>
-                    <label for="text">Enter your VIN:</label>
-                    <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
-                    <p>2004 Chrysler Crossfire (autofilled from VIN)</p><br>
+            <div class="listing-container">
+                <div class="listing">
+                    <h2 style="text-align: center; padding: 1vh;">What car do you have?</h2>
+                    <div>
+                        <label for="text">Enter your VIN:</label>
+                        <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
+                        <p>2004 Chrysler Crossfire (autofilled from VIN)</p><br>
+                    </div>
+                    <div>
+                        <label for="number">Mileage:</label>
+                        <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
+                    </div>
+                    <div>
+                        <label for="select">Drivetrain:</label>
+                        <select id="select" name="varSelect" required>
+                            <option>FWD (front-wheel drive)</option>
+                            <option>RWD (rear-wheel drive)</option>
+                            <option>AWD (all-wheel drive)</option>
+                            <option>4x4 (four-wheel drive)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="select">Transmission: </label>
+                        <select id="select" name="varSelect" required>
+                            <option>Automatic</option>
+                            <option>Manual</option>
+                            <option>Automanual</option>
+                            <option>CVT (Continuously variable transmission)</option>
+                            <option>Single-speed (EV transmission)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="select">Fuel type: </label>
+                        <select id="select" name="varSelect" required>
+                            <option>Gasoline</option>
+                            <option>Electric</option>
+                            <option>Hybrid</option>
+                            <option>Diesel</option>
+                            <option>Fuel cell</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="number">Cylinders: </label>
+                        <input type="number" name="varNumber" id="number" min="3" max="12" step="1" required />
+                    </div>
+                    <div>
+                        <label for="select">Title status: </label>
+                        <select id="select" name="varSelect" required>
+                            <option>Clean</option>
+                            <option>Rebuilt</option>
+                            <option>Salvage</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="textarea">Description: </label>
+                        <textarea id="textarea" name="varTextarea" required></textarea>
+                    </div>
+                    <div>
+                        <label for="file">Upload pictures: </label>
+                        <input type="file" id="file" name="varFile" accept="image/*" multiple required />
+                    </div>
+                    <button class="btn" type="submit"style="margin-top: 2vh ">Save and post</button>
                 </div>
-                <div>
-                    <label for="number">Mileage:</label>
-                    <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
-                </div>
-                <div>
-                    <label for="select">Drivetrain:</label>
-                    <select id="select" name="varSelect" required>
-                        <option>FWD (front-wheel drive)</option>
-                        <option>RWD (rear-wheel drive)</option>
-                        <option>AWD (all-wheel drive)</option>
-                        <option>4x4 (four-wheel drive)</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="select">Transmission: </label>
-                    <select id="select" name="varSelect" required>
-                        <option>Automatic</option>
-                        <option>Manual</option>
-                        <option>Automanual</option>
-                        <option>CVT (Continuously variable transmission)</option>
-                        <option>Single-speed (EV transmission)</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="select">Fuel type: </label>
-                    <select id="select" name="varSelect" required>
-                        <option>Gasoline</option>
-                        <option>Electric</option>
-                        <option>Hybrid</option>
-                        <option>Diesel</option>
-                        <option>Fuel cell</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="number">Cylinders: </label>
-                    <input type="number" name="varNumber" id="number" min="3" max="12" step="1" required />
-                </div>
-                <div>
-                    <label for="select">Title status: </label>
-                    <select id="select" name="varSelect" required>
-                        <option>Clean</option>
-                        <option>Rebuilt</option>
-                        <option>Salvage</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="textarea">Description: </label>
-                    <textarea id="textarea" name="varTextarea" required></textarea>
-                </div>
-                <div>
-                    <label for="file">Upload pictures: </label>
-                    <input type="file" id="file" name="varFile" accept="image/*" multiple required />
-                </div>
-                <button class="btn" type="submit"style="margin-top: 2vh ">Save and post</button>
             </div>
         </main>
         <footer>

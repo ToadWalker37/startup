@@ -12,9 +12,10 @@
         <link rel="stylesheet" href="style.css">
         <style>
             #chats {
-                flex: 1;
-                display: flex;
-                flex-direction: row;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                grid-auto-rows: minmax(0px, 1fr);
+                grid-gap: 1em;
             }
             div.chat {
                 padding: 2vw;
@@ -22,11 +23,17 @@
             p.me {
                 text-align: right;
             }
+            p {
+                padding: 0.3vh;
+            }
             h4.chat-header {
                 padding-bottom: 2vh;
             }
             input {
                 float: right;
+            }
+            span {
+                font-size: 0.75em;
             }
         </style>
     </head>
@@ -38,7 +45,7 @@
                 <span class="login">Sign out</span>
             </div>
             <nav>
-                <li class="nav"><a href="index.html">Home</a></li>
+                <li class="nav"><a href="index.html" id="home">Home</a></li>
                 <li class="nav"><a href="browse-want.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
@@ -51,22 +58,22 @@
             <div id="chats">
                 <div class="chat">
                     <h4 class="chat-header">Harold &middot; 2004 Ford Focus <span class="fa">&#xf0ec;</span> 2006 Dodge Ram</h4>
-                    <p>Can I see it? <span>6:24</span></p>
-                    <p class="me">Sure thing! <span>8:17</span></p>
-                    <p>When works? <span>11:04</span></p>
+                    <p>Can I see it? <span>&nbsp;6:24</span></p>
+                    <p class="me">Sure thing! <span>&nbsp;8:17</span></p>
+                    <p>When works? <span>&nbsp;11:04</span></p>
                     <input type="text" id="text" name="varText" placeholder="Type message here" required />
                 </div>
                 <div class="chat">
                     <h4 class="chat-header">Wendy &middot; 2010 GMC Acadia <span class="fa">&#xf0ec;</span> 2008 Toyota Prius <span class="fa">&#xf0e0;</span></h4>
-                    <p class="me">Hello. I'm interested. <span>20:09, yesterday</span></p>
-                    <p>When can I come? <span>20:10, yesterday</span></p>
-                    <p class="me">Afternoon today! <span>11:01</span></p>
+                    <p class="me">Hello. I'm interested. <span>&nbsp;20:09, yesterday</span></p>
+                    <p>When can I come? <span>&nbsp;20:10, yesterday</span></p>
+                    <p class="me">Afternoon today! <span>&nbsp;11:01</span></p>
                     <p>read</p>
                     <input type="text" id="text" name="varText" placeholder="Type message here" required />
                 </div>
                 <div class="chat">
                     <h4 class="chat-header">Marla &middot; 2014 VW Jetta <span class="fa">&#xf0ec;</span> 2006 Dodge Ram <span class="fa">&#xf192;</span></h4>
-                    <p class="me">Hello Marla! <span>11:02</span></p>
+                    <p class="me">Hello Marla! <span>&nbsp;11:02</span></p>
                     <p>sent</p>
                     <input type="text" id="text" name="varText" placeholder="Type message here" required />
                 </div>

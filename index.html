@@ -30,6 +30,17 @@
                 align-items: center;
                 justify-content: center;
             }
+            .fa {
+                font-size:5vh;
+            }
+            @media (max-height: 1000px) {
+                h2, h3 {
+                    font-size: 1em;
+                }
+                .fa {
+                    font-size: 1em;
+                }
+            }
         </style>
     </head>
     <body>
@@ -40,7 +51,7 @@
                 <span class="login">Sign out</span>
             </div>
             <nav>
-                <li class="nav"><a href="index.html">Home</a></li>
+                <li class="nav"><a href="index.html" id="home">Home</a></li>
                 <li class="nav"><a href="browse-want.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
@@ -53,7 +64,7 @@
                     <h2 style="padding-bottom:1vh">Turn this</h2>
                     <img class="responsive" src="images/ford.jpg" />
                 </div>
-                <i class="fa fa-exchange" style="font-size:5vh"></i>
+                <i class="fa fa-exchange"></i>
                 <div class="entry-example">
                     <h2 style="padding-bottom:1vh">into that</h2>
                     <img class="responsive" src="images/mazda.jpg" />
