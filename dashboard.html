@@ -12,16 +12,14 @@
         <link rel="stylesheet" href="style.css">
         <style>
             div.dashboard {
-                flex: 1;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
+                grid-auto-rows: 100%;
+                grid-gap: 1em;
+                background-color: white;
             }
             div.display {
-                padding: 2vw;
-                padding-left: 4vw;
-                padding-right: 4vw;
+                padding: 4vw;
                 display: flex;
                 flex-direction: column;
             }
@@ -94,6 +92,46 @@
                             <p class="fa" style="text-align: right; float: right">&#xf192;</p>
                         </div>
                         <p>Where do you want to meet up?</p>
+                    </div>
+                </div>
+                <div class="display">
+                    <div>
+                        <div class="split-left-right" style="padding-bottom: 1vh;">
+                            <h3>My Wishlist</h3>
+                            <h4 style="text-align: right; margin-left: 10%"><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
+                        </div>
+                        <div class="display-card">
+                            <h4>Classic Trucks &nbsp; <a href="edit-listing.html">Edit</a></h4>
+                            <p><span>&lt;200k mi</span> &middot; <span>Manual</span> &middot; <span>V8</span> &middot; <span>4x4</span> &middot; <span>&lt;=1999</span></span></p>
+                            <p>Trade for <span>2012 Scion iQ</span></p>
+                            <img width="150" src="images/Scion iQ.jpg" />
+                        </div>
+                        <div class="display-card">
+                            <h4>Off-Roaders &nbsp; <a href="edit-listing.html">Edit</a></h4>
+                            <p><span>&lt;120k mi</span> &middot; <span>Manual</span> &middot; <span>4x4</span></span> &middot; <span>&gt;2008</span> &middot; <span>Clean title</span></p>
+                            <p>Trade for <span>2012 Scion iQ</span> &middot; <span>2008 Toyota Prius</span></p>
+                            <img width="150" src="images/Toyota Prius.jpg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="display">
+                    <div>
+                        <div class="split-left-right" style="padding-bottom: 1vh;">
+                            <h3>My Favorites</h3>
+                            <h4 style="text-align: right; margin-left: 10%"><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
+                        </div>
+                        <div class="display-card">
+                            <h4>Classic Trucks &nbsp; <a href="edit-listing.html">Edit</a></h4>
+                            <p><span>&lt;200k mi</span> &middot; <span>Manual</span> &middot; <span>V8</span> &middot; <span>4x4</span> &middot; <span>&lt;=1999</span></span></p>
+                            <p>Trade for <span>2012 Scion iQ</span></p>
+                            <img width="150" src="images/ford.jpg" />
+                        </div>
+                        <div class="display-card">
+                            <h4>Off-Roaders &nbsp; <a href="edit-listing.html">Edit</a></h4>
+                            <p><span>&lt;120k mi</span> &middot; <span>Manual</span> &middot; <span>4x4</span></span> &middot; <span>&gt;2008</span> &middot; <span>Clean title</span></p>
+                            <p>Trade for <span>2012 Scion iQ</span> &middot; <span>2008 Toyota Prius</span></p>
+                            <img width="150" src="images/Truck 1.jpg" />
+                        </div>
                     </div>
                 </div>
             </div>
