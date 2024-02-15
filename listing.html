@@ -18,15 +18,14 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                padding: 1vh;
+                padding: 2vh;
             }
             span.icon {
                 text-align: center;
-                width: 20%;
+                padding: 2vw;
             }
             span.fact {
                 text-align: left;
-                width: 80%;
             }
             #listing-images-container {
                 display: flex;
@@ -40,26 +39,25 @@
                 text-align: center;
             }
             #listing-details {
-                display: flex;
-                flex-direction: row;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+                grid-auto-rows: minmax(0px, 1fr);
+                grid-gap: 1em;
             }
             #facts-and-figures {
                 padding-left: 5vh;
                 padding-right: 5vh;
                 padding-top: 5vh;
-                width: 30%;
             }
             #description {
                 padding-left: 5vh;
                 padding-right: 5vh;
                 padding-top: 5vh;
-                width: 40%;
             }
             #looking-for {
                 padding-left: 5vh;
                 padding-right: 5vh;
                 padding-top: 5vh;
-                width: 30%;
             }
         </style>
     </head>

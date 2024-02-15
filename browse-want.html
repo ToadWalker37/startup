@@ -37,14 +37,14 @@
             <h2 style="text-align: center; padding: 1vh;">What car do you want?</h2>
             <fieldset>
                 <legend><a href="browse-have.html">Browse listings based on what I have</a></legend>
-                <span class="option">
+                <div class="option">
                     <input type="checkbox" id="tradeCheckbox" name="varCheckbox" value="wantsToTrade" />
                     <label for="checkbox">Just listings that match with the car I have</label>
-                </span>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Make</legend>
-                <div style="column-count: 10;">
+                <div class="make">
                     <div>
                         <input type="checkbox" id="makeCheckbox" name="varCheckbox" value="Acura" />
                         <label for="checkbox">Acura</label>
@@ -333,68 +333,68 @@
             </fieldset>
             <fieldset>
                 <legend>Fuel type</legend>
-                <span class="option">
+                <div class="option">
                     <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Gasoline" />
                     <label for="checkbox">Gasoline</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Electric" />
                     <label for="checkbox">Electric</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Hybrid" />
                     <label for="checkbox">Hybrid</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Diesel" />
                     <label for="checkbox">Diesel</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="fuelCheckbox" name="varCheckbox" value="Fuel Cell" />
                     <label for="checkbox">Fuel Cell</label>
-                </span>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Drivetrain</legend>
-                <span class="option">
+                <div class="option">
                     <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="FWD" />
                     <label for="checkbox">FWD (front-wheel drive)</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="RWD" />
                     <label for="checkbox">RWD (rear-wheel drive)</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="AWD" />
                     <label for="checkbox">AWD (all-wheel drive)</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="driveCheckbox" name="varCheckbox" value="4X4" />
                     <label for="checkbox">4x4 (four-wheel drive)</label>
-                </span>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Transmission</legend>
-                <span class="option">
+                <div class="option">
                     <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Automatic" />
                     <label for="checkbox">Automatic</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Manual" />
                     <label for="checkbox">Manual</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Automanual" />
                     <label for="checkbox">Automanual</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="transCheckbox" name="varCheckbox" value="CVT" />
                     <label for="checkbox">CVT (Continuously variable transmission)</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="transCheckbox" name="varCheckbox" value="Single-speed" />
                     <label for="checkbox">Single-speed (EV transmission)</label>
-                </span>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Cylinders</legend>
@@ -405,67 +405,67 @@
             </fieldset>
             <fieldset>
                 <legend>Title status</legend>
-                <span class="option">
+                <div class="option">
                     <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Clean" />
                     <label for="checkbox">Clean</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Rebuilt" />
                     <label for="checkbox">Rebuilt</label>
-                </span>
-                <span class="option">
+                </div>
+                <div class="option">
                     <input type="checkbox" id="titleCheckbox" name="varCheckbox" value="Salvage" />
                     <label for="checkbox">Salvage</label>
-                </span>
+                </div>
             </fieldset>
             <div style="text-align: center; padding-bottom: 2vh;"><button class="btn" type="submit">Find the car of my dreams!</button></div>
             <div class="container" style="padding-top:5vh;padding-bottom:5vh;">
                 <a class="listing-link" href="listing.html">
                     <div class="card" height="100%">
                         <h3 class="listing-title">1995 Chevrolet K1500</h3>
-                        <img src="images/Truck 1.jpg" />
+                        <img class="listing-image" src="images/Truck 1.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2016 Ford F-150</h3>
-                        <img src="images/ford.jpg" />
+                        <img class="listing-image" src="images/ford.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2019 Mazda Miata</h3>
-                        <img src="images/mazda.jpg" />
+                        <img  class="listing-image" src="images/mazda.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2012 Scion iQ</h3>
-                        <img src="images/Scion iQ.jpg" />
+                        <img class="listing-image" src="images/Scion iQ.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2008 Toyota Prius</h3>
-                        <img src="images/Toyota Prius.jpg" />
+                        <img class="listing-image" src="images/Toyota Prius.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2018 Mazda Miata</h3>
-                        <img src="images/mazda.jpg" />
+                        <img class="listing-image" src="images/mazda.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card" height="100%">
                         <h3 class="listing-title">1998 Chevrolet K1500</h3>
-                        <img src="images/Truck 1.jpg" />
+                        <img class="listing-image" src="images/Truck 1.jpg" />
                     </div>
                 </a>
                 <a class="listing-link" href="listing.html">
                     <div class="card">
                         <h3 class="listing-title">2015 Ford F-150</h3>
-                        <img src="images/ford.jpg" />
+                        <img class="listing-image" src="images/ford.jpg" />
                     </div>
                 </a>
               </div>

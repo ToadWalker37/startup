@@ -129,6 +129,13 @@
     height: 100%;
   }
 
+  .make {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+    grid-auto-rows: 15px;
+    grid-gap: 1em;
+  }
+
   a.listing-link {
     text-decoration: none;
   }
@@ -137,6 +144,11 @@
     padding: 1vh;
     text-align: center;
 }
+
+  .listing-image {
+    max-height:70%;
+    width:auto;
+  }
   
   footer {
     flex: 1;

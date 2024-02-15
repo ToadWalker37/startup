@@ -13,10 +13,9 @@
         <style>
             div.dashboard {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
-                grid-auto-rows: 100%;
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+                grid-auto-rows: minmax(0px, 1fr);
                 grid-gap: 1em;
-                background-color: white;
             }
             div.display {
                 padding: 4vw;
@@ -98,11 +97,11 @@
                     <div>
                         <div class="split-left-right" style="padding-bottom: 1vh;">
                             <h3>My Wishlist</h3>
-                            <h4 style="text-align: right; margin-left: 10%"><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
+                            <h4 style="text-align: right; margin-left: 10%"><a href="browse-want.html">New <span class="fa">&#xf067;</span></a></h4>
                         </div>
                         <div class="display-card">
                             <h4>Classic Trucks &nbsp; <a href="edit-listing.html">Edit</a></h4>
-                            <p><span>&lt;200k mi</span> &middot; <span>Manual</span> &middot; <span>V8</span> &middot; <span>4x4</span> &middot; <span>&lt;=1999</span></span></p>
+                            <p><span>&lt;200k mi</span> &middot; <span>Manual</span> &middot; <span>V8</span> &middot; <span>4x4</span> &middot; <span>&lt;=1999</span> </p>
                             <p>Trade for <span>2012 Scion iQ</span></p>
                             <img width="150" src="images/Scion iQ.jpg" />
                         </div>
@@ -118,20 +117,23 @@
                     <div>
                         <div class="split-left-right" style="padding-bottom: 1vh;">
                             <h3>My Favorites</h3>
-                            <h4 style="text-align: right; margin-left: 10%"><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
                         </div>
-                        <div class="display-card">
-                            <h4>Classic Trucks &nbsp; <a href="edit-listing.html">Edit</a></h4>
-                            <p><span>&lt;200k mi</span> &middot; <span>Manual</span> &middot; <span>V8</span> &middot; <span>4x4</span> &middot; <span>&lt;=1999</span></span></p>
-                            <p>Trade for <span>2012 Scion iQ</span></p>
-                            <img width="150" src="images/ford.jpg" />
-                        </div>
-                        <div class="display-card">
-                            <h4>Off-Roaders &nbsp; <a href="edit-listing.html">Edit</a></h4>
-                            <p><span>&lt;120k mi</span> &middot; <span>Manual</span> &middot; <span>4x4</span></span> &middot; <span>&gt;2008</span> &middot; <span>Clean title</span></p>
-                            <p>Trade for <span>2012 Scion iQ</span> &middot; <span>2008 Toyota Prius</span></p>
-                            <img width="150" src="images/Truck 1.jpg" />
-                        </div>
+                        <a href="listing.html" style="color: white; text-decoration: none;">
+                            <div class="display-card">
+                                <h4>2015 Ford F-150</h4>
+                                <p><span>138k mi</span> &middot; <span>automatic</span> &middot; <span>gas</span> &middot; <span>4x4</span></p>
+                                <p>1FTFJFKE934J32R46</p>
+                                <img width="150" src="images/ford.jpg" />
+                            </div>
+                        </a>
+                        <a href="listing.html" style="color: white; text-decoration: none;">
+                            <div class="display-card">
+                                <h4>1995 Chevrolet K1500</h4>
+                                <p><span>203k mi</span> &middot; <span>automatic</span> &middot; <span>gas</span></span> &middot; <span>4x4</span></p>
+                                <p>1GCE83RJEKWL4RJ35</p>
+                                <img width="150" src="images/Truck 1.jpg" />
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
