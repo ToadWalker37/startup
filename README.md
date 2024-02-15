@@ -43,3 +43,14 @@ For this deliverable I built out the structure of my application using HTML.
 - Images - There are two images on the homepage as well as several images in the Dashboard and Browse pages from sample listings.
 - DB/Login - Input box and submit button for login. The listing information represents data pulled from the database, and a sample listing is in the HTML.
 - WebSocket - The dashboard and browse statistics for saves and views represent real-time user data. The chat data also represents real-time data from other users.
+
+## CSS Deliverable
+
+For this deliverable I properly styled the application into its final appearance.
+
+- Header, footer, and main content body - Well-proportioned. Used flex and grid to layout sections.
+- Navigation elements - I dropped the underlines and changed the color for anchor elements. Links change color on hover. Nav bar is yellow.
+- Responsive to window resizing - Responsive to window resizing. Looks good on iPad, desktop, and iPhone.
+- Application elements - Used good contrast and whitespace, consistent colors, and buttons are using bootstrap.
+- Application text content - Consistent font. Text is displayed using the Segoe UI/Helvetica/Noto font family.
+- Application images - I added curved edges around my listing thumbnail photos on the browse page. I also made a carousel on the listing page.
