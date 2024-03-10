@@ -6,48 +6,49 @@ function processVehicleData(input) {
     .then((data) => {
         const vehicle = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(data, null, "  ")).Results))[0]));
 
+        const vehicleData = document.querySelector("#vehicleData");
+        while (vehicleData.firstChild) { vehicleData.removeChild(vehicleData.lastChild); }
+
         if (vehicle.ErrorCode != 0) {
             const error = document.createElement('p');
             error.textContent = "Hold up! That's not a real car! Try once more.";
-            document.querySelector('#vehicleData').appendChild(error);
+            vehicleData.appendChild(error);
         }
         
         else {
-        const yearLabel = document.createElement('label');
-        yearLabel.textContent = "Year:";
-        const year = document.createElement('input');
-        year.value = vehicle.ModelYear;
-        year.readOnly = true;
+            let yearLabel = document.createElement('label');
+            yearLabel.textContent = "Year:";
+            let year = document.createElement('input');
+            year.value = vehicle.ModelYear;
+            year.readOnly = true;
 
-        const makeLabel = document.createElement('label');
-        makeLabel.textContent = "Make:";
-        const make = document.createElement('input');
-        make.value = vehicle.NCSAMake;
-        make.readOnly = true;
+            let makeLabel = document.createElement('label');
+            makeLabel.textContent = "Make:";
+            let make = document.createElement('input');
+            make.value = vehicle.NCSAMake;
+            make.readOnly = true;
 
-        const modelLabel = document.createElement('label');
-        modelLabel.textContent = "Model:";
-        const model = document.createElement('input');
-        model.value = vehicle.Model;
-        model.readOnly = true;
+            let modelLabel = document.createElement('label');
+            modelLabel.textContent = "Model:";
+            let model = document.createElement('input');
+            model.value = vehicle.Model;            
+            model.readOnly = true;
 
-        
+            vehicleData.appendChild(yearLabel);
+            vehicleData.appendChild(year);
 
-        document.querySelector('#vehicleData').appendChild(yearLabel);
-        document.querySelector('#vehicleData').appendChild(year);
+            vehicleData.appendChild(makeLabel);
+            vehicleData.appendChild(make);
 
-        document.querySelector('#vehicleData').appendChild(makeLabel);
-        document.querySelector('#vehicleData').appendChild(make);
+            vehicleData.appendChild(modelLabel);
+            vehicleData.appendChild(model);
 
-        document.querySelector('#vehicleData').appendChild(modelLabel);
-        document.querySelector('#vehicleData').appendChild(model);
+            //Fuel type
+            //Drivetrain
+            //Transmission
+            //Cylinders and displacement
 
-        //Fuel type
-        //Drivetrain
-        //Transmission
-        //Cylinders and displacement
-
-
-        console.log(vehicle)}
+            //If data is null, make readOnly false
+        }
     });
 }
