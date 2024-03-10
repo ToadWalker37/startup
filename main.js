@@ -20,53 +20,52 @@ function processVehicleData(input) {
             yearLabel.textContent = "Year:";
             let year = document.createElement('input');
             year.value = vehicle.ModelYear;
-            year.readOnly = true;
+            if ("".localeCompare(vehicle.ModelYear) !== 0) { year.readOnly = true; }
 
             let makeLabel = document.createElement('label');
             makeLabel.textContent = "Make:";
             let make = document.createElement('input');
-            make.value = vehicle.NCSAMake;
-            make.readOnly = true;
+            make.value = vehicle.Make.toLowerCase().charAt(0).toUpperCase() + vehicle.Make.toLowerCase().slice(1);
+            if ("".localeCompare(vehicle.Make) !== 0) { make.readOnly = true; }
 
             let modelLabel = document.createElement('label');
             modelLabel.textContent = "Model:";
             let model = document.createElement('input');
-            model.value = vehicle.Model;            
-            model.readOnly = true;
+            model.value = vehicle.Model;
+            if ("".localeCompare(vehicle.Model) !== 0) { model.readOnly = true; }
 
             let fuelLabel = document.createElement('label');
             fuelLabel.textContent = "Fuel type:";
             let fuel = document.createElement('input');
-            fuel.value = `${vehicle.FuelTypePrimary} and ${vehicle.FuelTypeSecondary}`;            
-            fuel.readOnly = true;
+            if ("".localeCompare(vehicle.FuelTypeSecondary) === 0) { fuel.value = vehicle.FuelTypePrimary; }
+            else { fuel.value = `${vehicle.FuelTypePrimary} and ${vehicle.FuelTypeSecondary}`; }      
+            if ("".localeCompare(vehicle.FuelTypePrimary) !== 0) { fuel.readOnly = true; }
 
             let drivetrainLabel = document.createElement('label');
             drivetrainLabel.textContent = "Drivetrain:";
             let drivetrain = document.createElement('input');
             drivetrain.value = vehicle.DriveType;            
-            drivetrain.readOnly = true;
+            if ("".localeCompare(vehicle.DriveType) !== 0) { drivetrain.readOnly = true; }
 
             let transmissionLabel = document.createElement('label');
             transmissionLabel.textContent = "Transmission:";
             let transmission = document.createElement('input');
             transmission.value = vehicle.TransmissionStyle;            
-            transmission.readOnly = true;
+            if ("".localeCompare(vehicle.TransmissionStyle) !== 0) { transmission.readOnly = true; }
 
             let engineLabel = document.createElement('label');
             engineLabel.textContent = "Engine:";
             let engine = document.createElement('input');
-            let inline = "In-Line";
-            let vshaped = "V-Shaped";
-            if (inline.localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L I-${vehicle.EngineCylinders}`; }
-            else if (vshaped.localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L V${vehicle.EngineCylinders}`; }
+            if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L I-${vehicle.EngineCylinders}`; }
+            else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L V${vehicle.EngineCylinders}`; }
             else { engine.value = `${vehicle.DisplacementL}L ${vehicle.EngineCylinders} cyl` }
-            engine.readOnly = true;
+            if ("".localeCompare(vehicle.DisplacementL) !== 0 || "".localeCompare(vehicle.EngineCylinders) !== 0) { engine.readOnly = true; }
 
             let doorsLabel = document.createElement('label');
             doorsLabel.textContent = "Doors:";
             let doors = document.createElement('input');
             doors.value = vehicle.Doors;            
-            doors.readOnly = true;
+            if ("".localeCompare(vehicle.Doors) !== 0) { doors.readOnly = true; }
 
             vehicleData.appendChild(yearLabel);
             vehicleData.appendChild(year);
@@ -93,8 +92,6 @@ function processVehicleData(input) {
             vehicleData.appendChild(doors);
 
             console.log(vehicle);
-
-            //If data is null, make readOnly false
         }
     });
 }

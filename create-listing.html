@@ -61,10 +61,6 @@
                     </div>
                     <div id="vehicleData">
                         <div>
-                            <label for="number">Mileage:</label>
-                            <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
-                        </div>
-                        <div>
                             <label for="select">Drivetrain:</label>
                             <select id="select" name="varSelect" required>
                                 <option>FWD (front-wheel drive)</option>
@@ -97,6 +93,11 @@
                             <label for="number">Cylinders: </label>
                             <input type="number" name="varNumber" id="number" min="3" max="12" step="1" required />
                         </div>
+                    </div>
+                    <div>
+                        <label for="number">Mileage:</label>
+                        <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
+                    </div>
                         <div>
                             <label for="select">Title status: </label>
                             <select id="select" name="varSelect" required>
@@ -105,7 +106,6 @@
                                 <option>Salvage</option>
                             </select>
                         </div>
-                    </div>
                     <div>
                         <label for="textarea">Description: </label>
                         <textarea id="textarea" name="varTextarea" required></textarea>
