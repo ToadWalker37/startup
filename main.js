@@ -1,10 +1,11 @@
+let vehicle;
 function processVehicleData(input) {
     let vin = input;
     let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`;
     fetch(url)
     .then((response) => response.json())
     .then((data) => {
-        const vehicle = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(data, null, "  ")).Results))[0]));
+        vehicle = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(data, null, "  ")).Results))[0]));
 
         const vehicleData = document.querySelector("#vehicleData");
         while (vehicleData.firstChild) { vehicleData.removeChild(vehicleData.lastChild); }
@@ -71,6 +72,7 @@ function processVehicleData(input) {
                 diesel.textContent = "Diesel";
                 let fuelCell = document.createElement('option');
                 fuelCell.textContent = "Fuel cell";
+                fuelSelect.id = "fuel";
                 vehicleData.appendChild(fuelSelect);
                 fuelSelect.appendChild(gasoline);
                 fuelSelect.appendChild(electric);
@@ -103,6 +105,7 @@ function processVehicleData(input) {
                 awd.textContent = "AWD (all-wheel drive)";
                 let fourxfour = document.createElement('option');
                 fourxfour.textContent = "4x4 (four-wheel drive)";
+                drivetrainSelect.id = "drivetrain";
                 vehicleData.appendChild(drivetrainSelect);
                 drivetrainSelect.appendChild(fwd);
                 drivetrainSelect.appendChild(rwd);
@@ -133,6 +136,7 @@ function processVehicleData(input) {
                 cvt.textContent = "CVT (Continuously variable transmission)";
                 let singleSpeed = document.createElement('option');
                 singleSpeed.textContent = "Single-speed (EV transmission)";
+                transmissionSelect.id = "transmission";
                 vehicleData.appendChild(transmissionSelect);
                 transmissionSelect.appendChild(automatic);
                 transmissionSelect.appendChild(manual);
@@ -162,6 +166,7 @@ function processVehicleData(input) {
                 displacement.max = 10.0;
                 displacement.step = 0.1;
                 displacement.required = true;
+                displacement.id = "displacement";
                 vehicleData.appendChild(displacementLabel);
                 vehicleData.appendChild(displacement);
 
@@ -173,6 +178,7 @@ function processVehicleData(input) {
                 cylinders.max = 12;
                 cylinders.step = 1;
                 cylinders.required = true;
+                cylinders.id = "cylinders";
                 vehicleData.appendChild(cylinderLabel);
                 vehicleData.appendChild(cylinders);
                 
@@ -189,15 +195,33 @@ function processVehicleData(input) {
                 vehicleData.appendChild(doors);
             }
             else {
-                
                 let doors = document.createElement('input');
                 doors.type = "number";
                 doors.min = 1;
                 doors.max = 12;
                 doors.step = 1;
                 doors.required = true;
+                doors.id = "doors";
                 vehicleData.appendChild(doors);
             }
         }
     });
+}
+
+function completeVehicle() {
+        if (vehicle == null) { confirm("We don't know what car you have yet! You must click \"Find my car\" before we can list it.")}
+        else {
+            if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = document.querySelector("#year").value; }
+            if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = document.querySelector("#make").value; }
+            if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = document.querySelector("#model").value; }
+            if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = document.querySelector("#fuel").value; }
+            if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = document.querySelector("#drivetrain").value; }
+            if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = document.querySelector("#transmission").value; }
+            if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = document.querySelector("#displacement").value; }
+            if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = document.querySelector("#cylinders").value; }
+            if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = document.querySelector("#doors").value; }
+            vehicle.Mileage = document.querySelector("#mileage").value;
+            vehicle.Title = document.querySelector("#title").value;
+            vehicle.Description = document.querySelector("#description").value; // To do: Disable empty description possibility
+        }
 }

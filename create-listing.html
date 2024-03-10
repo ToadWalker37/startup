@@ -62,11 +62,11 @@
                     <div id="vehicleData"></div>
                     <div>
                         <label for="number">Mileage:</label>
-                        <input type="number" name="varNumber" id="number" min="0" max="999999" step="1" required />
+                        <input type="number" name="varNumber" id="mileage" min="0" max="999999" step="1" required />
                     </div>
                         <div>
                             <label for="select">Title status: </label>
-                            <select id="select" name="varSelect" required>
+                            <select id="title" name="varSelect" required>
                                 <option>Clean</option>
                                 <option>Rebuilt</option>
                                 <option>Salvage</option>
@@ -74,13 +74,13 @@
                         </div>
                     <div>
                         <label for="textarea">Description: </label>
-                        <textarea id="textarea" name="varTextarea" required></textarea>
+                        <textarea id="description" name="varTextarea" minlength="1" required></textarea>
                     </div>
                     <div>
                         <label for="file">Upload pictures: </label>
                         <input type="file" id="file" name="varFile" accept="image/*" multiple required />
                     </div>
-                    <button class="btn" type="submit"style="margin-top: 2vh ">Save and post</button>
+                    <button class="btn" id="create-listing" type="submit" onclick="completeVehicle()" style="margin-top: 2vh ">Save and post</button>
                 </div>
             </div>
         </main>
