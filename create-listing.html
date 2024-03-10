@@ -6,10 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="The best place to exchange vehicles with other car owners.">
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="style.css">
+        <script defer="defer" src="main.js"></script>
         <style>
             div.listing-container {
                 display: flex;
@@ -54,8 +56,11 @@
                     <h2 style="text-align: center; padding: 1vh;">What car do you have?</h2>
                     <div>
                         <label for="text">Enter your VIN:</label>
-                        <input type="text" id="text" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
-                        <p>2004 Chrysler Crossfire convertible S Base | 3.2L 6 cyl | </p><br>
+                        <input type="text" id="vinDecoder" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
+                        <button class="btn" style="margin-top: 5px; margin-bottom: 20px" id="vinDecoderButton" onclick="processVehicleData(document.getElementById('vinDecoder').value)">Find my car</button>
+                    </div>
+                    <div id="vehicleData">
+                        
                     </div>
                     <div>
                         <label for="number">Mileage:</label>
