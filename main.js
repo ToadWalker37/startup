@@ -34,6 +34,40 @@ function processVehicleData(input) {
             model.value = vehicle.Model;            
             model.readOnly = true;
 
+            let fuelLabel = document.createElement('label');
+            fuelLabel.textContent = "Fuel type:";
+            let fuel = document.createElement('input');
+            fuel.value = `${vehicle.FuelTypePrimary} and ${vehicle.FuelTypeSecondary}`;            
+            fuel.readOnly = true;
+
+            let drivetrainLabel = document.createElement('label');
+            drivetrainLabel.textContent = "Drivetrain:";
+            let drivetrain = document.createElement('input');
+            drivetrain.value = vehicle.DriveType;            
+            drivetrain.readOnly = true;
+
+            let transmissionLabel = document.createElement('label');
+            transmissionLabel.textContent = "Transmission:";
+            let transmission = document.createElement('input');
+            transmission.value = vehicle.TransmissionStyle;            
+            transmission.readOnly = true;
+
+            let engineLabel = document.createElement('label');
+            engineLabel.textContent = "Engine:";
+            let engine = document.createElement('input');
+            let inline = "In-Line";
+            let vshaped = "V-Shaped";
+            if (inline.localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L I-${vehicle.EngineCylinders}`; }
+            else if (vshaped.localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L V${vehicle.EngineCylinders}`; }
+            else { engine.value = `${vehicle.DisplacementL}L ${vehicle.EngineCylinders} cyl` }
+            engine.readOnly = true;
+
+            let doorsLabel = document.createElement('label');
+            doorsLabel.textContent = "Doors:";
+            let doors = document.createElement('input');
+            doors.value = vehicle.Doors;            
+            doors.readOnly = true;
+
             vehicleData.appendChild(yearLabel);
             vehicleData.appendChild(year);
 
@@ -43,10 +77,22 @@ function processVehicleData(input) {
             vehicleData.appendChild(modelLabel);
             vehicleData.appendChild(model);
 
-            //Fuel type
-            //Drivetrain
-            //Transmission
-            //Cylinders and displacement
+            vehicleData.appendChild(fuelLabel);
+            vehicleData.appendChild(fuel);
+
+            vehicleData.appendChild(drivetrainLabel);
+            vehicleData.appendChild(drivetrain);
+
+            vehicleData.appendChild(transmissionLabel);
+            vehicleData.appendChild(transmission);
+
+            vehicleData.appendChild(engineLabel);
+            vehicleData.appendChild(engine);
+
+            vehicleData.appendChild(doorsLabel);
+            vehicleData.appendChild(doors);
+
+            console.log(vehicle);
 
             //If data is null, make readOnly false
         }
