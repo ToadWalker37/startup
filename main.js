@@ -98,13 +98,13 @@ function processVehicleData(input) {
                 let drivetrainSelect = document.createElement('select');
                 drivetrainSelect.required = true;
                 let fwd = document.createElement('option');
-                fwd.textContent = "FWD (front-wheel drive)";
+                fwd.textContent = "FWD/Front-Wheel Drive";
                 let rwd = document.createElement('option');
-                rwd.textContent = "RWD (rear-wheel drive)";
+                rwd.textContent = "RWD/Rear-Wheel Drive";
                 let awd = document.createElement('option');
-                awd.textContent = "AWD (all-wheel drive)";
+                awd.textContent = "AWD/All-Wheel Drive";
                 let fourxfour = document.createElement('option');
-                fourxfour.textContent = "4x4 (four-wheel drive)";
+                fourxfour.textContent = "4x4/Four-Wheel Drive";
                 drivetrainSelect.id = "drivetrain";
                 vehicleData.appendChild(drivetrainSelect);
                 drivetrainSelect.appendChild(fwd);
@@ -149,8 +149,13 @@ function processVehicleData(input) {
             let engineLabel = document.createElement('label');
             engineLabel.textContent = "Engine:";
             let engine = document.createElement('input');
-            if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L I-${vehicle.EngineCylinders}`; }
-            else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicle.DisplacementL}L V${vehicle.EngineCylinders}`; }
+            let vehicleDisplacement;
+            if ("".localeCompare(vehicle.DisplacementL) !== 0) {
+                const round = (num) => Math.round(num * 10)/10;
+                vehicleDisplacement = round(vehicle.DisplacementL);
+            }
+            if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicleDisplacement}L I-${vehicle.EngineCylinders}`; }
+            else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicleDisplacement}L V${vehicle.EngineCylinders}`; }
             else { engine.value = `${vehicle.DisplacementL}L ${vehicle.EngineCylinders}-cyl` }
             if ("".localeCompare(vehicle.DisplacementL) !== 0 || "".localeCompare(vehicle.EngineCylinders) !== 0) {
                 engine.readOnly = true;
