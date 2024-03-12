@@ -1,4 +1,5 @@
-let vehicle;
+function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
 function processVehicleData(input) {
     let vin = input;
     let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`;
@@ -6,7 +7,7 @@ function processVehicleData(input) {
     .then((response) => response.json())
     .then((data) => {
         vehicle = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(data, null, "  ")).Results))[0]));
-
+        
         const vehicleData = document.querySelector("#vehicleData");
         while (vehicleData.firstChild) { vehicleData.removeChild(vehicleData.lastChild); }
 
@@ -30,6 +31,7 @@ function processVehicleData(input) {
             makeLabel.textContent = "Make:";
             let make = document.createElement('input');
             make.value = vehicle.Make.toLowerCase().charAt(0).toUpperCase() + vehicle.Make.toLowerCase().slice(1);
+            vehicle.Make = make.value;
             if ("".localeCompare(vehicle.Make) !== 0) { make.readOnly = true; }
 
             vehicleData.appendChild(makeLabel);
@@ -54,6 +56,7 @@ function processVehicleData(input) {
                 if ("Flexible Fuel Vehicle (FFV)".localeCompare(vehicle.FuelTypeSecondary) === 0) { fuelTypeSecondary = "Flex Fuel"; }
                 else { fuelTypeSecondary = vehicle.FuelTypeSecondary; }
                 fuel.value = `${vehicle.FuelTypePrimary} & ${fuelTypeSecondary}`;
+                vehicle.FuelTypePrimary = fuel.value;
             }      
             if ("".localeCompare(vehicle.FuelTypePrimary) !== 0) {
                 fuel.readOnly = true;
@@ -210,6 +213,7 @@ function processVehicleData(input) {
                 vehicleData.appendChild(doors);
             }
         }
+        localStorage.setItem("vehicle", JSON.stringify(vehicle));
     });
 }
 function sleep(ms) {
@@ -232,18 +236,26 @@ function completeVehicle() {
         displayNullVehicleErrorMessage();
     }
     else {
-        if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = document.querySelector("#year").value; }
-        if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = document.querySelector("#make").value; }
-        if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = document.querySelector("#model").value; }
-        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = document.querySelector("#fuel").value; }
-        if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = document.querySelector("#drivetrain").value; }
-        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = document.querySelector("#transmission").value; }
-        if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = document.querySelector("#displacement").value; }
-        if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = document.querySelector("#cylinders").value; }
-        if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = document.querySelector("#doors").value; }
-        vehicle.Mileage = document.querySelector("#mileage").value;
-        vehicle.Title = document.querySelector("#title").value;
-        vehicle.Description = document.querySelector("#description").value; // To do: Disable empty description and images possibility
+        if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = sanitize(document.querySelector("#year").value); }
+        if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = sanitize(document.querySelector("#make").value); }
+        if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = sanitize(document.querySelector("#model").value); }
+        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value); }
+        if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value); }
+        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value); }
+        if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value); }
+        if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value); }
+        if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = sanitize(document.querySelector("#doors").value); }
+        vehicle.Mileage = sanitize(document.querySelector("#mileage").value);
+        vehicle.Title = sanitize(document.querySelector("#title").value);
+        vehicle.Description = sanitize(document.querySelector("#description").value); // To do: Disable empty description, mileage and images possibility
     }
+    localStorage.setItem("vehicle", JSON.stringify(vehicle));
+    window.location.assign("dashboard.html");
 }
 
+function displayInGarage() {
+    let vehicle = JSON.parse(localStorage.getItem("vehicle"));
+    document.querySelector("#title").innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a>`;
+    document.querySelector("#snippets").innerHTML = `<span>${vehicle.Mileage}</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+    document.querySelector("#vin").innerHTML = `${vehicle.VIN}`;
+}

@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="style.css">
+        <script defer="defer" src="main.js"></script>
         <style>
             div.dashboard {
                 display: grid;
@@ -33,7 +34,7 @@
             }
         </style>
     </head>
-    <body>
+    <body onload="displayInGarage()">
         <header class="sticky-top">
             <h1 class="home-banner"><a href="index.html">Dynamic Garage</a></h1>
             <h5 class="home-banner"><a href="index.html">Get your dream car</a></h5>
@@ -58,9 +59,9 @@
                             <h4 style="text-align: right; margin-left: 10%"><a href="create-listing.html">New <span class="fa">&#xf067;</span></a></h4>
                         </div>
                         <div class="display-card">
-                            <h4>2012 Scion iQ &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a></h4>
-                            <p><span>112k mi</span> &middot; <span>CVT</span> &middot; <span>gas</span> &middot; <span>FWD</span></span></p>
-                            <p>1BC26G89VKF325818</p>
+                            <h4 id="title">2012 Scion iQ &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a></h4>
+                            <p id="snippets"><span>112k mi</span> &middot; <span>CVT</span> &middot; <span>gas</span> &middot; <span>FWD</span></span></p>
+                            <p id="vin">1BC26G89VKF325818</p>
                             <img width="150" src="images/Scion iQ.jpg" />
                         </div>
                         <div class="display-card">
