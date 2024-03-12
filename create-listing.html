@@ -44,7 +44,7 @@
             </div>
             <nav>
                 <li class="nav"><a href="index.html" id="home">Home</a></li>
-                <li class="nav"><a href="browse-want.html">Browse</a></li>
+                <li class="nav"><a href="browse.html">Browse</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li class="nav"><a href="authenticate.html">Sign in / Sign up</a></li>
                 <li class="nav"><a href="about.html">About</a></li>
@@ -74,12 +74,13 @@
                         </div>
                     <div>
                         <label for="textarea">Description: </label>
-                        <textarea id="description" name="varTextarea" minlength="1" required></textarea>
+                        <textarea id="description" name="varTextarea" minlength="10" required></textarea>
                     </div>
                     <div>
                         <label for="file">Upload pictures: </label>
                         <input type="file" id="file" name="varFile" accept="image/*" multiple required />
                     </div>
+                    <div id="null-vehicle"></div>
                     <button class="btn" id="create-listing" type="submit" onclick="completeVehicle()" style="margin-top: 2vh ">Save and post</button>
                 </div>
             </div>

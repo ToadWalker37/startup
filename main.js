@@ -11,9 +11,9 @@ function processVehicleData(input) {
         while (vehicleData.firstChild) { vehicleData.removeChild(vehicleData.lastChild); }
 
         if (vehicle.ErrorCode != 0) {
-            const error = document.createElement('p');
-            error.textContent = "Hold up! That's not a real car! Try once more.";
-            vehicleData.appendChild(error);
+            const vinError = document.createElement('p');
+            vinError.textContent = "Hold up! That's not a real car! Try once more.";
+            vehicleData.appendChild(vinError);
         }
         
         else {
@@ -212,21 +212,38 @@ function processVehicleData(input) {
         }
     });
 }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function displayNullVehicleErrorMessage() {
+    await sleep(2000);
+    document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
+}
 
 function completeVehicle() {
-        if (vehicle == null) { confirm("We don't know what car you have yet! You must click \"Find my car\" before we can list it.")}
-        else {
-            if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = document.querySelector("#year").value; }
-            if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = document.querySelector("#make").value; }
-            if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = document.querySelector("#model").value; }
-            if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = document.querySelector("#fuel").value; }
-            if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = document.querySelector("#drivetrain").value; }
-            if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = document.querySelector("#transmission").value; }
-            if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = document.querySelector("#displacement").value; }
-            if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = document.querySelector("#cylinders").value; }
-            if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = document.querySelector("#doors").value; }
-            vehicle.Mileage = document.querySelector("#mileage").value;
-            vehicle.Title = document.querySelector("#title").value;
-            vehicle.Description = document.querySelector("#description").value; // To do: Disable empty description possibility
-        }
+    const nullVehicle = document.querySelector("#null-vehicle");
+    while (nullVehicle.firstChild) { nullVehicle.removeChild(nullVehicle.lastChild); }
+    if (vehicle == null) {
+        const nullVehicleError = document.createElement('p');
+        nullVehicleError.textContent = "We don't know what car you have yet! You must enter your VIN and click \"Find my car\" before we can list it.";
+        nullVehicle.appendChild(nullVehicleError);
+        document.querySelector("#create-listing").style = "background-color:red; color: white";
+        displayNullVehicleErrorMessage();
+    }
+    else {
+        if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = document.querySelector("#year").value; }
+        if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = document.querySelector("#make").value; }
+        if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = document.querySelector("#model").value; }
+        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = document.querySelector("#fuel").value; }
+        if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = document.querySelector("#drivetrain").value; }
+        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = document.querySelector("#transmission").value; }
+        if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = document.querySelector("#displacement").value; }
+        if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = document.querySelector("#cylinders").value; }
+        if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = document.querySelector("#doors").value; }
+        vehicle.Mileage = document.querySelector("#mileage").value;
+        vehicle.Title = document.querySelector("#title").value;
+        vehicle.Description = document.querySelector("#description").value; // To do: Disable empty description and images possibility
+    }
 }
+
