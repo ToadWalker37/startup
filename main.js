@@ -33,7 +33,8 @@ function processVehicleData(input) {
             let makeLabel = document.createElement('label');
             makeLabel.textContent = "Make:";
             let make = document.createElement('input');
-            make.value = vehicle.Make.toLowerCase().charAt(0).toUpperCase() + vehicle.Make.toLowerCase().slice(1);
+            if ("GMC".localeCompare(vehicle.Make) === 0 || "BMW".localeCompare(vehicle.Make) === 0) { make.value = vehicle.Make; }
+            else { make.value = vehicle.Make.toLowerCase().charAt(0).toUpperCase() + vehicle.Make.toLowerCase().slice(1); }
             vehicle.Make = make.value;
             if ("".localeCompare(vehicle.Make) !== 0) { make.readOnly = true; }
 
@@ -157,12 +158,15 @@ function processVehicleData(input) {
             let engine = document.createElement('input');
             let vehicleDisplacement;
             if ("".localeCompare(vehicle.DisplacementL) !== 0) {
-                const round = (num) => Math.round(num * 10)/10;
-                vehicleDisplacement = round(vehicle.DisplacementL);
+                if (vehicle.DisplacementL.indexOf(".") === -1) { vehicleDisplacement = `${vehicle.DisplacementL}.0` }
+                else {
+                    const round = (num) => Math.round(num * 10)/10;
+                    vehicleDisplacement = round(vehicle.DisplacementL);
+                }
             }
             if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicleDisplacement}L I-${vehicle.EngineCylinders}`; }
             else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine.value = `${vehicleDisplacement}L V${vehicle.EngineCylinders}`; }
-            else { engine.value = `${vehicle.DisplacementL}L ${vehicle.EngineCylinders}-cyl` }
+            else { engine.value = `${vehicleDisplacement}L ${vehicle.EngineCylinders}-cyl` }
             if ("".localeCompare(vehicle.DisplacementL) !== 0 || "".localeCompare(vehicle.EngineCylinders) !== 0) {
                 engine.readOnly = true;
                 vehicleData.appendChild(engineLabel);
@@ -215,6 +219,10 @@ function processVehicleData(input) {
                 doors.id = "doors";
                 vehicleData.appendChild(doors);
             }
+            const areYouSure = document.createElement('p');
+            areYouSure.style.fontStyle = "italic";
+            areYouSure.textContent = "Be sure it's all correct. You can only change the mileage, description, and photos later.";
+            vehicleData.appendChild(areYouSure);
         }
     });
 }
@@ -228,7 +236,7 @@ async function displayNullVehicleErrorMessage() {
     document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
 }
 
-function completeVehicle() {
+function publishListing() {
     const nullVehicle = document.querySelector("#null-vehicle");
     while (nullVehicle.firstChild) { nullVehicle.removeChild(nullVehicle.lastChild); }
     if (vehicle == null) {
@@ -239,17 +247,60 @@ function completeVehicle() {
         displayNullVehicleErrorMessage();
     }
     else {
-        if ("".localeCompare(vehicle.ModelYear) === 0) { ; vehicle.ModelYear = sanitize(document.querySelector("#year").value); }
-        if ("".localeCompare(vehicle.Make) === 0) { vehicle.Make = sanitize(document.querySelector("#make").value); }
-        if ("".localeCompare(vehicle.Model) === 0) { vehicle.Model = sanitize(document.querySelector("#model").value); }
-        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value); }
-        if ("".localeCompare(vehicle.DriveType) === 0) { vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value); }
-        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value); }
-        if ("".localeCompare(vehicle.DisplacementL) === 0) { vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value); }
-        if ("".localeCompare(vehicle.EngineCylinders) === 0) { vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value); }
-        if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = sanitize(document.querySelector("#doors").value); }
+        vehicle.EditableFields = new Array();
+
+        if ("".localeCompare(vehicle.ModelYear) === 0) {
+            vehicle.EditableFields.push("ModelYear");
+            vehicle.ModelYear = sanitize(document.querySelector("#year").value);
+        }
+
+        if ("".localeCompare(vehicle.Make) === 0) {
+            vehicle.EditableFields.push("Make");
+            vehicle.Make = sanitize(document.querySelector("#make").value);
+        }
+        
+        if ("".localeCompare(vehicle.Model) === 0) {
+            vehicle.EditableFields.push("Model");
+            vehicle.Model = sanitize(document.querySelector("#model").value);
+        }
+        
+        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) {
+            vehicle.EditableFields.push("FuelTypePrimary");
+            vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value);
+        }
+        
+        if ("".localeCompare(vehicle.DriveType) === 0) {
+            vehicle.EditableFields.push("DriveType");
+            vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value);
+        }
+        
+        if ("".localeCompare(vehicle.TransmissionStyle) === 0) {
+            vehicle.EditableFields.push("TransmissionStyle");
+            vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value);
+        }
+        
+        if ("".localeCompare(vehicle.DisplacementL) === 0) {
+            vehicle.EditableFields.push("DisplacementL");
+            vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value);
+        }
+        
+        if ("".localeCompare(vehicle.EngineCylinders) === 0) {
+            vehicle.EditableFields.push("EngineCylinders");
+            vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value);
+        }
+        
+        if ("".localeCompare(vehicle.Doors) === 0) {
+            vehicle.EditableFields.push("Doors");
+            vehicle.Doors = sanitize(document.querySelector("#doors").value);
+        }
+        
+        vehicle.EditableFields.push("Mileage");
         vehicle.Mileage = sanitize(document.querySelector("#mileage").value);
-        vehicle.Title = sanitize(document.querySelector("#title").value);
+        
+        vehicle.EditableFields.push("Title");
+        vehicle.Title = sanitize(document.querySelector("#title").value); // To do: title-checker API
+        
+        vehicle.EditableFields.push("Description");
         vehicle.Description = sanitize(document.querySelector("#description").value); // To do: Disable empty fields possibility
     }
     vehicle.ListingID = validateID(6);
@@ -293,7 +344,7 @@ function displayInGarage() {
         let snippets = document.createElement("p");
         let vin = document.createElement("p");
         
-        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a>`;
+        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
         snippets.innerHTML = `<span>${vehicle.Mileage} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
         vin.innerHTML = `${vehicle.VIN}`;
 
@@ -308,4 +359,62 @@ function displayInGarage() {
         displayCard.appendChild(vin);
         displayCard.appendChild(image);
     }
+}
+
+function displayEditScreen(editOriginator) {
+    let vehicleID = editOriginator.id;
+    let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+    document.querySelector("#dashboard").style = "display:none";
+    
+    let announcementBig = document.createElement("h2");
+    announcementBig.style = "text-align: center; padding: 1vh;";
+    announcementBig.textContent = "Let's make things right on your";
+    let announcementLittle = document.createElement("p");
+    announcementLittle.textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+    
+    let listing = document.querySelector("#listing");
+    listing.appendChild(announcementBig);
+    listing.appendChild(announcementLittle);
+
+    let mileageLabel = document.createElement('label');
+    mileageLabel.textContent = "Mileage:";
+    let mileage = document.createElement('input');
+    mileage.type = "number";
+    mileage.min = 1;
+    mileage.max = 999999;
+    mileage.step = 1;
+    mileage.required = true;
+    mileage.id = "edit-mileage";
+    mileage.value = vehicle.Mileage;
+    listing.appendChild(mileageLabel);
+    listing.appendChild(mileage);
+
+    let descriptionLabel = document.createElement('label');
+    descriptionLabel.textContent = "Description:";
+    let description = document.createElement('textarea');
+    description.required = true;
+    description.id = "edit-description";
+    description.value = vehicle.Description;
+    listing.appendChild(descriptionLabel);
+    listing.appendChild(description);
+
+    // To-do: Add image-editing functionality
+
+    let editButton = document.createElement('button');
+    editButton.classList.add('btn');
+    // editButton.style = "margin-top: 2vh";
+    editButton.textContent = "Save and update";
+    editButton.id = `${vehicleID}`;
+    editButton.onclick = editListing;
+    listing.appendChild(editButton);
+}
+
+function editListing() {
+    let vehicleID = document.getElementsByClassName('btn').item(0).id;
+    let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+    vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value);
+    vehicle.Description = sanitize(document.querySelector("#edit-description").value); // To do: Disable empty fields possibility
+    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+    const listing = document.querySelector("#listing");
+    window.location.assign("dashboard.html");
 }

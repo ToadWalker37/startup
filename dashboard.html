@@ -13,11 +13,30 @@
         <link rel="stylesheet" href="style.css">
         <script defer="defer" src="main.js"></script>
         <style>
-            div.dashboard {
+            #dashboard {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
                 grid-auto-rows: minmax(0px, 1fr);
                 grid-gap: 1em;
+            }
+            #edit-listing {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            #listing {
+                text-align: center;
+                width:350px;
+            }
+            label {
+                padding-top: 1vh;
+                padding-bottom: 2vh;
+                width: 30%;
+            }
+            select, input, textarea {
+                width: 50%;
             }
             div.display {
                 padding: 4vw;
@@ -51,7 +70,8 @@
             </nav>
         </header>
         <main>
-            <div class="dashboard">
+            <div id="edit-listing"><div id="listing"></div></div>
+            <div id="dashboard">
                 <div class="display">
                     <div id="garage">
                         <div class="split-left-right" style="padding-bottom: 1vh;">
