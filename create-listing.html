@@ -56,7 +56,7 @@
                     <h2 style="text-align: center; padding: 1vh;">What car do you have?</h2>
                     <div>
                         <label for="text">Enter your VIN:</label>
-                        <input type="text" id="vinDecoder" name="varText" placeholder="Your VIN here" required pattern="\b[(A-H|J-N|P|R-Z|0-9)]{17}\b" required />
+                        <input type="text" id="vinDecoder" name="varText" placeholder="Your VIN here" required pattern="\b(A-H|J-N|P|R-Z|0-9){17}\b" required />
                         <button class="btn" style="margin-top: 0.5vh; margin-bottom: 2vh" id="vinDecoderButton" onclick="processVehicleData(document.querySelector('#vinDecoder').value)">Find my car</button>
                     </div>
                     <div id="vehicleData"></div>

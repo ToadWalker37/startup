@@ -1,7 +1,10 @@
+let vehicle;
+const vehicles = new Array();
+
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
 function processVehicleData(input) {
-    let vin = input;
+        let vin = input;
     let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`;
     fetch(url)
     .then((response) => response.json())
@@ -213,9 +216,9 @@ function processVehicleData(input) {
                 vehicleData.appendChild(doors);
             }
         }
-        localStorage.setItem("vehicle", JSON.stringify(vehicle));
     });
 }
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -247,15 +250,62 @@ function completeVehicle() {
         if ("".localeCompare(vehicle.Doors) === 0) { vehicle.Doors = sanitize(document.querySelector("#doors").value); }
         vehicle.Mileage = sanitize(document.querySelector("#mileage").value);
         vehicle.Title = sanitize(document.querySelector("#title").value);
-        vehicle.Description = sanitize(document.querySelector("#description").value); // To do: Disable empty description, mileage and images possibility
+        vehicle.Description = sanitize(document.querySelector("#description").value); // To do: Disable empty fields possibility
     }
-    localStorage.setItem("vehicle", JSON.stringify(vehicle));
+    vehicle.ListingID = validateID(6);
+    if (localStorage.getItem("vehicles") == null) {
+        localStorage.setItem("vehicles", JSON.stringify(vehicles));
+    }
+    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    localVehicles.push(vehicle.ListingID);
+    localStorage.setItem("vehicles", JSON.stringify(localVehicles));
+    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
     window.location.assign("dashboard.html");
 }
 
+function generateID(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (let i = 0; i < length; i++) { result += characters.charAt(Math.floor(Math.random() * charactersLength)); }
+    return result;
+}
+
+function validateID(length) {
+    let potentialID = generateID(length);
+    if (localStorage.getItem(`${potentialID}`) == null) { return potentialID; }
+    else { return validateID(length); }
+}
+
 function displayInGarage() {
-    let vehicle = JSON.parse(localStorage.getItem("vehicle"));
-    document.querySelector("#title").innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a>`;
-    document.querySelector("#snippets").innerHTML = `<span>${vehicle.Mileage}</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
-    document.querySelector("#vin").innerHTML = `${vehicle.VIN}`;
+    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    for (let i = 0; i < localVehicles.length; i++) {
+        let vehicleID = localVehicles[i];
+        let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        
+        let anchor = document.createElement("a");
+        anchor.href = `listings/${vehicle.ListingID}`;
+        anchor.style = "color: white; text-decoration: none;"
+        let displayCard = document.createElement("div");
+        displayCard.classList.add("display-card");
+        
+        let title = document.createElement("h4");
+        let snippets = document.createElement("p");
+        let vin = document.createElement("p");
+        
+        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="edit-listing.html">Edit</a>`;
+        snippets.innerHTML = `<span>${vehicle.Mileage} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+        vin.innerHTML = `${vehicle.VIN}`;
+
+        let image = document.createElement("img");
+        image.style.width = "150px";
+        image.src = "images/Scion iQ.jpg";
+
+        document.querySelector("#garage").appendChild(anchor);
+        anchor.appendChild(displayCard);
+        displayCard.appendChild(title);
+        displayCard.appendChild(snippets);
+        displayCard.appendChild(vin);
+        displayCard.appendChild(image);
+    }
 }
