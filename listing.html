@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>1995 Chevrolet K1500 - Dynamic Garage</title>
+        <title>Dynamic Garage</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +11,14 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="style.css">
+        <script>
+            let vehicleID = window.location.href.slice(38,44);
+            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+            if ("http://127.0.0.1:5500/listing.html?id=".localeCompare(window.location.href.slice(0,38)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(44)) !== 0) {
+                window.location.href = "404.html";
+            }
+        </script>
+        <script defer="defer" src="main.js"></script>
         <style>
             h4 {
                 text-align: center;
@@ -50,7 +58,7 @@
                 padding-right: 5vh;
                 padding-top: 5vh;
             }
-            #description {
+            div.description {
                 padding-left: 5vh;
                 padding-right: 5vh;
                 padding-top: 5vh;
@@ -62,7 +70,7 @@
             }
         </style>
     </head>
-    <body>
+    <body onload="displayListing()">
         <header class="sticky-top">
             <h1 class="home-banner"><a href="index.html">Dynamic Garage</a></h1>
             <h5 class="home-banner"><a href="index.html">Get your dream car</a></h5>
@@ -79,8 +87,8 @@
             </nav>
         </header>
         <main>
-            <h2 style="text-align: center; padding: 1vh;">1995 Chevrolet K1500</h2>
-            <h5 style="text-align: center; padding: 1vh;">Posted 31 January 2024 &middot; 31 &starf; &middot; 800 <span class="fa">&#xf06e;</h5>
+            <h2 id="title" style="text-align: center; padding: 1vh;"></h2>
+            <h5 style="text-align: center; padding: 1vh;" id="stats"></h5>
             <div id="listing-images-container">
                 <div id="listing-images" class="carousel slide">
                     <div class="carousel-inner">
@@ -115,45 +123,46 @@
                     <button type="button" data-bs-target="#listing-images-indicators" data-bs-slide-to="4" aria-label="Image 5"></button>
                 </div>
             </div>
+            <p style="text-align: center; padding: 1vh;" id="posted-when"></p>
             <div id="listing-details">
                 <div id="facts-and-figures">
                     <h4>Facts and Figures</h4>
                     <div class="figure">
                         <span class="icon"><img width="70em" height="20em" src="images/odometer.png"/></span>
-                        <span class="fact"><h5>Miles: 200,000</h5></span>
+                        <span class="fact"><h5 id="mileage"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="40em" height="40em" src="images/transmission.png" /></span>
-                        <span class="fact"><h5>Transmission: Automatic</h5></span>
+                        <span class="fact"><h5 id="transmission"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="20em" height="40em" src="images/drivetrain.png" /></span>
-                        <span class="fact"><h5>Drivetrain: 4x4 (four-wheel drive)</h5></span>
+                        <span class="fact"><h5 id="drivetrain"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="20em" height="40em" src="images/cylinders.png" /></span>
-                        <span class="fact"><h5>Cylinders: 8</h5></span>
+                        <span class="fact"><h5 id="engine"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="30em" height="30em" src="images/fuel.png" /></span>
-                        <span class="fact"><h5>Fuel type: Gasoline</h5></span>
+                        <span class="fact"><h5 id="fuel"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="20em" height="30em" src="images/title.png" /></span>
-                        <span class="fact"><h5>Title: Clean</h5></span>
+                        <span class="fact"><h5 id="title-status"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="30em" height="40em" src="images/pin.png" /></span>
-                        <span class="fact"><h5>11 miles from zip code 99999</h5></span>
+                        <span class="fact"><h5 id="location"></h5></span>
                     </div>
                     <div class="figure">
                         <span class="icon"><img width="70em" height="20em" src="images/vin.png"/></span>
-                        <span class="fact"><h5>VIN: EXAMPLEVIN17CHARS</h5>
+                        <span class="fact"><h5 id="vin"></h5></span>
                     </div>
                 </div>
-                <div id="description">
+                <div class="description">
                     <h4>Description</h4>
-                    <div style="padding:1vh">
+                    <div style="padding:1vh" id="description">
                         <p>Here is a solid 4x4 work/play truck. It has:</p>
                         <ul>
                             <li>The Z71 off-road package</li>

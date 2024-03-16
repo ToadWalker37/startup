@@ -330,6 +330,7 @@ function publishListing() {
         else { vehicle.Description = sanitize(document.querySelector("#description").value); }
         
         if (cantPublish === false) {
+            vehicle.Date = new Date();
             vehicle.ListingID = validateID(6);
             if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
             let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
@@ -383,10 +384,10 @@ function displayInGarage() {
     }
     for (let i = 0; i < localVehicles.length; i++) {
         let vehicleID = localVehicles[i];
-        let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
         
         let anchor = document.createElement("a");
-        anchor.href = `listings/${vehicle.ListingID}`;
+        anchor.href = `listing.html?id=${vehicle.ListingID}`;
         anchor.style = "color: white; text-decoration: none;"
         let displayCard = document.createElement("div");
         displayCard.classList.add("display-card");
@@ -395,8 +396,9 @@ function displayInGarage() {
         let snippets = document.createElement("p");
         let vin = document.createElement("p");
         
+        kify = (x) => `${Math.floor(x/1000)}k`;
         title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
-        snippets.innerHTML = `<span>${vehicle.Mileage} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+        snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
         vin.innerHTML = `${vehicle.VIN}`;
 
         let image = document.createElement("img");
@@ -414,7 +416,7 @@ function displayInGarage() {
 
 function displayEditScreen(editOriginator) {
     let vehicleID = editOriginator.id;
-    let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+    vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
     document.querySelector("#dashboard").style = "display:none";
     
     let announcementBig = document.createElement("h2");
@@ -469,7 +471,7 @@ function displayEditScreen(editOriginator) {
         let cantEdit = false;
     
         let vehicleID = document.getElementsByClassName('btn').item(0).id;
-        let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
         
         if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyInputError("mileage"); }
         else { vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value); }
@@ -485,4 +487,39 @@ function displayEditScreen(editOriginator) {
 
         cantEdit = false;
     }
+}
+
+function displayListing() {
+    let vehicleID = window.location.href.slice(38,44);
+    vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+    let date = new Date(vehicle.Date.toLocaleString());
+    
+    document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
+    document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+    document.querySelector("#stats").innerHTML = `Location &middot; 31 &starf; &middot; 800 <span class="fa">&#xf06e;`;
+    document.querySelector("#posted-when").textContent = `Posted ${date}`;
+    
+    let engine;
+    let vehicleDisplacement;
+    if ("".localeCompare(vehicle.DisplacementL) !== 0) {
+        if (vehicle.DisplacementL.indexOf(".") === -1) { vehicleDisplacement = `${vehicle.DisplacementL}.0` }
+        else {
+            const round = (num) => Math.round(num * 10)/10;
+            vehicleDisplacement = round(vehicle.DisplacementL);
+        }
+    }
+    if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L I-${vehicle.EngineCylinders}`; }
+    else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L V${vehicle.EngineCylinders}`; }
+    else { engine = `${vehicleDisplacement}L ${vehicle.EngineCylinders}-cyl` }
+
+    commify = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.querySelector("#mileage").textContent = `Miles: ${commify(vehicle.Mileage)}`;
+    document.querySelector("#transmission").textContent = `Transmission: ${vehicle.TransmissionStyle}`;
+    document.querySelector("#drivetrain").textContent = `Drivetrain: ${vehicle.DriveType}`;
+    document.querySelector("#engine").textContent = `Engine: ${engine}`;
+    document.querySelector("#fuel").textContent = `Fuel type: ${vehicle.FuelTypePrimary}`;
+    document.querySelector("#title-status").textContent = `Title status: ${vehicle.Title}`;
+    document.querySelector("#location").textContent = `Location: 11 miles from zip code 99999`;
+    document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
+    document.querySelector("#description").textContent = `${vehicle.Description}`;
 }
