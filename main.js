@@ -69,6 +69,8 @@ function processVehicleData(input) {
             else {
                 let fuelSelect = document.createElement('select');
                 fuelSelect.required = true;
+                let select = document.createElement('option');
+                select.textContent = "Select";
                 let gasoline = document.createElement('option');
                 gasoline.textContent = "Gasoline";
                 let electric = document.createElement('option');
@@ -81,6 +83,7 @@ function processVehicleData(input) {
                 fuelCell.textContent = "Fuel cell";
                 fuelSelect.id = "fuel";
                 vehicleData.appendChild(fuelSelect);
+                fuelSelect.appendChild(select);
                 fuelSelect.appendChild(gasoline);
                 fuelSelect.appendChild(electric);
                 fuelSelect.appendChild(hybrid);
@@ -104,6 +107,8 @@ function processVehicleData(input) {
             else {
                 let drivetrainSelect = document.createElement('select');
                 drivetrainSelect.required = true;
+                let select = document.createElement('option');
+                select.textContent = "Select";
                 let fwd = document.createElement('option');
                 fwd.textContent = "FWD/Front-Wheel Drive";
                 let rwd = document.createElement('option');
@@ -114,6 +119,7 @@ function processVehicleData(input) {
                 fourxfour.textContent = "4x4/Four-Wheel Drive";
                 drivetrainSelect.id = "drivetrain";
                 vehicleData.appendChild(drivetrainSelect);
+                drivetrainSelect.appendChild(select);
                 drivetrainSelect.appendChild(fwd);
                 drivetrainSelect.appendChild(rwd);
                 drivetrainSelect.appendChild(awd);
@@ -133,6 +139,8 @@ function processVehicleData(input) {
             else {
                 let transmissionSelect = document.createElement('select');
                 transmissionSelect.required = true;
+                let select = document.createElement('option');
+                select.textContent = "Select";
                 let automatic = document.createElement('option');
                 automatic.textContent = "Automatic";
                 let manual = document.createElement('option');
@@ -145,6 +153,7 @@ function processVehicleData(input) {
                 singleSpeed.textContent = "Single-speed (EV transmission)";
                 transmissionSelect.id = "transmission";
                 vehicleData.appendChild(transmissionSelect);
+                transmissionSelect.appendChild(select);
                 transmissionSelect.appendChild(automatic);
                 transmissionSelect.appendChild(manual);
                 transmissionSelect.appendChild(automanual);
@@ -231,105 +240,146 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function displayNullVehicleErrorMessage() {
-    await sleep(2000);
-    document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
-}
-
 function publishListing() {
-    const nullVehicle = document.querySelector("#null-vehicle");
-    while (nullVehicle.firstChild) { nullVehicle.removeChild(nullVehicle.lastChild); }
+    const nullVehicleData = document.querySelector("#null-vehicle");
+    while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
+
+    async function displaynullVehicleDataErrorMessage() {
+        await sleep(2000);
+        document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
+    }
+
     if (vehicle == null) {
-        const nullVehicleError = document.createElement('p');
-        nullVehicleError.textContent = "We don't know what car you have yet! You must enter your VIN and click \"Find my car\" before we can list it.";
-        nullVehicle.appendChild(nullVehicleError);
+        const nullVehicleDataError = document.createElement('p');
+        nullVehicleDataError.textContent = "We don't know what car you have yet! You must enter your VIN and click \"Find my car\" before we can list it.";
+        nullVehicleData.appendChild(nullVehicleDataError);
         document.querySelector("#create-listing").style = "background-color:red; color: white";
-        displayNullVehicleErrorMessage();
+        displaynullVehicleDataErrorMessage();
     }
     else {
         vehicle.EditableFields = new Array();
+        let cantPublish = false;
 
         if ("".localeCompare(vehicle.ModelYear) === 0) {
             vehicle.EditableFields.push("ModelYear");
-            vehicle.ModelYear = sanitize(document.querySelector("#year").value);
+            if ("".localeCompare(document.querySelector("#year").value) === 0 ) { cantPublish = true; emptyInputError("year"); }
+            else { vehicle.ModelYear = sanitize(document.querySelector("#year").value); }
         }
 
         if ("".localeCompare(vehicle.Make) === 0) {
             vehicle.EditableFields.push("Make");
-            vehicle.Make = sanitize(document.querySelector("#make").value);
+            if ("".localeCompare(document.querySelector("#make").value) === 0 ) { cantPublish = true; emptyInputError("make"); }
+            else { vehicle.Make = sanitize(document.querySelector("#make").value); }
         }
         
         if ("".localeCompare(vehicle.Model) === 0) {
             vehicle.EditableFields.push("Model");
-            vehicle.Model = sanitize(document.querySelector("#model").value);
+            if ("".localeCompare(document.querySelector("#model").value) === 0 ) { cantPublish = true; emptyInputError("model"); }
+            else { vehicle.Model = sanitize(document.querySelector("#model").value); }
         }
         
-        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) {
+        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { /////////////
             vehicle.EditableFields.push("FuelTypePrimary");
-            vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value);
+            let invalid = ("".localeCompare(document.querySelector("#fuel").value) === 0 || "Select".localeCompare(document.querySelector("#fuel").value) === 0);
+            if (invalid) { cantPublish = true; emptyInputError("fuel type"); }
+            else { vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value); }
         }
         
-        if ("".localeCompare(vehicle.DriveType) === 0) {
-            vehicle.EditableFields.push("DriveType");
-            vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value);
+        if ("".localeCompare(vehicle.DriveType) === 0) { /////////////////////
+            let invalid = ("".localeCompare(document.querySelector("#drivetrain").value) === 0 || "Select".localeCompare(document.querySelector("#drivetrain").value) === 0);
+            if (invalid) { cantPublish = true; emptyInputError("drivetrain type"); }
+            else { vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value); }
         }
         
-        if ("".localeCompare(vehicle.TransmissionStyle) === 0) {
+        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { ////////////////////
             vehicle.EditableFields.push("TransmissionStyle");
-            vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value);
+            let invalid = ("".localeCompare(document.querySelector("#transmission").value) === 0 || "Select".localeCompare(document.querySelector("#transmission").value) === 0);
+            if (invalid) { cantPublish = true; emptyInputError("transmission type"); }
+            else { vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value); }
         }
         
         if ("".localeCompare(vehicle.DisplacementL) === 0) {
             vehicle.EditableFields.push("DisplacementL");
-            vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value);
+            if ("".localeCompare(document.querySelector("#displacement").value) === 0 ) { cantPublish = true; emptyInputError("engine displacement in liters"); }
+            else { vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value); }
         }
         
         if ("".localeCompare(vehicle.EngineCylinders) === 0) {
             vehicle.EditableFields.push("EngineCylinders");
-            vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value);
+            if ("".localeCompare(document.querySelector("#cylinders").value) === 0 ) { cantPublish = true; emptyInputError("amount of cylinders"); }
+            else { vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value); }
         }
         
         if ("".localeCompare(vehicle.Doors) === 0) {
             vehicle.EditableFields.push("Doors");
-            vehicle.Doors = sanitize(document.querySelector("#doors").value);
+            if ("".localeCompare(document.querySelector("#doors").value) === 0 ) { cantPublish = true; emptyInputError("amount of doors"); }
+            else { vehicle.Doors = sanitize(document.querySelector("#doors").value); }
         }
         
         vehicle.EditableFields.push("Mileage");
-        vehicle.Mileage = sanitize(document.querySelector("#mileage").value);
+        if ("".localeCompare(document.querySelector("#mileage").value) === 0 ) { cantPublish = true; emptyInputError("mileage"); }
+        else { vehicle.Mileage = sanitize(document.querySelector("#mileage").value); }
         
         vehicle.EditableFields.push("Title");
-        vehicle.Title = sanitize(document.querySelector("#title").value); // To do: title-checker API
+        let invalid = ("".localeCompare(document.querySelector("#transmission").value) === 0 || "Select".localeCompare(document.querySelector("#transmission").value) === 0);
+        if (invalid) { cantPublish = true; emptyInputError("title status"); }
+        else { vehicle.Title = sanitize(document.querySelector("#title").value); } // To do: title-checker API
         
         vehicle.EditableFields.push("Description");
-        vehicle.Description = sanitize(document.querySelector("#description").value); // To do: Disable empty fields possibility
-    }
-    vehicle.ListingID = validateID(6);
-    if (localStorage.getItem("vehicles") == null) {
-        localStorage.setItem("vehicles", JSON.stringify(vehicles));
-    }
-    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
-    localVehicles.push(vehicle.ListingID);
-    localStorage.setItem("vehicles", JSON.stringify(localVehicles));
-    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-    window.location.assign("dashboard.html");
-}
+        if ("".localeCompare(document.querySelector("#description").value) === 0 ) { cantPublish = true; emptyInputError("description"); }
+        else { vehicle.Description = sanitize(document.querySelector("#description").value); }
+        
+        if (cantPublish === false) {
+            vehicle.ListingID = validateID(6);
+            if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
+            let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+            localVehicles.push(vehicle.ListingID);
+            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
+            localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+            window.location.assign("dashboard.html");
+        }
 
-function generateID(length) {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (let i = 0; i < length; i++) { result += characters.charAt(Math.floor(Math.random() * charactersLength)); }
-    return result;
+        function emptyInputError(fail) {
+            const nullVehicleDataError = document.createElement('p');
+            let possiblyMistyped = ("engine displacement in liters".localeCompare(fail) === 0 || "amount of cylinders".localeCompare(fail) === 0 || "amount of doors".localeCompare(fail) === 0 || "mileage".localeCompare(fail) === 0);
+            if (possiblyMistyped == true) { nullVehicleDataError.textContent = `The ${fail} of your car is missing or mistyped! Please fill that in.`; }
+            else { nullVehicleDataError.textContent = `The ${fail} of your car is missing! Please fill that in.`; }
+            nullVehicleData.appendChild(nullVehicleDataError);
+
+            document.querySelector("#create-listing").style = "background-color:red; color: white";
+            displaynullVehicleDataErrorMessage();
+        }
+        
+        cantPublish = false;
+    }
 }
 
 function validateID(length) {
     let potentialID = generateID(length);
     if (localStorage.getItem(`${potentialID}`) == null) { return potentialID; }
     else { return validateID(length); }
+
+    function generateID(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (let i = 0; i < length; i++) { result += characters.charAt(Math.floor(Math.random() * charactersLength)); }
+        return result;
+    }
 }
 
 function displayInGarage() {
     let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    let garage = document.querySelector("#garage");
+    if (localVehicles == null) {
+        let noVehicles = document.createElement("p");
+        noVehicles.innerHTML = `Your garage is empty! Add a vehicle <a href="create-listing.html" style="text-decoration: none;">here</a>.`;
+        garage.appendChild(noVehicles);
+        let emptyGarage = document.createElement("img");
+        emptyGarage.src = "images/empty_garage.jpg";
+        emptyGarage.style.width = "150px";
+        garage.appendChild(emptyGarage);
+    }
     for (let i = 0; i < localVehicles.length; i++) {
         let vehicleID = localVehicles[i];
         let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
@@ -352,7 +402,7 @@ function displayInGarage() {
         image.style.width = "150px";
         image.src = "images/Scion iQ.jpg";
 
-        document.querySelector("#garage").appendChild(anchor);
+        garage.appendChild(anchor);
         anchor.appendChild(displayCard);
         displayCard.appendChild(title);
         displayCard.appendChild(snippets);
@@ -407,14 +457,14 @@ function displayEditScreen(editOriginator) {
     editButton.id = `${vehicleID}`;
     editButton.onclick = editListing;
     listing.appendChild(editButton);
-}
 
-function editListing() {
-    let vehicleID = document.getElementsByClassName('btn').item(0).id;
-    let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-    vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value);
-    vehicle.Description = sanitize(document.querySelector("#edit-description").value); // To do: Disable empty fields possibility
-    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-    const listing = document.querySelector("#listing");
-    window.location.assign("dashboard.html");
+    function editListing() {
+        let vehicleID = document.getElementsByClassName('btn').item(0).id;
+        let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value);
+        vehicle.Description = sanitize(document.querySelector("#edit-description").value); // To do: Disable empty fields possibility
+        localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+        const listing = document.querySelector("#listing");
+        window.location.assign("dashboard.html");
+    }
 }
