@@ -331,6 +331,8 @@ function publishListing() {
         
         if (cantPublish === false) {
             vehicle.Date = new Date();
+            vehicle.Favorites = 0;
+            vehicle.Views = 0;
             vehicle.ListingID = validateID(6);
             if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
             let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
@@ -397,7 +399,7 @@ function displayInGarage() {
         let vin = document.createElement("p");
         
         kify = (x) => `${Math.floor(x/1000)}k`;
-        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; 25 &starf; &middot; 300 <span class="fa">&#xf06e; &nbsp; <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
+        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp; <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
         snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
         vin.innerHTML = `${vehicle.VIN}`;
 
@@ -496,7 +498,10 @@ function displayListing() {
     
     document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
     document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
-    document.querySelector("#stats").innerHTML = `Location &middot; 31 &starf; &middot; 800 <span class="fa">&#xf06e;`;
+    
+    document.querySelector("#stats").innerHTML = `Location &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
+    vehicle.Views += 1;
+
     document.querySelector("#posted-when").textContent = `Posted ${date}`;
     
     let engine;
@@ -522,4 +527,6 @@ function displayListing() {
     document.querySelector("#location").textContent = `Location: 11 miles from zip code 99999`;
     document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
     document.querySelector("#description").textContent = `${vehicle.Description}`;
+
+    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
 }
