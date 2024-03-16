@@ -240,14 +240,14 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function displaynullVehicleDataErrorMessage() {
+    await sleep(2000);
+    document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
+}
+
 function publishListing() {
     const nullVehicleData = document.querySelector("#null-vehicle");
     while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
-
-    async function displaynullVehicleDataErrorMessage() {
-        await sleep(2000);
-        document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
-    }
 
     if (vehicle == null) {
         const nullVehicleDataError = document.createElement('p');
@@ -278,20 +278,20 @@ function publishListing() {
             else { vehicle.Model = sanitize(document.querySelector("#model").value); }
         }
         
-        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) { /////////////
+        if ("".localeCompare(vehicle.FuelTypePrimary) === 0) {
             vehicle.EditableFields.push("FuelTypePrimary");
             let invalid = ("".localeCompare(document.querySelector("#fuel").value) === 0 || "Select".localeCompare(document.querySelector("#fuel").value) === 0);
             if (invalid) { cantPublish = true; emptyInputError("fuel type"); }
             else { vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value); }
         }
         
-        if ("".localeCompare(vehicle.DriveType) === 0) { /////////////////////
+        if ("".localeCompare(vehicle.DriveType) === 0) {
             let invalid = ("".localeCompare(document.querySelector("#drivetrain").value) === 0 || "Select".localeCompare(document.querySelector("#drivetrain").value) === 0);
             if (invalid) { cantPublish = true; emptyInputError("drivetrain type"); }
             else { vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value); }
         }
         
-        if ("".localeCompare(vehicle.TransmissionStyle) === 0) { ////////////////////
+        if ("".localeCompare(vehicle.TransmissionStyle) === 0) {
             vehicle.EditableFields.push("TransmissionStyle");
             let invalid = ("".localeCompare(document.querySelector("#transmission").value) === 0 || "Select".localeCompare(document.querySelector("#transmission").value) === 0);
             if (invalid) { cantPublish = true; emptyInputError("transmission type"); }
@@ -321,7 +321,7 @@ function publishListing() {
         else { vehicle.Mileage = sanitize(document.querySelector("#mileage").value); }
         
         vehicle.EditableFields.push("Title");
-        let invalid = ("".localeCompare(document.querySelector("#transmission").value) === 0 || "Select".localeCompare(document.querySelector("#transmission").value) === 0);
+        let invalid = ("".localeCompare(document.querySelector("#title").value) === 0 || "Select".localeCompare(document.querySelector("#title").value) === 0);
         if (invalid) { cantPublish = true; emptyInputError("title status"); }
         else { vehicle.Title = sanitize(document.querySelector("#title").value); } // To do: title-checker API
         
@@ -338,20 +338,21 @@ function publishListing() {
             localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
             window.location.assign("dashboard.html");
         }
-
-        function emptyInputError(fail) {
-            const nullVehicleDataError = document.createElement('p');
-            let possiblyMistyped = ("engine displacement in liters".localeCompare(fail) === 0 || "amount of cylinders".localeCompare(fail) === 0 || "amount of doors".localeCompare(fail) === 0 || "mileage".localeCompare(fail) === 0);
-            if (possiblyMistyped == true) { nullVehicleDataError.textContent = `The ${fail} of your car is missing or mistyped! Please fill that in.`; }
-            else { nullVehicleDataError.textContent = `The ${fail} of your car is missing! Please fill that in.`; }
-            nullVehicleData.appendChild(nullVehicleDataError);
-
-            document.querySelector("#create-listing").style = "background-color:red; color: white";
-            displaynullVehicleDataErrorMessage();
-        }
         
         cantPublish = false;
     }
+}
+
+function emptyInputError(fail) {
+    const nullVehicleData = document.querySelector("#null-vehicle");
+    const nullVehicleDataError = document.createElement('p');
+    let possiblyMistyped = ("engine displacement in liters".localeCompare(fail) === 0 || "amount of cylinders".localeCompare(fail) === 0 || "amount of doors".localeCompare(fail) === 0 || "mileage".localeCompare(fail) === 0);
+    if (possiblyMistyped == true) { nullVehicleDataError.textContent = `The ${fail} of your car is missing or mistyped! Please fill that in.`; }
+    else { nullVehicleDataError.textContent = `The ${fail} of your car is missing! Please fill that in.`; }
+    nullVehicleData.appendChild(nullVehicleDataError);
+
+    document.querySelector("#create-listing").style = "background-color:red; color: white";
+    displaynullVehicleDataErrorMessage();
 }
 
 function validateID(length) {
@@ -448,7 +449,11 @@ function displayEditScreen(editOriginator) {
     listing.appendChild(descriptionLabel);
     listing.appendChild(description);
 
-    // To-do: Add image-editing functionality
+    // To do: Add image-editing functionality
+
+    let nullVehicleDataContainer = document.createElement('div');
+    nullVehicleDataContainer.id = 'null-vehicle';
+    listing.appendChild(nullVehicleDataContainer);
 
     let editButton = document.createElement('button');
     editButton.classList.add('btn');
@@ -459,12 +464,25 @@ function displayEditScreen(editOriginator) {
     listing.appendChild(editButton);
 
     function editListing() {
+        const nullVehicleData = document.querySelector("#null-vehicle");
+        while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
+        let cantEdit = false;
+    
         let vehicleID = document.getElementsByClassName('btn').item(0).id;
         let vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value);
-        vehicle.Description = sanitize(document.querySelector("#edit-description").value); // To do: Disable empty fields possibility
-        localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-        const listing = document.querySelector("#listing");
-        window.location.assign("dashboard.html");
+        
+        if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyInputError("mileage"); }
+        else { vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value); }
+        
+        if ("".localeCompare(document.querySelector("#edit-description").value) === 0 ) { cantEdit = true; emptyInputError("description"); }
+        else { vehicle.Description = sanitize(document.querySelector("#edit-description").value); }
+        
+        if (cantEdit === false) {
+            localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+            const listing = document.querySelector("#listing");
+            window.location.assign("dashboard.html");
+        }
+
+        cantEdit = false;
     }
 }
