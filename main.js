@@ -384,35 +384,37 @@ function displayInGarage() {
         emptyGarage.style.width = "150px";
         garage.appendChild(emptyGarage);
     }
-    for (let i = 0; i < localVehicles.length; i++) {
-        let vehicleID = localVehicles[i];
-        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        
-        let anchor = document.createElement("a");
-        anchor.href = `listing.html?id=${vehicle.ListingID}`;
-        anchor.style = "color: white; text-decoration: none;"
-        let displayCard = document.createElement("div");
-        displayCard.classList.add("display-card");
-        
-        let title = document.createElement("h4");
-        let snippets = document.createElement("p");
-        let vin = document.createElement("p");
-        
-        kify = (x) => `${Math.floor(x/1000)}k`;
-        title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp; <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
-        snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
-        vin.innerHTML = `${vehicle.VIN}`;
+    else {
+        for (let i = 0; i < localVehicles.length; i++) {
+            let vehicleID = localVehicles[i];
+            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+            
+            let anchor = document.createElement("a");
+            anchor.href = `listing.html?id=${vehicle.ListingID}`;
+            anchor.style = "color: white; text-decoration: none;"
+            let displayCard = document.createElement("div");
+            displayCard.classList.add("display-card");
+            
+            let title = document.createElement("h4");
+            let snippets = document.createElement("p");
+            let vin = document.createElement("p");
+            
+            kify = (x) => `${Math.floor(x/1000)}k`;
+            title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp;</span> <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
+            snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+            vin.innerHTML = `${vehicle.VIN}`;
 
-        let image = document.createElement("img");
-        image.style.width = "150px";
-        image.src = "images/Scion iQ.jpg";
+            let image = document.createElement("img");
+            image.style.width = "150px";
+            image.src = "images/Scion iQ.jpg";
 
-        garage.appendChild(anchor);
-        anchor.appendChild(displayCard);
-        displayCard.appendChild(title);
-        displayCard.appendChild(snippets);
-        displayCard.appendChild(vin);
-        displayCard.appendChild(image);
+            garage.appendChild(anchor);
+            anchor.appendChild(displayCard);
+            displayCard.appendChild(title);
+            displayCard.appendChild(snippets);
+            displayCard.appendChild(vin);
+            displayCard.appendChild(image);
+        }
     }
 }
 
@@ -461,18 +463,31 @@ function displayEditScreen(editOriginator) {
 
     let editButton = document.createElement('button');
     editButton.classList.add('btn');
-    // editButton.style = "margin-top: 2vh";
+    editButton.classList.add('edit');
     editButton.textContent = "Save and update";
     editButton.id = `${vehicleID}`;
     editButton.onclick = editListing;
     listing.appendChild(editButton);
+
+    let orText = document.createElement('p');
+    orText.textContent = "or, delete my listing.";
+    orText.style = "margin: 2vh";
+    listing.appendChild(orText);
+
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('btn');
+    deleteButton.classList.add('delete');
+    deleteButton.textContent = "Delete";
+    deleteButton.id = `${vehicleID}`;
+    deleteButton.onclick = deleteListing;
+    listing.appendChild(deleteButton);
 
     function editListing() {
         const nullVehicleData = document.querySelector("#null-vehicle");
         while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
         let cantEdit = false;
     
-        let vehicleID = document.getElementsByClassName('btn').item(0).id;
+        let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
         vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
         
         if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyInputError("mileage"); }
@@ -488,6 +503,23 @@ function displayEditScreen(editOriginator) {
         }
 
         cantEdit = false;
+    }
+
+    function deleteListing() {
+        let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
+        let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+        if (localVehicles.length === 1) { localStorage.removeItem("vehicles"); }
+        else {
+            let index = localVehicles.indexOf(vehicleID);
+            const localVehiclesInterator = localVehicles.entries();
+            localVehicles = [];
+            for (let vehicleInList of localVehiclesInterator) {
+                if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); }
+            }
+            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
+        }
+        localStorage.removeItem(`${vehicleID}`);
+        window.location.assign("dashboard.html");
     }
 }
 
