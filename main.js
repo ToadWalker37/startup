@@ -1,13 +1,15 @@
 let vehicle;
 const vehicles = new Array();
-let user;
+let user = {};
 if (localStorage.getItem("email@example.com") == null) { localStorage.setItem("email@example.com", "password"); }
 if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
+
+if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.querySelector("span").innerHTML = `${JSON.parse(localStorage.getItem("currentUser")).Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh;" class="fa">&#xf08b;</i></a>`; }
 
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
 function processVehicleData(input) {
-        let vin = input;
+    let vin = input;
     let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`;
     fetch(url)
     .then((response) => response.json())
@@ -101,7 +103,7 @@ function processVehicleData(input) {
             let drivetrain = document.createElement('input');
             let driveType;
             if ("4WD/4-Wheel Drive/4x4".localeCompare(vehicle.DriveType) === 0) { driveType = "4x4"; }
-                else { driveType = vehicle.DriveType; }
+            else { driveType = vehicle.DriveType; }
             drivetrain.value = driveType;            
             if ("".localeCompare(vehicle.DriveType) !== 0) {
                 drivetrain.readOnly = true;
@@ -239,14 +241,9 @@ function processVehicleData(input) {
     });
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-async function displaynullVehicleDataErrorMessage() {
-    await sleep(2000);
-    document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black";
-}
+async function displaynullVehicleDataErrorMessage() { await sleep(2000); document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black"; }
 
 function publishListing() {
     const nullVehicleData = document.querySelector("#null-vehicle");
@@ -265,71 +262,71 @@ function publishListing() {
 
         if ("".localeCompare(vehicle.ModelYear) === 0) {
             vehicle.EditableFields.push("ModelYear");
-            if ("".localeCompare(document.querySelector("#year").value) === 0 ) { cantPublish = true; emptyInputError("year"); }
+            if ("".localeCompare(document.querySelector("#year").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("year"); }
             else { vehicle.ModelYear = sanitize(document.querySelector("#year").value); }
         }
 
         if ("".localeCompare(vehicle.Make) === 0) {
             vehicle.EditableFields.push("Make");
-            if ("".localeCompare(document.querySelector("#make").value) === 0 ) { cantPublish = true; emptyInputError("make"); }
+            if ("".localeCompare(document.querySelector("#make").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("make"); }
             else { vehicle.Make = sanitize(document.querySelector("#make").value); }
         }
         
         if ("".localeCompare(vehicle.Model) === 0) {
             vehicle.EditableFields.push("Model");
-            if ("".localeCompare(document.querySelector("#model").value) === 0 ) { cantPublish = true; emptyInputError("model"); }
+            if ("".localeCompare(document.querySelector("#model").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("model"); }
             else { vehicle.Model = sanitize(document.querySelector("#model").value); }
         }
         
         if ("".localeCompare(vehicle.FuelTypePrimary) === 0) {
             vehicle.EditableFields.push("FuelTypePrimary");
             let invalid = ("".localeCompare(document.querySelector("#fuel").value) === 0 || "Select".localeCompare(document.querySelector("#fuel").value) === 0);
-            if (invalid) { cantPublish = true; emptyInputError("fuel type"); }
+            if (invalid) { cantPublish = true; emptyVehicleListingInputError("fuel type"); }
             else { vehicle.FuelTypePrimary = sanitize(document.querySelector("#fuel").value); }
         }
         
         if ("".localeCompare(vehicle.DriveType) === 0) {
             let invalid = ("".localeCompare(document.querySelector("#drivetrain").value) === 0 || "Select".localeCompare(document.querySelector("#drivetrain").value) === 0);
-            if (invalid) { cantPublish = true; emptyInputError("drivetrain type"); }
+            if (invalid) { cantPublish = true; emptyVehicleListingInputError("drivetrain type"); }
             else { vehicle.DriveType = sanitize(document.querySelector("#drivetrain").value); }
         }
         
         if ("".localeCompare(vehicle.TransmissionStyle) === 0) {
             vehicle.EditableFields.push("TransmissionStyle");
             let invalid = ("".localeCompare(document.querySelector("#transmission").value) === 0 || "Select".localeCompare(document.querySelector("#transmission").value) === 0);
-            if (invalid) { cantPublish = true; emptyInputError("transmission type"); }
+            if (invalid) { cantPublish = true; emptyVehicleListingInputError("transmission type"); }
             else { vehicle.TransmissionStyle = sanitize(document.querySelector("#transmission").value); }
         }
         
         if ("".localeCompare(vehicle.DisplacementL) === 0) {
             vehicle.EditableFields.push("DisplacementL");
-            if ("".localeCompare(document.querySelector("#displacement").value) === 0 ) { cantPublish = true; emptyInputError("engine displacement in liters"); }
+            if ("".localeCompare(document.querySelector("#displacement").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("engine displacement in liters"); }
             else { vehicle.DisplacementL = sanitize(document.querySelector("#displacement").value); }
         }
         
         if ("".localeCompare(vehicle.EngineCylinders) === 0) {
             vehicle.EditableFields.push("EngineCylinders");
-            if ("".localeCompare(document.querySelector("#cylinders").value) === 0 ) { cantPublish = true; emptyInputError("amount of cylinders"); }
+            if ("".localeCompare(document.querySelector("#cylinders").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("amount of cylinders"); }
             else { vehicle.EngineCylinders = sanitize(document.querySelector("#cylinders").value); }
         }
         
         if ("".localeCompare(vehicle.Doors) === 0) {
             vehicle.EditableFields.push("Doors");
-            if ("".localeCompare(document.querySelector("#doors").value) === 0 ) { cantPublish = true; emptyInputError("amount of doors"); }
+            if ("".localeCompare(document.querySelector("#doors").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("amount of doors"); }
             else { vehicle.Doors = sanitize(document.querySelector("#doors").value); }
         }
         
         vehicle.EditableFields.push("Mileage");
-        if ("".localeCompare(document.querySelector("#mileage").value) === 0 ) { cantPublish = true; emptyInputError("mileage"); }
+        if ("".localeCompare(document.querySelector("#mileage").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("mileage"); }
         else { vehicle.Mileage = sanitize(document.querySelector("#mileage").value); }
         
         vehicle.EditableFields.push("Title");
         let invalid = ("".localeCompare(document.querySelector("#title").value) === 0 || "Select".localeCompare(document.querySelector("#title").value) === 0);
-        if (invalid) { cantPublish = true; emptyInputError("title status"); }
+        if (invalid) { cantPublish = true; emptyVehicleListingInputError("title status"); }
         else { vehicle.Title = sanitize(document.querySelector("#title").value); } // To do: title-checker API
         
         vehicle.EditableFields.push("Description");
-        if ("".localeCompare(document.querySelector("#description").value) === 0 ) { cantPublish = true; emptyInputError("description"); }
+        if ("".localeCompare(document.querySelector("#description").value) === 0 ) { cantPublish = true; emptyVehicleListingInputError("description"); }
         else { vehicle.Description = sanitize(document.querySelector("#description").value); }
         
         if (cantPublish === false) {
@@ -349,7 +346,7 @@ function publishListing() {
     }
 }
 
-function emptyInputError(fail) {
+function emptyVehicleListingInputError(fail) {
     const nullVehicleData = document.querySelector("#null-vehicle");
     const nullVehicleDataError = document.createElement('p');
     let possiblyMistyped = ("engine displacement in liters".localeCompare(fail) === 0 || "amount of cylinders".localeCompare(fail) === 0 || "amount of doors".localeCompare(fail) === 0 || "mileage".localeCompare(fail) === 0);
@@ -493,10 +490,10 @@ function displayEditScreen(editOriginator) {
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
         vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
         
-        if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyInputError("mileage"); }
+        if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("mileage"); }
         else { vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value); }
         
-        if ("".localeCompare(document.querySelector("#edit-description").value) === 0 ) { cantEdit = true; emptyInputError("description"); }
+        if ("".localeCompare(document.querySelector("#edit-description").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("description"); }
         else { vehicle.Description = sanitize(document.querySelector("#edit-description").value); }
         
         if (cantEdit === false) {
@@ -504,7 +501,6 @@ function displayEditScreen(editOriginator) {
             const listing = document.querySelector("#listing");
             window.location.assign("dashboard.html");
         }
-
         cantEdit = false;
     }
 
@@ -566,37 +562,64 @@ function displayListing() {
     localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
 }
 
-function signIn() {
-    async function displayAuthenticationError(buttonID) {
-        await sleep(2000);
-        document.querySelector(`#${buttonID}`).style = "background-color: hsl(54, 100%, 50%); color: black";
-    }
+async function displayAuthenticationError(buttonID) { await sleep(2000); document.querySelector(`#${buttonID}`).style = "background-color: hsl(54, 100%, 50%); color: black"; }
 
+function emptyAuthenticationError(fail, nullDiv, authenticationErrorType) {
+    const nullAuthenticationDataError = document.createElement('p');
+    nullAuthenticationDataError.textContent = `${fail}`;
+    nullDiv.appendChild(nullAuthenticationDataError);
+    document.querySelector(`#${authenticationErrorType}`).style = "background-color:red; color: white";
+    displayAuthenticationError(authenticationErrorType);
+}
+
+function signIn() {   
     const nullSignInData = document.querySelector("#null-sign-in");
     while (nullSignInData.firstChild) { nullSignInData.removeChild(nullSignInData.lastChild); }
     
-    if ("".localeCompare(document.querySelector("#signInEmail").value) === 0) {
-        const nullSignInDataError = document.createElement('p');
-        nullSignInDataError.textContent = `Email missing! Please fill that in.`;
-        nullSignInData.appendChild(nullSignInDataError);
-        document.querySelector("#sign-in").style = "background-color:red; color: white";
-        displayAuthenticationError("sign-in");
-    }
-    else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) {
-        const nullSignInDataError = document.createElement('p');
-        nullSignInDataError.textContent = `Password missing! Please fill that in.`;
-        nullSignInData.appendChild(nullSignInDataError);
-        document.querySelector("#sign-in").style = "background-color:red; color: white";
-        displayAuthenticationError("sign-in");   
-    }
+    if ("".localeCompare(document.querySelector("#signInUsername").value) === 0) { emptyAuthenticationError("Username missing! Please fill that in.", nullSignInData, "sign-in"); }
+    else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) { emptyAuthenticationError("Password missing! Please fill that in.", nullSignInData, "sign-in"); }
     else {
-        if (localStorage.getItem(`${document.querySelector("#signInEmail").value}`) == null || document.querySelector("#signInPassword").value.localeCompare(localStorage.getItem(`${document.querySelector("#signInEmail").value}`)) !== 0) {
-            const nullSignInDataError = document.createElement('p');
-            nullSignInDataError.textContent = `Email or password invalid.`;
-            nullSignInData.appendChild(nullSignInDataError);
-            document.querySelector("#sign-in").style = "background-color:red; color: white";
-            displayAuthenticationError("sign-in");
+        if (localStorage.getItem(`${document.querySelector("#signInUsername").value}`) == null || document.querySelector("#signInPassword").value.localeCompare(JSON.parse(localStorage.getItem(`${document.querySelector("#signInUsername").value}`)).Password) !== 0) { emptyAuthenticationError("Email or password invalid.", nullSignInData, "sign-in"); }
+        else {
+            localStorage.setItem("signedIn", 1);
+            localStorage.setItem("currentUser", localStorage.getItem(`${document.querySelector("#signInUsername").value}`));
+            window.location.reload();
         }
-        else { localStorage.setItem("signedIn", 1); }
     }
+}
+
+function signUp() {
+    const nullSignUpData = document.querySelector("#null-sign-up");
+    while (nullSignUpData.firstChild) { nullSignUpData.removeChild(nullSignUpData.lastChild); }
+    let cantAuthenticate = false;
+    
+    if ("".localeCompare(document.querySelector("#signUpFirstName").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("First name missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpLastName").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Last name missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpUsername").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Username missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpEmail").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Email missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpPhone").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Phone number missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpZipCode").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Zip code missing! Please fill that in.", nullSignUpData, "sign-up"); }
+    if ("".localeCompare(document.querySelector("#signUpPassword").value) === 0) { cantAuthenticate = true; emptyAuthenticationError("Password missing! Please fill that in.", nullSignUpData, "sign-up"); }
+
+    if (localStorage.getItem(`${document.querySelector("#signUpUsername").value}`) != null) { cantAuthenticate = true; emptyAuthenticationError("Username taken! Please pick a different one.", nullSignUpData, "sign-up"); }
+
+    if (cantAuthenticate === false) {
+        user.FirstName = sanitize(document.querySelector("#signUpFirstName").value);
+        user.LastName = sanitize(document.querySelector("#signUpLastName").value);
+        user.Username = sanitize(document.querySelector("#signUpUsername").value);
+        user.Email = sanitize(document.querySelector("#signUpEmail").value);
+        user.Phone = sanitize(document.querySelector("#signUpPhone").value);
+        user.ZipCode = sanitize(document.querySelector("#signUpZipCode").value);
+        user.Password = document.querySelector("#signUpPassword").value;
+        localStorage.setItem(`${user.Username}`, JSON.stringify(user));
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        localStorage.setItem("signedIn", 1);
+        window.location.reload();
+    }
+}
+
+function signOut() {
+    localStorage.setItem("signedIn", "0");
+    localStorage.setItem("currentUser", {});
+    window.location.reload();
 }

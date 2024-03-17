@@ -37,10 +37,7 @@
         <header class="sticky-top">
             <h1 class="home-banner"><a href="index.html">Dynamic Garage</a></h1>
             <h5 class="home-banner"><a href="index.html">Get your dream car</a></h5>
-            <div id="login">
-                <span class="login">ToadWalker37</span>
-                <span class="login">Sign out</span>
-            </div>
+            <div id="login"><span class="login"></span></div>
             <nav>
                 <li class="nav"><a href="index.html" id="home">Home</a></li>
                 <li class="nav"><a href="browse.html">Browse</a></li>
@@ -53,8 +50,8 @@
             <div class="account-option">
                 <legend>Have an account? Sign in here!</legend>
                 <div class="option">
-                    <label for="email">Email: </label>
-                    <input type="email" id="signInEmail" name="varEmail" placeholder="" required />
+                    <label for="email">Username: </label>
+                    <input type="email" id="signInUsername" name="varEmail" placeholder="" required />
                 </div>
                 <div class="option">
                     <label for="password">Password: </label>
@@ -69,37 +66,42 @@
                 <legend>No account yet? Join us today!</legend>
                 <div class="option">
                     <label class="no-account" for="text">First name: </label>
-                    <input class="no-account" type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
+                    <input class="no-account" type="text" id="signUpFirstName" name="varText" placeholder="" required pattern="[Aa].*" required />
                 </div>
                 <div class="option">
                     <label class="no-account" for="text">Last name: </label>
-                    <input class="no-account" type="text" id="text" name="varText" placeholder="" required pattern="[Aa].*" required />
+                    <input class="no-account" type="text" id="signUpLastName" name="varText" placeholder="" required pattern="[Aa].*" required />
+                </div>
+                <div class="option">
+                    <label class="no-account" for="text">Username: </label>
+                    <input class="no-account" type="text" id="signUpUsername" name="varText" placeholder="" required pattern="[A-Za-z0-9].*" required />
                 </div>
                 <div class="option">
                     <label class="no-account" for="email">Email: </label>
-                    <input class="no-account" type="email" id="email" name="varEmail" placeholder="you@example.com" required />
+                    <input class="no-account" type="email" id="signUpEmail" name="varEmail" placeholder="you@example.com" required />
                 </div>
                 <div class="option">
                     <label class="no-account" for="tel">Phone: </label>
-                    <input class="no-account" type="tel" id="tel" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" required />
+                    <input class="no-account" type="tel" id="signUpPhone" name="varTel" placeholder="###-###-####" pattern="\d{3}-\d{3}-\d{4}" required />
                 </div>
                 <div class="option">
                     <label class="no-account" for="zip">Zip code: </label>
-                    <input class="no-account" type="zip" id="zip" name="zip" placeholder="XXXXX" required pattern="/d{5}" required />
+                    <input class="no-account" type="zip" id="signUpZipCode" name="zip" placeholder="XXXXX" required pattern="/d{5}" required />
                 </div>
                 <div class="option">
                     <label class="no-account" for="password">Password: </label>
-                    <input class="no-account" type="password" id="password" name="varPassword" required />
+                    <input class="no-account" type="password" id="signUpPassword" name="varPassword" required />
                 </div>
+                <div id="null-sign-up"></div>
                 <div class="option" style="padding: 2vh;">
-                    <button class="btn" type="submit">Start trading!</button>
+                    <button class="btn" type="submit" onclick="signUp()" id="sign-up">Start trading!</button>
                 </div>
             </div>
             <div class="account-option">
                 <legend>Don't remember your password? Reset it here.</legend>
                 <div class="option">
                     <label for="email">Email: </label>
-                    <input type="email" id="email" name="varEmail" placeholder="" required />
+                    <input type="email" id="email" name="varEmail" placeholder="Currently unavailable" disabled required />
                 </div>
                 <div class="option" style="padding: 2vh;">
                     <button class="btn" type="submit">Recover my password</button>

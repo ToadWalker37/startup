@@ -43,6 +43,7 @@
   span.login {
     float: right;
     padding-right: 1vw;
+    font-size: 2vh;
   }
 
   nav {
