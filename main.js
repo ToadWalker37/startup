@@ -1,5 +1,8 @@
 let vehicle;
 const vehicles = new Array();
+let user;
+if (localStorage.getItem("email@example.com") == null) { localStorage.setItem("email@example.com", "password"); }
+if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
 
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
@@ -406,7 +409,7 @@ function displayInGarage() {
 
             let image = document.createElement("img");
             image.style.width = "150px";
-            image.src = "images/Scion iQ.jpg";
+            image.src = "images/Coming Soon.png";
 
             garage.appendChild(anchor);
             anchor.appendChild(displayCard);
@@ -527,7 +530,7 @@ function displayListing() {
     let vehicleID = window.location.href.slice(38,44);
     vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
     let date = new Date(vehicle.Date.toLocaleString());
-    
+
     document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
     document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
     
@@ -561,4 +564,39 @@ function displayListing() {
     document.querySelector("#description").textContent = `${vehicle.Description}`;
 
     localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+}
+
+function signIn() {
+    async function displayAuthenticationError(buttonID) {
+        await sleep(2000);
+        document.querySelector(`#${buttonID}`).style = "background-color: hsl(54, 100%, 50%); color: black";
+    }
+
+    const nullSignInData = document.querySelector("#null-sign-in");
+    while (nullSignInData.firstChild) { nullSignInData.removeChild(nullSignInData.lastChild); }
+    
+    if ("".localeCompare(document.querySelector("#signInEmail").value) === 0) {
+        const nullSignInDataError = document.createElement('p');
+        nullSignInDataError.textContent = `Email missing! Please fill that in.`;
+        nullSignInData.appendChild(nullSignInDataError);
+        document.querySelector("#sign-in").style = "background-color:red; color: white";
+        displayAuthenticationError("sign-in");
+    }
+    else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) {
+        const nullSignInDataError = document.createElement('p');
+        nullSignInDataError.textContent = `Password missing! Please fill that in.`;
+        nullSignInData.appendChild(nullSignInDataError);
+        document.querySelector("#sign-in").style = "background-color:red; color: white";
+        displayAuthenticationError("sign-in");   
+    }
+    else {
+        if (localStorage.getItem(`${document.querySelector("#signInEmail").value}`) == null || document.querySelector("#signInPassword").value.localeCompare(localStorage.getItem(`${document.querySelector("#signInEmail").value}`)) !== 0) {
+            const nullSignInDataError = document.createElement('p');
+            nullSignInDataError.textContent = `Email or password invalid.`;
+            nullSignInData.appendChild(nullSignInDataError);
+            document.querySelector("#sign-in").style = "background-color:red; color: white";
+            displayAuthenticationError("sign-in");
+        }
+        else { localStorage.setItem("signedIn", 1); }
+    }
 }

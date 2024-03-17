@@ -192,8 +192,14 @@
                     </div>
                 </div>
             </div>
-            <div style="text-align: center; padding-bottom: 5vh;"><button class="btn" type="submit">Message Thomas</button></div>
+            <div style="text-align: center; padding-bottom: 5vh;"><button class="btn" type="submit" id="message">Message Thomas</button></div>
         </main>
+        <script>
+            if ("0".localeCompare(localStorage.getItem("signedIn")) === 0) {
+                document.querySelector("#message").disabled = true;
+                document.querySelector("#message").style = "background-color: gray;";
+            }
+        </script>
         <footer>
             <p>Created by <a href="https://github.com/ToadWalker37/startup">ToadWalker37</a></p>
         </footer>
