@@ -334,6 +334,8 @@ function publishListing() {
             vehicle.Date = new Date();
             vehicle.Favorites = 0;
             vehicle.Views = 0;
+            vehicle.ZipCode = currentUser.ZipCode;
+            vehicle.Location = vehicle.ZipCode;
             vehicle.ListingID = validateID(6);
 
             if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
@@ -426,12 +428,8 @@ function displayInGarage() {
     let favorites = document.querySelector("#favorites");
     if (currentUser.Favorites.length === 0) {
         let noVehicles = document.createElement("p");
-        noVehicles.innerHTML = `Your garage is empty! Add a vehicle <a href="create-listing.html" style="text-decoration: none;">here</a>.`;
-        garage.appendChild(noVehicles);
-        let emptyGarage = document.createElement("img");
-        emptyGarage.src = "images/empty_garage.jpg";
-        emptyGarage.style.width = "150px";
-        favorites.appendChild(emptyGarage);
+        noVehicles.innerHTML = `You have no favorites yet! Find your favorite car <a href="browse.html" style="text-decoration: none;">here</a>.`;
+        favorites.appendChild(noVehicles);
     }
     else {
         for (let i = 0; i < currentUser.Favorites.length; i++) {
@@ -599,7 +597,7 @@ function displayListing() {
     document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
     document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
     
-    document.querySelector("#stats").innerHTML = `Location &middot; ${vehicle.Favorites} <a href="#" style="text-align:center; text-decoration:none; color: white;" onclick="favorite()">&starf;</a> &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
+    document.querySelector("#stats").innerHTML = `${vehicle.Location} &middot; ${vehicle.Favorites} <a href="#" style="text-align:center; text-decoration:none; color: white;" onclick="favorite()">&starf;</a> &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
     vehicle.Views += 1;
 
     document.querySelector("#posted-when").textContent = `Posted ${date}`;
@@ -624,7 +622,7 @@ function displayListing() {
     document.querySelector("#engine").textContent = `Engine: ${engine}`;
     document.querySelector("#fuel").textContent = `Fuel type: ${vehicle.FuelTypePrimary}`;
     document.querySelector("#title-status").textContent = `Title status: ${vehicle.Title}`;
-    document.querySelector("#location").textContent = `Location: 11 miles from zip code 99999`;
+    document.querySelector("#location").textContent = `Location: some miles from zip code ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
     document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
     document.querySelector("#description").textContent = `${vehicle.Description}`;
 
