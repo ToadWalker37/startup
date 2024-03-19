@@ -14,7 +14,7 @@
         <script>
             let vehicleID = window.location.href.slice(38,44);
             vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-            if ("http://127.0.0.1:5500/listing.html?id=".localeCompare(window.location.href.slice(0,38)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(44)) !== 0) {
+            if ("http://127.0.0.1:5500/listing.html?id=".localeCompare(window.location.href.slice(0,38)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(45)) !== 0) {
                 window.location.href = "listing-not-found.html";
             }
         </script>

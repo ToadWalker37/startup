@@ -1,7 +1,6 @@
 let vehicle;
 const vehicles = new Array();
 let user = {};
-if (localStorage.getItem("email@example.com") == null) { localStorage.setItem("email@example.com", "password"); }
 if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
 
 if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.querySelector("span").innerHTML = `${JSON.parse(localStorage.getItem("currentUser")).Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh;" class="fa">&#xf08b;</i></a>`; }
@@ -330,15 +329,23 @@ function publishListing() {
         else { vehicle.Description = sanitize(document.querySelector("#description").value); }
         
         if (cantPublish === false) {
+            let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            vehicle.Owner = currentUser.Username;
             vehicle.Date = new Date();
             vehicle.Favorites = 0;
             vehicle.Views = 0;
             vehicle.ListingID = validateID(6);
+
             if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
             let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
             localVehicles.push(vehicle.ListingID);
             localStorage.setItem("vehicles", JSON.stringify(localVehicles));
             localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+            
+            currentUser.Listings.push(vehicle.ListingID);
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            
             window.location.assign("dashboard.html");
         }
         
@@ -373,9 +380,9 @@ function validateID(length) {
 }
 
 function displayInGarage() {
-    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let garage = document.querySelector("#garage");
-    if (localVehicles == null) {
+    if (currentUser.Listings.length === 0) {
         let noVehicles = document.createElement("p");
         noVehicles.innerHTML = `Your garage is empty! Add a vehicle <a href="create-listing.html" style="text-decoration: none;">here</a>.`;
         garage.appendChild(noVehicles);
@@ -385,8 +392,8 @@ function displayInGarage() {
         garage.appendChild(emptyGarage);
     }
     else {
-        for (let i = 0; i < localVehicles.length; i++) {
-            let vehicleID = localVehicles[i];
+        for (let i = 0; i < currentUser.Listings.length; i++) {
+            let vehicleID = currentUser.Listings[i];
             vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
             
             let anchor = document.createElement("a");
@@ -409,6 +416,48 @@ function displayInGarage() {
             image.src = "images/Coming Soon.png";
 
             garage.appendChild(anchor);
+            anchor.appendChild(displayCard);
+            displayCard.appendChild(title);
+            displayCard.appendChild(snippets);
+            displayCard.appendChild(vin);
+            displayCard.appendChild(image);
+        }
+    }
+    let favorites = document.querySelector("#favorites");
+    if (currentUser.Favorites.length === 0) {
+        let noVehicles = document.createElement("p");
+        noVehicles.innerHTML = `Your garage is empty! Add a vehicle <a href="create-listing.html" style="text-decoration: none;">here</a>.`;
+        garage.appendChild(noVehicles);
+        let emptyGarage = document.createElement("img");
+        emptyGarage.src = "images/empty_garage.jpg";
+        emptyGarage.style.width = "150px";
+        favorites.appendChild(emptyGarage);
+    }
+    else {
+        for (let i = 0; i < currentUser.Favorites.length; i++) {
+            let vehicleID = currentUser.Favorites[i];
+            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+            
+            let anchor = document.createElement("a");
+            anchor.href = `listing.html?id=${vehicle.ListingID}`;
+            anchor.style = "color: white; text-decoration: none;"
+            let displayCard = document.createElement("div");
+            displayCard.classList.add("display-card");
+            
+            let title = document.createElement("h4");
+            let snippets = document.createElement("p");
+            let vin = document.createElement("p");
+            
+            kify = (x) => `${Math.floor(x/1000)}k`;
+            title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+            snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+            vin.innerHTML = `${vehicle.VIN}`;
+
+            let image = document.createElement("img");
+            image.style.width = "150px";
+            image.src = "images/Coming Soon.png";
+
+            favorites.appendChild(anchor);
             anchor.appendChild(displayCard);
             displayCard.appendChild(title);
             displayCard.appendChild(snippets);
@@ -505,17 +554,37 @@ function displayEditScreen(editOriginator) {
     }
 
     function deleteListing() {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
         let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
-        if (localVehicles.length === 1) { localStorage.removeItem("vehicles"); }
-        else {
+        if (localVehicles.length === 1) {
+            localStorage.removeItem("vehicles");
+            currentUser.Listings = [];
+        }
+        else if (currentUser.Listings.length === 1) {
             let index = localVehicles.indexOf(vehicleID);
             const localVehiclesInterator = localVehicles.entries();
             localVehicles = [];
-            for (let vehicleInList of localVehiclesInterator) {
-                if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); }
-            }
+            for (let vehicleInList of localVehiclesInterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
             localStorage.setItem("vehicles", JSON.stringify(localVehicles));
+            
+            currentUser.Listings = [];
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+        }
+        else {
+            let localVehiclesIndex = localVehicles.indexOf(vehicleID);
+            const localVehiclesInterator = localVehicles.entries();
+            localVehicles = [];
+            for (let vehicleInList of localVehiclesInterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
+            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
+
+            let currentUserListingsIndex = currentUser.Listings.indexOf(vehicleID);
+            const currentUserListingsInterator = currentUser.Listings.entries();
+            currentUser.Listings = [];
+            for (let vehicleInList of currentUserListingsInterator) { if (vehicleInList[0] !== currentUserListingsIndex) { currentUser.Listings.push(vehicleInList[1]); } }
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
         }
         localStorage.removeItem(`${vehicleID}`);
         window.location.assign("dashboard.html");
@@ -530,7 +599,7 @@ function displayListing() {
     document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
     document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
     
-    document.querySelector("#stats").innerHTML = `Location &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
+    document.querySelector("#stats").innerHTML = `Location &middot; ${vehicle.Favorites} <a href="#" style="text-align:center; text-decoration:none; color: white;" onclick="favorite()">&starf;</a> &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
     vehicle.Views += 1;
 
     document.querySelector("#posted-when").textContent = `Posted ${date}`;
@@ -611,6 +680,8 @@ function signUp() {
         user.Phone = sanitize(document.querySelector("#signUpPhone").value);
         user.ZipCode = sanitize(document.querySelector("#signUpZipCode").value);
         user.Password = document.querySelector("#signUpPassword").value;
+        user.Listings = new Array();
+        user.Favorites = new Array();
         localStorage.setItem(`${user.Username}`, JSON.stringify(user));
         localStorage.setItem("currentUser", JSON.stringify(user));
         localStorage.setItem("signedIn", 1);
@@ -622,4 +693,32 @@ function signOut() {
     localStorage.setItem("signedIn", "0");
     localStorage.setItem("currentUser", {});
     window.location.reload();
+}
+
+function favorite() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if ("0".localeCompare(localStorage.getItem("signedIn")) === 0) { window.location.assign("must-sign-in.html"); }
+    else {
+        let vehicleID = window.location.href.slice(38,44);
+        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        let currentUserFavoritesIndex = currentUser.Favorites.indexOf(vehicleID);
+        if (currentUserFavoritesIndex !== -1) {
+            const currentUserFavoritesInterator = currentUser.Favorites.entries();
+            currentUser.Favorites = [];
+            for (let vehicleInList of currentUserFavoritesInterator) { if (vehicleInList[0] !== currentUserFavoritesIndex) { currentUser.Favorites.push(vehicleInList[1]); } }
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+
+            vehicle.Favorites--;
+            localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
+        }
+        else /* vehicle not in user.favorites */ {
+            currentUser.Favorites.push(vehicleID);
+            vehicle.Favorites++;
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
+        }
+        window.location.reload();
+    }
 }
