@@ -721,13 +721,26 @@ function favorite() {
     }
 }
 
-function displayBrowseOptions() {
+function displayBrowseOptions(make, model) {
     let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
     const browseOptions = document.querySelector("#browse-options");
     if (localVehicles == null) {
         let noVehiclesError = document.createElement('p');
         noVehiclesError.textContent = "It looks like there are no cars yet to search. Grab your friend and get them to list their car on here! They'll be the first!";
         browseOptions.appendChild(noVehiclesError);
+    }
+    else if ("model".localeCompare(model) === 0) {
+        let makeNode = document.querySelector(`#${make}`);
+        let modelNode = document.querySelector("#model");
+        if (makeNode.checked == true) {
+            makeNode.checked = 1;
+            populateOptions(modelNode, "model", make);
+        }
+        else {
+            makeNode.checked = 0;
+            let modelChildren = modelNode.querySelectorAll(`div`);
+            for (let i = 0; i < modelChildren.length; i++) { if (modelChildren[i].classList.contains(`${make}`)) { modelNode.removeChild(modelChildren[i]); } }
+        }
     }
     else {
         let make = document.querySelector("#make");
@@ -742,8 +755,8 @@ function displayBrowseOptions() {
         populateOptions(title, "title");
     }
 
-    function populateOptions(div, type) {
-        while (div.firstChild) { div.removeChild(div.lastChild); }
+    function populateOptions(div, type, make) {
+        if ("model".localeCompare(type) !== 0) { while (div.firstChild) { div.removeChild(div.lastChild); } }
         let iterator = localVehicles.entries();
         let options = [];
         for (let vehicleID of iterator) {
@@ -751,19 +764,28 @@ function displayBrowseOptions() {
             let value;
             switch (type) {
                 case "make": value = vehicleInList.Make; break;
+                case "model": value = vehicleInList.Model; break; savedMake = vehicle;
                 case "fuel": value = vehicleInList.FuelTypePrimary; break;
                 case "drivetrain": value = vehicleInList.DriveType; break;
                 case "transmission": value = vehicleInList.TransmissionStyle; break;
                 case "title": value = vehicleInList.Title; break;
             }
-            if (options.indexOf(value) === -1) { options.push(value); }
+            if ("model".localeCompare(type) === 0) { if (make.localeCompare(vehicleInList.Make) === 0) { options.push(value); } }
+            else if (options.indexOf(value) === -1) { options.push(value); }
         }
         options.sort();
         iterator = options.entries()
         for (let value of iterator) {
             let option = document.createElement('div');
-            if ("make".localeCompare(type) !== 0) { option.classList.add("option"); }
-            option.innerHTML = `<input type="checkbox" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+            if ("make".localeCompare(type) !== 0 && "model".localeCompare(type) !== 0) {
+                option.classList.add("option");
+                option.innerHTML = `<input type="checkbox" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+            }
+            else if ("make".localeCompare(type) === 0) { option.innerHTML = `<input type="checkbox" id='${value[1]}' onchange="displayBrowseOptions('${value[1]}', 'model')" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`; }
+            else {
+                option.classList.add(`${make}`);
+                option.innerHTML = `<input type="checkbox" class="${make}" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+            }
             div.appendChild(option);
         }
     }
@@ -772,6 +794,9 @@ function displayBrowseOptions() {
 function displayMatches() {
     let make = document.querySelector("#make");
     let makeList = reportUserDesires(make, "make");
+    let model = document.querySelector("#model");
+    let modelList = new Map();
+    for (let i = 0; i < makeList.length; i++) { modelList.set(`${makeList[i]}`, reportUserDesires(model, "model", makeList[i])); }
     let fuel = document.querySelector("#fuel");
     let fuelList = reportUserDesires(fuel, "fuel");
     let drivetrain = document.querySelector("#drivetrain");
@@ -786,6 +811,7 @@ function displayMatches() {
     for (let i = 0; i < localVehicles.length; i++) {
         vehicle = JSON.parse(localStorage.getItem(`${localVehicles[i]}`));
         let meetsMakeCriteria = (makeList.indexOf(vehicle.Make) !== -1 || makeList.length === 0);
+        let meetsModelCriteria = (modelList.size === 0 || (modelList.has(`${vehicle.Make}`) && (modelList.get(`${vehicle.Make}`).indexOf(vehicle.Model) !== -1 || modelList.get(`${vehicle.Make}`).length === 0)));
         // let meetsYearCriteria = ();
         // let meetsMileageCriteria = ();
         // let meetsDistanceCriteria = ();
@@ -794,7 +820,7 @@ function displayMatches() {
         let meetsTransmissionCriteria = (transmissionList.indexOf(vehicle.TransmissionStyle) !== -1 || transmissionList.length === 0);
         // let meetsEngineCriteria = ();
         let meetsTitleCriteria = (titleList.indexOf(vehicle.Title) !== -1 || titleList.length === 0);
-        let meetsAllCriteria = (meetsMakeCriteria && meetsFuelCriteria && meetsDrivetrainCriteria && meetsTransmissionCriteria && meetsTitleCriteria);
+        let meetsAllCriteria = (meetsMakeCriteria && meetsModelCriteria && meetsFuelCriteria && meetsDrivetrainCriteria && meetsTransmissionCriteria && meetsTitleCriteria);
         if (meetsAllCriteria == true) { matchingVehicles.push(vehicle.ListingID); }
     }
     let matches = document.querySelector("#matches");
@@ -814,8 +840,10 @@ function displayMatches() {
     }
     else { for (let i = matchingVehicles.length-1; i >= 0; i--) { displayVehicle(matchingVehicles[i]); } }
 
-    function reportUserDesires(div, type) {
-        let checkedInputs = div.querySelectorAll(`input[name=${type}]:checked`);
+    function reportUserDesires(div, type, make) {
+        let checkedInputs;
+        if ("model".localeCompare(div.id) === 0) { checkedInputs = div.querySelectorAll(`input[name=${type}][class=${make}]:checked`); }
+        else { checkedInputs = div.querySelectorAll(`input[name=${type}]:checked`); }
         let checkedInputValues = [];
         for (let i = 0; i < checkedInputs.length; i++) { checkedInputValues.push(checkedInputs[i].value); }
         return checkedInputValues;
