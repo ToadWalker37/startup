@@ -3,7 +3,7 @@ const vehicles = new Array();
 let user = {};
 if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
 
-if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.querySelector("span").innerHTML = `${JSON.parse(localStorage.getItem("currentUser")).Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh;" class="fa">&#xf08b;</i></a>`; }
+if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.querySelector("span").innerHTML = `${JSON.parse(localStorage.getItem("currentUser")).Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh; color: white; " class="fa">&#xf08b;</i></a>`; }
 
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
@@ -101,7 +101,7 @@ function processVehicleData(input) {
             vehicleData.appendChild(drivetrainLabel);
             let drivetrain = document.createElement('input');
             let driveType;
-            if ("4WD/4-Wheel Drive/4x4".localeCompare(vehicle.DriveType) === 0) { driveType = "4x4"; }
+            if ("4WD/4-Wheel Drive/4x4".localeCompare(vehicle.DriveType) === 0) { driveType = "4x4/Four-Wheel Drive"; vehicle.DriveType = driveType; }
             else { driveType = vehicle.DriveType; }
             drivetrain.value = driveType;            
             if ("".localeCompare(vehicle.DriveType) !== 0) {
@@ -561,9 +561,9 @@ function displayEditScreen(editOriginator) {
         }
         else if (currentUser.Listings.length === 1) {
             let index = localVehicles.indexOf(vehicleID);
-            const localVehiclesInterator = localVehicles.entries();
+            const localVehiclesIterator = localVehicles.entries();
             localVehicles = [];
-            for (let vehicleInList of localVehiclesInterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
+            for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
             localStorage.setItem("vehicles", JSON.stringify(localVehicles));
             
             currentUser.Listings = [];
@@ -572,15 +572,15 @@ function displayEditScreen(editOriginator) {
         }
         else {
             let localVehiclesIndex = localVehicles.indexOf(vehicleID);
-            const localVehiclesInterator = localVehicles.entries();
+            const localVehiclesIterator = localVehicles.entries();
             localVehicles = [];
-            for (let vehicleInList of localVehiclesInterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
+            for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
             localStorage.setItem("vehicles", JSON.stringify(localVehicles));
 
             let currentUserListingsIndex = currentUser.Listings.indexOf(vehicleID);
-            const currentUserListingsInterator = currentUser.Listings.entries();
+            const currentUserListingsIterator = currentUser.Listings.entries();
             currentUser.Listings = [];
-            for (let vehicleInList of currentUserListingsInterator) { if (vehicleInList[0] !== currentUserListingsIndex) { currentUser.Listings.push(vehicleInList[1]); } }
+            for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[0] !== currentUserListingsIndex) { currentUser.Listings.push(vehicleInList[1]); } }
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
             localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
         }
@@ -701,9 +701,9 @@ function favorite() {
         vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
         let currentUserFavoritesIndex = currentUser.Favorites.indexOf(vehicleID);
         if (currentUserFavoritesIndex !== -1) {
-            const currentUserFavoritesInterator = currentUser.Favorites.entries();
+            const currentUserFavoritesIterator = currentUser.Favorites.entries();
             currentUser.Favorites = [];
-            for (let vehicleInList of currentUserFavoritesInterator) { if (vehicleInList[0] !== currentUserFavoritesIndex) { currentUser.Favorites.push(vehicleInList[1]); } }
+            for (let vehicleInList of currentUserFavoritesIterator) { if (vehicleInList[0] !== currentUserFavoritesIndex) { currentUser.Favorites.push(vehicleInList[1]); } }
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
             localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
 
@@ -718,5 +718,53 @@ function favorite() {
             localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
         }
         window.location.reload();
+    }
+}
+
+function displayBrowseOptions() {
+    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    const browseOptions = document.querySelector("#browse-options");
+    if (localVehicles == null) {
+        let noVehiclesError = document.createElement('p');
+        noVehiclesError.textContent = "It looks like there are no cars yet to search. Grab your friend and get them to list their car on here! They'll be the first!";
+        browseOptions.appendChild(noVehiclesError);
+    }
+    else {
+        let make = document.querySelector("#make");
+        populateOptions(make, "make");
+        let fuel = document.querySelector("#fuel");
+        populateOptions(fuel, "fuel");
+        let drivetrain = document.querySelector("#drivetrain");
+        populateOptions(drivetrain, "drivetrain");
+        let transmission = document.querySelector("#transmission");
+        populateOptions(transmission, "transmission");
+        let title = document.querySelector("#title");
+        populateOptions(title, "title");
+    }
+
+    function populateOptions(div, type) {
+        while (div.firstChild) { div.removeChild(div.lastChild); }
+        let iterator = localVehicles.entries();
+        let options = [];
+        for (let vehicleID of iterator) {
+            let vehicleInList = JSON.parse(localStorage.getItem(`${vehicleID[1]}`));
+            let value;
+            switch (type) {
+                case "make": value = vehicleInList.Make; break;
+                case "fuel": value = vehicleInList.FuelTypePrimary; break;
+                case "drivetrain": value = vehicleInList.DriveType; break;
+                case "transmission": value = vehicleInList.TransmissionStyle; break;
+                case "title": value = vehicleInList.Title; break;
+            }
+            if (options.indexOf(value) === -1) { options.push(value); }
+        }
+        options.sort();
+        iterator = options.entries()
+        for (let value of iterator) {
+            let option = document.createElement('div');
+            if ("make".localeCompare(type) !== 0) { option.classList.add("option"); }
+            option.innerHTML = `<input type="checkbox" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+            div.appendChild(option);
+        }
     }
 }
