@@ -75,18 +75,18 @@
                 <div class="fieldset">
                     <legend>Year</legend>
                     <label for="number">From </label>
-                    <input type="number" min="1900" max="2099" step="1"/>
+                    <input id="yearMin" type="number" min="1900" max="2099" step="1" value="1900"/>
                     <label for="number"> to </label>
-                    <input type="number" min="1900" max="2099" step="1"/>
+                    <input id="yearMax" type="number" min="1900" max="2099" step="1" value="2100"/>
                 </div>
                 <div class="fieldset">
                     <legend>Mileage</legend>
                     <label for="number">From </label>
-                    <input type="number" min="0" max="999999" step="1"/>
+                    <input id="mileageMin" type="number" min="0" max="999999" step="1" value="0"/>
                     <label for="number"> to </label>
-                    <input type="number" min="0" max="999999" step="1"/>
+                    <input id="mileageMax" type="number" min="0" max="999999" step="1" value="999999"/>
                 </div>
-                <div class="fieldset">
+                <div class="fieldset" style="display:none">
                     <legend>Distance</legend>
                     <input type="number" min="0" max="9999" step="1" placeholder="Miles"/>
                     <label for="number"> from </label>
@@ -106,10 +106,7 @@
                 </div>
                 <div class="fieldset">
                     <legend>Cylinders</legend>
-                    <label for="number">From </label>
-                    <input type="number" min="3" max="12" step="1"/>
-                    <label for="number"> to </label>
-                    <input type="number" min="3" max="12" step="1"/>
+                    <div id="cylinders"></div>
                 </div>
                 <div class="fieldset">
                     <legend>Title status</legend>

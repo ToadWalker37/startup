@@ -558,6 +558,8 @@ function displayEditScreen(editOriginator) {
         if (localVehicles.length === 1) {
             localStorage.removeItem("vehicles");
             currentUser.Listings = [];
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
         }
         else if (currentUser.Listings.length === 1) {
             let index = localVehicles.indexOf(vehicleID);
@@ -725,8 +727,10 @@ function displayBrowseOptions(make, model) {
     let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
     const browseOptions = document.querySelector("#browse-options");
     if (localVehicles == null) {
+        while (browseOptions.firstChild) { browseOptions.removeChild(browseOptions.lastChild); }
         let noVehiclesError = document.createElement('p');
-        noVehiclesError.textContent = "It looks like there are no cars yet to search. Grab your friend and get them to list their car on here! They'll be the first!";
+        noVehiclesError.innerHTML = `No cars yet to search. <a href="create-listing.html">Be the first!</a>`;
+        noVehiclesError.style = "padding: 2vh;"
         browseOptions.appendChild(noVehiclesError);
     }
     else if ("model".localeCompare(model) === 0) {
@@ -751,6 +755,8 @@ function displayBrowseOptions(make, model) {
         populateOptions(drivetrain, "drivetrain");
         let transmission = document.querySelector("#transmission");
         populateOptions(transmission, "transmission");
+        let cylinders = document.querySelector("#cylinders");
+        populateOptions(cylinders, "cylinders");
         let title = document.querySelector("#title");
         populateOptions(title, "title");
     }
@@ -768,6 +774,7 @@ function displayBrowseOptions(make, model) {
                 case "fuel": value = vehicleInList.FuelTypePrimary; break;
                 case "drivetrain": value = vehicleInList.DriveType; break;
                 case "transmission": value = vehicleInList.TransmissionStyle; break;
+                case "cylinders": value = vehicleInList.EngineCylinders; break;
                 case "title": value = vehicleInList.Title; break;
             }
             if ("model".localeCompare(type) === 0) { if (make.localeCompare(vehicleInList.Make) === 0) { options.push(value); } }
@@ -803,6 +810,8 @@ function displayMatches() {
     let drivetrainList = reportUserDesires(drivetrain, "drivetrain");
     let transmission = document.querySelector("#transmission");
     let transmissionList = reportUserDesires(transmission, "transmission");
+    let cylinders = document.querySelector("#cylinders");
+    let cylindersList = reportUserDesires(cylinders, "cylinders");
     let title = document.querySelector("#title");
     let titleList = reportUserDesires(title, "title");
 
@@ -812,15 +821,16 @@ function displayMatches() {
         vehicle = JSON.parse(localStorage.getItem(`${localVehicles[i]}`));
         let meetsMakeCriteria = (makeList.indexOf(vehicle.Make) !== -1 || makeList.length === 0);
         let meetsModelCriteria = (modelList.size === 0 || (modelList.has(`${vehicle.Make}`) && (modelList.get(`${vehicle.Make}`).indexOf(vehicle.Model) !== -1 || modelList.get(`${vehicle.Make}`).length === 0)));
-        // let meetsYearCriteria = ();
-        // let meetsMileageCriteria = ();
+        range = (type) => [document.querySelector(`#${type}Min`).value, document.querySelector(`#${type}Max`).value];
+        let meetsYearCriteria = ((vehicle.ModelYear >= range("year")[0] && vehicle.ModelYear <= range("year")[1]));
+        let meetsMileageCriteria = ((vehicle.Mileage >= range("mileage")[0] && vehicle.Mileage <= range("mileage")[1]));
         // let meetsDistanceCriteria = ();
         let meetsFuelCriteria = (fuelList.indexOf(vehicle.FuelTypePrimary) !== -1 || fuelList.length === 0);
         let meetsDrivetrainCriteria = (drivetrainList.indexOf(vehicle.DriveType) !== -1 || drivetrainList.length === 0);
         let meetsTransmissionCriteria = (transmissionList.indexOf(vehicle.TransmissionStyle) !== -1 || transmissionList.length === 0);
-        // let meetsEngineCriteria = ();
+        let meetsCylinderCriteria = (cylindersList.indexOf(vehicle.EngineCylinders) !== -1 || cylindersList.length === 0);
         let meetsTitleCriteria = (titleList.indexOf(vehicle.Title) !== -1 || titleList.length === 0);
-        let meetsAllCriteria = (meetsMakeCriteria && meetsModelCriteria && meetsFuelCriteria && meetsDrivetrainCriteria && meetsTransmissionCriteria && meetsTitleCriteria);
+        let meetsAllCriteria = (meetsMakeCriteria && meetsModelCriteria && meetsYearCriteria && meetsMileageCriteria && meetsFuelCriteria && meetsDrivetrainCriteria && meetsTransmissionCriteria && meetsCylinderCriteria && meetsTitleCriteria);
         if (meetsAllCriteria == true) { matchingVehicles.push(vehicle.ListingID); }
     }
     let matches = document.querySelector("#matches");
