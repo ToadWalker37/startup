@@ -812,7 +812,7 @@ function displayMatches() {
         matches.appendChild(frown);
         
     }
-    else { for (let i = 0; i < matchingVehicles.length; i++) { displayVehicle(matchingVehicles[i]); } }
+    else { for (let i = matchingVehicles.length-1; i >= 0; i--) { displayVehicle(matchingVehicles[i]); } }
 
     function reportUserDesires(div, type) {
         let checkedInputs = div.querySelectorAll(`input[name=${type}]:checked`);
@@ -826,7 +826,10 @@ function displayMatches() {
         let anchor = document.createElement('a');
         anchor.classList.add("listing-link");
         anchor.href = `listing.html?id=${vehicleID}`;
-        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}</h3><img class="listing-image" src="images/Coming Soon.png" /></div>`
+        let vehicleMake;
+        if ("Chevrolet".localeCompare(vehicle.Make) === 0) { vehicleMake = "Chevy"; }
+        else { vehicleMake = vehicle.Make; }
+        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicleMake} ${vehicle.Model}</h3><img class="listing-image" src="images/Coming Soon.png" /></div>`
         document.querySelector("#matches").appendChild(anchor);
     }
 }
