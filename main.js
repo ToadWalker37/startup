@@ -763,8 +763,70 @@ function displayBrowseOptions() {
         for (let value of iterator) {
             let option = document.createElement('div');
             if ("make".localeCompare(type) !== 0) { option.classList.add("option"); }
-            option.innerHTML = `<input type="checkbox" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+            option.innerHTML = `<input type="checkbox" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
             div.appendChild(option);
         }
+    }
+}
+
+function displayMatches() {
+    let make = document.querySelector("#make");
+    let makeList = reportUserDesires(make, "make");
+    let fuel = document.querySelector("#fuel");
+    let fuelList = reportUserDesires(fuel, "fuel");
+    let drivetrain = document.querySelector("#drivetrain");
+    let drivetrainList = reportUserDesires(drivetrain, "drivetrain");
+    let transmission = document.querySelector("#transmission");
+    let transmissionList = reportUserDesires(transmission, "transmission");
+    let title = document.querySelector("#title");
+    let titleList = reportUserDesires(title, "title");
+
+    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    let matchingVehicles = [];
+    for (let i = 0; i < localVehicles.length; i++) {
+        vehicle = JSON.parse(localStorage.getItem(`${localVehicles[i]}`));
+        let meetsMakeCriteria = (makeList.indexOf(vehicle.Make) !== -1 || makeList.length === 0);
+        // let meetsYearCriteria = ();
+        // let meetsMileageCriteria = ();
+        // let meetsDistanceCriteria = ();
+        let meetsFuelCriteria = (fuelList.indexOf(vehicle.FuelTypePrimary) !== -1 || fuelList.length === 0);
+        let meetsDrivetrainCriteria = (drivetrainList.indexOf(vehicle.DriveType) !== -1 || drivetrainList.length === 0);
+        let meetsTransmissionCriteria = (transmissionList.indexOf(vehicle.TransmissionStyle) !== -1 || transmissionList.length === 0);
+        // let meetsEngineCriteria = ();
+        let meetsTitleCriteria = (titleList.indexOf(vehicle.Title) !== -1 || titleList.length === 0);
+        let meetsAllCriteria = (meetsMakeCriteria && meetsFuelCriteria && meetsDrivetrainCriteria && meetsTransmissionCriteria && meetsTitleCriteria);
+        if (meetsAllCriteria == true) { matchingVehicles.push(vehicle.ListingID); }
+    }
+    let matches = document.querySelector("#matches");
+    while (matches.firstChild) { matches.removeChild(matches.lastChild); }
+    if (matchingVehicles.length === 0) {
+        let noCarsMatch = document.createElement('p');
+        noCarsMatch.textContent = "Unfortunately, no cars match your search.";
+        noCarsMatch.style = "text-align:center; padding: 2vh;"
+        let frown = document.createElement('p');
+        frown.style = "font-size:120px;";
+        frown.classList.add("fa");
+        frown.innerHTML = "&#xf119;";
+        matches.style = "display: block;";
+        matches.appendChild(noCarsMatch);
+        matches.appendChild(frown);
+        
+    }
+    else { for (let i = 0; i < matchingVehicles.length; i++) { displayVehicle(matchingVehicles[i]); } }
+
+    function reportUserDesires(div, type) {
+        let checkedInputs = div.querySelectorAll(`input[name=${type}]:checked`);
+        let checkedInputValues = [];
+        for (let i = 0; i < checkedInputs.length; i++) { checkedInputValues.push(checkedInputs[i].value); }
+        return checkedInputValues;
+    }
+
+    function displayVehicle(vehicleID) {
+        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`))
+        let anchor = document.createElement('a');
+        anchor.classList.add("listing-link");
+        anchor.href = `listing.html?id=${vehicleID}`;
+        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}</h3><img class="listing-image" src="images/Coming Soon.png" /></div>`
+        document.querySelector("#matches").appendChild(anchor);
     }
 }
