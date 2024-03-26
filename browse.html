@@ -58,10 +58,12 @@
             <p style="text-align: center;">Options only listed when such cars are available</p>
             <div id="browse-options">
                 <div class="fieldset">
-                    <legend id="browse-legend"><a href="#" id="browse-anchor" onclick="changeStatus()">Browse listings based on what I have</a></legend>
+                    <div style="display:none">
+                        <legend id="browse-legend"><a href="#" id="browse-anchor" onclick="changeStatus()">Browse listings based on what I have</a></legend>
+                    </div>
                     <div class="option">
-                        <input type="checkbox" id="tradeCheckbox" name="varCheckbox" value="wantsToTrade" />
-                        <label for="checkbox" id="browse-label">Just listings that match with the car I have</label>
+                        <input type="checkbox" id="tradeCheckbox" value="wantsToTrade" />
+                        <label for="checkbox" id="browse-label">Check this to save your search</label>
                     </div>
                 </div>
                 <div class="fieldset">

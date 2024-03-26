@@ -627,6 +627,37 @@ function displayListing() {
     document.querySelector("#location").textContent = `Location: some miles from zip code ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
     document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
     document.querySelector("#description").textContent = `${vehicle.Description}`;
+    
+    let savedSearches = JSON.parse(localStorage.getItem(`${vehicle.Owner}`)).SavedSearches;
+    let savedSearchesDrivetrainList = savedSearches.drivetrainList;
+    for (let i = 0; i<savedSearchesDrivetrainList.length; i++) { savedSearchesDrivetrainList[i] = savedSearchesDrivetrainList[i].slice(0,3); }
+    if (savedSearches.makeList.length > 0) { document.querySelector("#looking-for-make").textContent = `${savedSearches.makeList}`; }
+    else { document.querySelector("#looking-for-make").textContent = `Any make`; }
+    if (savedSearches.modelList.length > 0) {
+        document.querySelector("ul").removeChild(document.querySelector("#looking-for-make"));
+        document.querySelector("ul").removeChild(document.querySelector("#looking-for-model"));
+        let modelListIterator = savedSearches.modelList.entries();
+        for (let makeModelPairs of modelListIterator) {
+            let li = document.createElement('li');
+            li.textContent = `${makeModelPairs[1]}`;
+            document.querySelector("#make-model-pairs").appendChild(li);
+        }
+    }
+    else { document.querySelector("#looking-for-model").textContent = `Any model`; }
+    if (savedSearches.yearList.length > 0) { document.querySelector("#looking-for-year").textContent = `From ${savedSearches.yearList[0]} to ${savedSearches.yearList[1]}`; }
+    else { document.querySelector("#looking-for-year").textContent = `Any year`; }
+    if (savedSearches.mileageList.length > 0) { document.querySelector("#looking-for-mileage").textContent = `From ${savedSearches.mileageList[0]} to ${savedSearches.mileageList[1]} miles`; }
+    else { document.querySelector("#looking-for-mileage").textContent = `Any mileage`; }
+    if (savedSearches.fuelList.length > 0) { document.querySelector("#looking-for-fuel").textContent = `${savedSearches.fuelList.join(", ")}`; }
+    else { document.querySelector("#looking-for-fuel").textContent = `Any fuel type`; }
+    if (savedSearches.drivetrainList.length > 0) { document.querySelector("#looking-for-drivetrain").textContent = `${savedSearchesDrivetrainList.join(", ")}`; }
+    else { document.querySelector("#looking-for-drivetrain").textContent = `Any drivetrain`; }
+    if (savedSearches.transmissionList.length > 0) { document.querySelector("#looking-for-transmission").textContent = `${savedSearches.transmissionList.join(", ")}`; }
+    else { document.querySelector("#looking-for-transmission").textContent = `Any transmission style`; }
+    if (savedSearches.cylindersList.length > 0) { document.querySelector("#looking-for-cylinders").textContent = `${savedSearches.cylindersList.join(", ")} cylinders`; }
+    else { document.querySelector("#looking-for-cylinders").textContent = `Any amount of cylinders`; }
+    if (savedSearches.titleList.length > 0) { document.querySelector("#looking-for-title").textContent = `${savedSearches.titleList.join(", ")} title`; }
+    else { document.querySelector("#looking-for-title").textContent = `Any title status`; }
 
     localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
 }
@@ -682,6 +713,7 @@ function signUp() {
         user.Password = document.querySelector("#signUpPassword").value;
         user.Listings = new Array();
         user.Favorites = new Array();
+        user.SavedSearches = new Map();
         localStorage.setItem(`${user.Username}`, JSON.stringify(user));
         localStorage.setItem("currentUser", JSON.stringify(user));
         localStorage.setItem("signedIn", 1);
@@ -712,7 +744,7 @@ function favorite() {
             vehicle.Favorites--;
             localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
         }
-        else /* vehicle not in user.favorites */ {
+        else {
             currentUser.Favorites.push(vehicleID);
             vehicle.Favorites++;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
@@ -770,7 +802,7 @@ function displayBrowseOptions(make, model) {
             let value;
             switch (type) {
                 case "make": value = vehicleInList.Make; break;
-                case "model": value = vehicleInList.Model; break; savedMake = vehicle;
+                case "model": value = vehicleInList.Model; break;
                 case "fuel": value = vehicleInList.FuelTypePrimary; break;
                 case "drivetrain": value = vehicleInList.DriveType; break;
                 case "transmission": value = vehicleInList.TransmissionStyle; break;
@@ -804,6 +836,9 @@ function displayMatches() {
     let model = document.querySelector("#model");
     let modelList = new Map();
     for (let i = 0; i < makeList.length; i++) { modelList.set(`${makeList[i]}`, reportUserDesires(model, "model", makeList[i])); }
+    range = (type) => [document.querySelector(`#${type}Min`).value, document.querySelector(`#${type}Max`).value];
+    let yearList = range("year");
+    let mileageList = range("mileage");
     let fuel = document.querySelector("#fuel");
     let fuelList = reportUserDesires(fuel, "fuel");
     let drivetrain = document.querySelector("#drivetrain");
@@ -814,6 +849,23 @@ function displayMatches() {
     let cylindersList = reportUserDesires(cylinders, "cylinders");
     let title = document.querySelector("#title");
     let titleList = reportUserDesires(title, "title");
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    let tradeCheckbox = document.querySelector("#tradeCheckbox");
+    if (tradeCheckbox.checked === true) {
+        currentUser.SavedSearches.makeList = makeList;
+        currentUser.SavedSearches.modelList = new Array();
+        modelList.forEach((value, key) => { currentUser.SavedSearches.modelList.push(`${key}: ${value}`); });
+        currentUser.SavedSearches.yearList = yearList;
+        currentUser.SavedSearches.mileageList = mileageList;
+        currentUser.SavedSearches.fuelList = fuelList;
+        currentUser.SavedSearches.drivetrainList = drivetrainList;
+        currentUser.SavedSearches.transmissionList = transmissionList;
+        currentUser.SavedSearches.cylindersList = cylindersList;
+        currentUser.SavedSearches.titleList = titleList;
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+    }
 
     let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
     let matchingVehicles = [];
@@ -821,9 +873,8 @@ function displayMatches() {
         vehicle = JSON.parse(localStorage.getItem(`${localVehicles[i]}`));
         let meetsMakeCriteria = (makeList.indexOf(vehicle.Make) !== -1 || makeList.length === 0);
         let meetsModelCriteria = (modelList.size === 0 || (modelList.has(`${vehicle.Make}`) && (modelList.get(`${vehicle.Make}`).indexOf(vehicle.Model) !== -1 || modelList.get(`${vehicle.Make}`).length === 0)));
-        range = (type) => [document.querySelector(`#${type}Min`).value, document.querySelector(`#${type}Max`).value];
-        let meetsYearCriteria = ((vehicle.ModelYear >= range("year")[0] && vehicle.ModelYear <= range("year")[1]));
-        let meetsMileageCriteria = ((vehicle.Mileage >= range("mileage")[0] && vehicle.Mileage <= range("mileage")[1]));
+        let meetsYearCriteria = (vehicle.ModelYear >= yearList[0] && vehicle.ModelYear <= yearList[1]);
+        let meetsMileageCriteria = (vehicle.Mileage >= mileageList[0] && vehicle.Mileage <= mileageList[1]);
         // let meetsDistanceCriteria = ();
         let meetsFuelCriteria = (fuelList.indexOf(vehicle.FuelTypePrimary) !== -1 || fuelList.length === 0);
         let meetsDrivetrainCriteria = (drivetrainList.indexOf(vehicle.DriveType) !== -1 || drivetrainList.length === 0);
