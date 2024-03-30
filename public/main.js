@@ -389,7 +389,7 @@ function displayInGarage() {
         noVehicles.innerHTML = `Your garage is empty! Add a vehicle <a href="create-listing.html" style="text-decoration: none;">here</a>.`;
         garage.appendChild(noVehicles);
         let emptyGarage = document.createElement("img");
-        emptyGarage.src = "images/empty_garage.jpg";
+        emptyGarage.src = "assets/empty_garage.jpg";
         emptyGarage.style.width = "150px";
         garage.appendChild(emptyGarage);
     }
@@ -415,7 +415,7 @@ function displayInGarage() {
 
             let image = document.createElement("img");
             image.style.width = "150px";
-            image.src = "images/Coming Soon.png";
+            image.src = "assets/Coming Soon.png";
 
             garage.appendChild(anchor);
             anchor.appendChild(displayCard);
@@ -453,7 +453,7 @@ function displayInGarage() {
 
             let image = document.createElement("img");
             image.style.width = "150px";
-            image.src = "images/Coming Soon.png";
+            image.src = "assets/Coming Soon.png";
 
             favorites.appendChild(anchor);
             anchor.appendChild(displayCard);
@@ -592,7 +592,7 @@ function displayEditScreen(editOriginator) {
 }
 
 function displayListing() {
-    let vehicleID = window.location.href.slice(38,44);
+    let vehicleID = window.location.href.slice(54,60);
     vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
     let date = new Date(vehicle.Date.toLocaleString());
 
@@ -918,7 +918,7 @@ function displayMatches() {
         let vehicleMake;
         if ("Chevrolet".localeCompare(vehicle.Make) === 0) { vehicleMake = "Chevy"; }
         else { vehicleMake = vehicle.Make; }
-        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicleMake} ${vehicle.Model}</h3><img class="listing-image" src="images/Coming Soon.png" /></div>`
+        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicleMake} ${vehicle.Model}</h3><img class="listing-image" src="assets/Coming Soon.png" /></div>`
         document.querySelector("#matches").appendChild(anchor);
     }
 }
