@@ -54,3 +54,12 @@ For this deliverable I properly styled the application into its final appearance
 - Application elements - Used good contrast and whitespace, consistent colors, and buttons are using bootstrap.
 - Application text content - Consistent font. Text is displayed using the Segoe UI/Helvetica/Noto font family.
 - Application images - I added curved edges around my listing thumbnail photos on the browse page. I also made a carousel on the listing page.
+
+## JavaScript deliverable
+
+For this deliverable I implemented by JavaScript so that the application works for multiple users using the same computer and browser. I also added placeholders for future technology.
+
+    login - Users can create accounts and this allows them to create listings when they navigate to the Dashboard page.
+    database - Listing and account data is stored and retrieved from LocalStorage, and it will be replaced with the database data later.
+    WebSocket - Users can favorite vehicles and this is shown on the listing page to everyone upon refresh. Later, a refresh will not be necessary because WebSocket messages will automatically update the "favorites" count of a vehicle.
+    application logic - Users can search for specific vehicles in the database by clicking checkboxes on the Browse page. They can also create listings and they will be automatically redirected to the Dashboard page once their listing is created. And listing details are displayed using JavaScript according to the vehicle ID passed into the URL.
