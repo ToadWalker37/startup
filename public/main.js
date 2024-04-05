@@ -576,7 +576,7 @@ function displayEditScreen(editOriginator) {
 }
 
 function displayListing() {
-    let vehicleID = window.location.href.slice(54,60);
+    let vehicleID = window.location.href.slice(47,53);
     vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
     let date = new Date(vehicle.Date.toLocaleString());
 
