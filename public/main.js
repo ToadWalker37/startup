@@ -352,12 +352,9 @@ async function saveVehicleData(vehicle, action) {
         currentUser.Listings.push(vehicle.ListingID);
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
         localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-
-        let response = await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
+        await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
     }
-    else {
-        let response = await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
-    }
+    else { await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) }); }
 }
 
 function emptyVehicleListingInputError(fail) {
