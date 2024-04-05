@@ -891,7 +891,6 @@ function displayMatches() {
         
     }
     else { for (let i = matchingVehicles.length-1; i >= 0; i--) { displayVehicle(matchingVehicles[i]); } }
-
     } );
 
     function reportUserDesires(div, type, make) {
