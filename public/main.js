@@ -1,5 +1,4 @@
 let vehicle;
-const vehicles = new Array();
 let user = {};
 if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
 
@@ -8,9 +7,7 @@ if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.queryS
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
 function processVehicleData(input) {
-    let vin = input;
-    let url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`;
-    fetch(url)
+    fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${input}?format=json`)
     .then((response) => response.json())
     .then((data) => {
         vehicle = JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify(data, null, "  ")).Results))[0]));
@@ -338,20 +335,31 @@ function publishListing() {
             vehicle.Location = vehicle.ZipCode;
             vehicle.ListingID = validateID(6);
 
-            if (localStorage.getItem("vehicles") == null) { localStorage.setItem("vehicles", JSON.stringify(vehicles)); }
-            let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
-            localVehicles.push(vehicle.ListingID);
-            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
-            localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-            
-            currentUser.Listings.push(vehicle.ListingID);
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            saveVehicleData(vehicle, 1);
             
             window.location.assign("dashboard.html");
         }
         
         cantPublish = false;
+    }
+}
+
+async function saveVehicleData(vehicle, action) {
+    console.log(action);
+    
+    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+    
+    if (action === 1) {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        currentUser.Listings.push(vehicle.ListingID);
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+
+        let response = await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
+    }
+    else {
+        console.log(vehicle);
+        let response = await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
     }
 }
 
@@ -554,45 +562,45 @@ function displayEditScreen(editOriginator) {
     function deleteListing() {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
-        let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
-        if (localVehicles.length === 1) {
-            localStorage.removeItem("vehicles");
-            currentUser.Listings = [];
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-        }
-        else if (currentUser.Listings.length === 1) {
-            let index = localVehicles.indexOf(vehicleID);
-            const localVehiclesIterator = localVehicles.entries();
-            localVehicles = [];
-            for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
-            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
-            
-            currentUser.Listings = [];
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-        }
-        else {
-            let localVehiclesIndex = localVehicles.indexOf(vehicleID);
-            const localVehiclesIterator = localVehicles.entries();
-            localVehicles = [];
-            for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
-            localStorage.setItem("vehicles", JSON.stringify(localVehicles));
-
-            let currentUserListingsIndex = currentUser.Listings.indexOf(vehicleID);
-            const currentUserListingsIterator = currentUser.Listings.entries();
-            currentUser.Listings = [];
-            for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[0] !== currentUserListingsIndex) { currentUser.Listings.push(vehicleInList[1]); } }
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-        }
-        localStorage.removeItem(`${vehicleID}`);
-        window.location.assign("dashboard.html");
+        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+        // fetch('/api/vehicles')
+        // .then((response) => response.json())
+        // .then((localVehicles) => {
+            if (currentUser.Listings.length === 1) {
+                // let index = localVehicles.indexOf(vehicleID);
+                // const localVehiclesIterator = localVehicles.entries();
+                // localVehicles = [];
+                // for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
+                
+                currentUser.Listings = [];
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            }
+            else {
+                // let localVehiclesIndex = localVehicles.indexOf(vehicleID);
+                // const localVehiclesIterator = localVehicles.entries();
+                // localVehicles = [];
+                // for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
+                
+                let currentUserListingsIndex = currentUser.Listings.indexOf(vehicleID);
+                const currentUserListingsIterator = currentUser.Listings.entries();
+                currentUser.Listings = [];
+                for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[1].localeCompare(vehicle.ListingID) !== 0) { currentUser.Listings.push(vehicleInList[1]); } }
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            }
+            saveVehicleData(vehicle, 0);
+            localStorage.removeItem(`${vehicleID}`);
+            window.location.assign("dashboard.html");
+        //});
     }
 }
 
 function displayListing() {
-    let vehicleID = window.location.href.slice(54,60);
+    let dev = 1;
+    let vehicleID;
+    if (dev === 1) { vehicleID = window.location.href.slice(38,44); }
+    else { vehicleID = window.location.href.slice(54,60);}
     vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
     let date = new Date(vehicle.Date.toLocaleString());
 
@@ -756,78 +764,82 @@ function favorite() {
 }
 
 function displayBrowseOptions(make, model) {
-    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
-    const browseOptions = document.querySelector("#browse-options");
-    if (localVehicles == null) {
-        while (browseOptions.firstChild) { browseOptions.removeChild(browseOptions.lastChild); }
-        let noVehiclesError = document.createElement('p');
-        noVehiclesError.innerHTML = `No cars yet to search. <a href="create-listing.html">Be the first!</a>`;
-        noVehiclesError.style = "padding: 2vh;"
-        browseOptions.appendChild(noVehiclesError);
-    }
-    else if ("model".localeCompare(model) === 0) {
-        let makeNode = document.querySelector(`#${make}`);
-        let modelNode = document.querySelector("#model");
-        if (makeNode.checked == true) {
-            makeNode.checked = 1;
-            populateOptions(modelNode, "model", make);
+    fetch('/api/vehicles')
+    .then((response) => response.json())
+    .then((localVehicles) => {
+        console.log(localVehicles);
+        const browseOptions = document.querySelector("#browse-options");
+        if (localVehicles[0] == null) {
+            while (browseOptions.firstChild) { browseOptions.removeChild(browseOptions.lastChild); }
+            let noVehiclesError = document.createElement('p');
+            noVehiclesError.innerHTML = `No cars yet to search. <a href="create-listing.html">Be the first!</a>`;
+            noVehiclesError.style = "padding: 2vh;"
+            browseOptions.appendChild(noVehiclesError);
+        }
+        else if ("model".localeCompare(model) === 0) {
+            let makeNode = document.querySelector(`#${make}`);
+            let modelNode = document.querySelector("#model");
+            if (makeNode.checked == true) {
+                makeNode.checked = 1;
+                populateOptions(modelNode, "model", make);
+            }
+            else {
+                makeNode.checked = 0;
+                let modelChildren = modelNode.querySelectorAll(`div`);
+                for (let i = 0; i < modelChildren.length; i++) { if (modelChildren[i].classList.contains(`${make}`)) { modelNode.removeChild(modelChildren[i]); } }
+            }
         }
         else {
-            makeNode.checked = 0;
-            let modelChildren = modelNode.querySelectorAll(`div`);
-            for (let i = 0; i < modelChildren.length; i++) { if (modelChildren[i].classList.contains(`${make}`)) { modelNode.removeChild(modelChildren[i]); } }
+            let make = document.querySelector("#make");
+            populateOptions(make, "make");
+            let fuel = document.querySelector("#fuel");
+            populateOptions(fuel, "fuel");
+            let drivetrain = document.querySelector("#drivetrain");
+            populateOptions(drivetrain, "drivetrain");
+            let transmission = document.querySelector("#transmission");
+            populateOptions(transmission, "transmission");
+            let cylinders = document.querySelector("#cylinders");
+            populateOptions(cylinders, "cylinders");
+            let title = document.querySelector("#title");
+            populateOptions(title, "title");
         }
-    }
-    else {
-        let make = document.querySelector("#make");
-        populateOptions(make, "make");
-        let fuel = document.querySelector("#fuel");
-        populateOptions(fuel, "fuel");
-        let drivetrain = document.querySelector("#drivetrain");
-        populateOptions(drivetrain, "drivetrain");
-        let transmission = document.querySelector("#transmission");
-        populateOptions(transmission, "transmission");
-        let cylinders = document.querySelector("#cylinders");
-        populateOptions(cylinders, "cylinders");
-        let title = document.querySelector("#title");
-        populateOptions(title, "title");
-    }
 
-    function populateOptions(div, type, make) {
-        if ("model".localeCompare(type) !== 0) { while (div.firstChild) { div.removeChild(div.lastChild); } }
-        let iterator = localVehicles.entries();
-        let options = [];
-        for (let vehicleID of iterator) {
-            let vehicleInList = JSON.parse(localStorage.getItem(`${vehicleID[1]}`));
-            let value;
-            switch (type) {
-                case "make": value = vehicleInList.Make; break;
-                case "model": value = vehicleInList.Model; break;
-                case "fuel": value = vehicleInList.FuelTypePrimary; break;
-                case "drivetrain": value = vehicleInList.DriveType; break;
-                case "transmission": value = vehicleInList.TransmissionStyle; break;
-                case "cylinders": value = vehicleInList.EngineCylinders; break;
-                case "title": value = vehicleInList.Title; break;
+        function populateOptions(div, type, make) {
+            if ("model".localeCompare(type) !== 0) { while (div.firstChild) { div.removeChild(div.lastChild); } }
+            let iterator = localVehicles.entries();
+            let options = [];
+            for (let vehicleID of iterator) {
+                let vehicleInList = vehicleID[1];
+                let value;
+                switch (type) {
+                    case "make": value = vehicleInList.Make; break;
+                    case "model": value = vehicleInList.Model; break;
+                    case "fuel": value = vehicleInList.FuelTypePrimary; break;
+                    case "drivetrain": value = vehicleInList.DriveType; break;
+                    case "transmission": value = vehicleInList.TransmissionStyle; break;
+                    case "cylinders": value = vehicleInList.EngineCylinders; break;
+                    case "title": value = vehicleInList.Title; break;
+                }
+                if ("model".localeCompare(type) === 0) { if (make.localeCompare(vehicleInList.Make) === 0) { options.push(value); } }
+                else if (options.indexOf(value) === -1) { options.push(value); }
             }
-            if ("model".localeCompare(type) === 0) { if (make.localeCompare(vehicleInList.Make) === 0) { options.push(value); } }
-            else if (options.indexOf(value) === -1) { options.push(value); }
+            options.sort();
+            iterator = options.entries()
+            for (let value of iterator) {
+                let option = document.createElement('div');
+                if ("make".localeCompare(type) !== 0 && "model".localeCompare(type) !== 0) {
+                    option.classList.add("option");
+                    option.innerHTML = `<input type="checkbox" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+                }
+                else if ("make".localeCompare(type) === 0) { option.innerHTML = `<input type="checkbox" id='${value[1]}' onchange="displayBrowseOptions('${value[1]}', 'model')" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`; }
+                else {
+                    option.classList.add(`${make}`);
+                    option.innerHTML = `<input type="checkbox" class="${make}" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
+                }
+                div.appendChild(option);
+            }
         }
-        options.sort();
-        iterator = options.entries()
-        for (let value of iterator) {
-            let option = document.createElement('div');
-            if ("make".localeCompare(type) !== 0 && "model".localeCompare(type) !== 0) {
-                option.classList.add("option");
-                option.innerHTML = `<input type="checkbox" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
-            }
-            else if ("make".localeCompare(type) === 0) { option.innerHTML = `<input type="checkbox" id='${value[1]}' onchange="displayBrowseOptions('${value[1]}', 'model')" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`; }
-            else {
-                option.classList.add(`${make}`);
-                option.innerHTML = `<input type="checkbox" class="${make}" name="${type}" value="${value[1]}" /><label for="checkbox">${value[1]}</label>`;
-            }
-            div.appendChild(option);
-        }
-    }
+    });
 }
 
 function displayMatches() {
@@ -867,10 +879,13 @@ function displayMatches() {
         localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
     }
 
-    let localVehicles = JSON.parse(localStorage.getItem("vehicles"));
+    fetch('/api/vehicles')
+    .then((response) => response.json())
+    .then((localVehicles) => {
+    console.log(localVehicles);
     let matchingVehicles = [];
     for (let i = 0; i < localVehicles.length; i++) {
-        vehicle = JSON.parse(localStorage.getItem(`${localVehicles[i]}`));
+        vehicle = localVehicles[i];
         let meetsMakeCriteria = (makeList.indexOf(vehicle.Make) !== -1 || makeList.length === 0);
         let meetsModelCriteria = (modelList.size === 0 || (modelList.has(`${vehicle.Make}`) && (modelList.get(`${vehicle.Make}`).indexOf(vehicle.Model) !== -1 || modelList.get(`${vehicle.Make}`).length === 0)));
         let meetsYearCriteria = (vehicle.ModelYear >= yearList[0] && vehicle.ModelYear <= yearList[1]);
@@ -900,6 +915,8 @@ function displayMatches() {
         
     }
     else { for (let i = matchingVehicles.length-1; i >= 0; i--) { displayVehicle(matchingVehicles[i]); } }
+
+    } );
 
     function reportUserDesires(div, type, make) {
         let checkedInputs;
