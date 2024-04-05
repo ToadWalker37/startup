@@ -563,36 +563,21 @@ function displayEditScreen(editOriginator) {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
         vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        // fetch('/api/vehicles')
-        // .then((response) => response.json())
-        // .then((localVehicles) => {
-            if (currentUser.Listings.length === 1) {
-                // let index = localVehicles.indexOf(vehicleID);
-                // const localVehiclesIterator = localVehicles.entries();
-                // localVehicles = [];
-                // for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== index) { localVehicles.push(vehicleInList[1]); } }
-                
-                currentUser.Listings = [];
-                localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-            }
-            else {
-                // let localVehiclesIndex = localVehicles.indexOf(vehicleID);
-                // const localVehiclesIterator = localVehicles.entries();
-                // localVehicles = [];
-                // for (let vehicleInList of localVehiclesIterator) { if (vehicleInList[0] !== localVehiclesIndex) { localVehicles.push(vehicleInList[1]); } }
-                
-                let currentUserListingsIndex = currentUser.Listings.indexOf(vehicleID);
-                const currentUserListingsIterator = currentUser.Listings.entries();
-                currentUser.Listings = [];
-                for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[1].localeCompare(vehicle.ListingID) !== 0) { currentUser.Listings.push(vehicleInList[1]); } }
-                localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-            }
-            saveVehicleData(vehicle, 0);
-            localStorage.removeItem(`${vehicleID}`);
-            window.location.assign("dashboard.html");
-        //});
+        if (currentUser.Listings.length === 1) {
+        currentUser.Listings = [];
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+    }
+    else {
+        const currentUserListingsIterator = currentUser.Listings.entries();
+        currentUser.Listings = [];
+        for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[1].localeCompare(vehicle.ListingID) !== 0) { currentUser.Listings.push(vehicleInList[1]); } }
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+    }
+    saveVehicleData(vehicle, 0);
+    localStorage.removeItem(`${vehicleID}`);
+    window.location.assign("dashboard.html");
     }
 }
 
@@ -878,7 +863,6 @@ function displayMatches() {
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
         localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
     }
-
     fetch('/api/vehicles')
     .then((response) => response.json())
     .then((localVehicles) => {
