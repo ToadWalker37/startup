@@ -57,9 +57,19 @@ For this deliverable I properly styled the application into its final appearance
 
 ## JavaScript deliverable
 
-For this deliverable I implemented by JavaScript so that the application works for multiple users using the same computer and browser. I also added placeholders for future technology.
+For this deliverable I implemented my JavaScript so that the application works for multiple users using the same computer and browser. I also added placeholders for future technology.
 
-    login - Users can create accounts and this allows them to create listings when they navigate to the Dashboard page.
-    database - Listing and account data is stored and retrieved from LocalStorage, and it will be replaced with the database data later.
-    WebSocket - Users can favorite vehicles and this is shown on the listing page to everyone upon refresh. Later, a refresh will not be necessary because WebSocket messages will automatically update the "favorites" count of a vehicle.
-    application logic - Users can search for specific vehicles in the database by clicking checkboxes on the Browse page. They can also create listings and they will be automatically redirected to the Dashboard page once their listing is created. And listing details are displayed using JavaScript according to the vehicle ID passed into the URL.
+- Login - Users can create accounts and this allows them to create listings when they navigate to the Dashboard page.
+- Database - Listing and account data is stored and retrieved from LocalStorage, and it will be replaced with the database data later.
+- WebSocket - Users can favorite vehicles and this is shown on the listing page to everyone upon refresh. Later, a refresh will not be necessary because WebSocket messages will automatically update the "favorites" count of a vehicle.
+- Application logic - Users can search for specific vehicles in the database by clicking checkboxes on the Browse page. They can also create listings and they will be automatically redirected to the Dashboard page once their listing is created. And listing details are displayed using JavaScript according to the vehicle ID passed into the URL.
+
+## Service deliverable
+
+For this deliverable I added backend endpoints that receives votes and returns the voting totals.
+
+- Node.js/Express HTTP service - implemented in index.js
+- Static middleware for frontend - implemented in index.js
+- Calls to third party endpoints - Vehicle data is populated with a fetch call to an API from the US Department of Transportation
+- Backend service endpoints - The list of all vehicle objects is stored on the backend, with endpoints for the frontend to grab vehicle data as needed
+- Frontend calls service endpoints - I did this using the fetch function. GET and POST requests to create, delete, and display listings
