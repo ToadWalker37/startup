@@ -18,19 +18,16 @@ let vehicles = new Array();
 
 // GetVehicles
 apiRouter.get('/vehicles', (_req, res) => {
-  console.log("Get 2+ vehicles");
   res.send(JSON.stringify(vehicles));
 });
 
 // AddVehicle
 apiRouter.post('/vehicle-add', (req, res) => {
-  console.log("Add 1 vehicle");
   res.send(JSON.stringify(addVehicles(req.body)));
 });
 
 // DeleteVehicle
 apiRouter.post('/vehicle-delete', (req, res) => {
-  console.log("Delete 1 vehicle");
   res.send(JSON.stringify(deleteVehicles(req.body)));
 });
 
@@ -44,13 +41,11 @@ app.listen(port, () => {
 });
 
 function addVehicles(vehicle) {
-  console.log(vehicle);
   vehicles.push(vehicle);
   return vehicles;
 }
 
 function deleteVehicles(vehicle) {
-  console.log(vehicle);
   let vehicleIndex = vehicles.indexOf(vehicle);
   const vehiclesIterator = vehicles.entries();
   vehicles = [];

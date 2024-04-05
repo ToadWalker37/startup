@@ -345,8 +345,6 @@ function publishListing() {
 }
 
 async function saveVehicleData(vehicle, action) {
-    console.log(action);
-    
     localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
     
     if (action === 1) {
@@ -358,7 +356,6 @@ async function saveVehicleData(vehicle, action) {
         let response = await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
     }
     else {
-        console.log(vehicle);
         let response = await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
     }
 }
@@ -752,7 +749,6 @@ function displayBrowseOptions(make, model) {
     fetch('/api/vehicles')
     .then((response) => response.json())
     .then((localVehicles) => {
-        console.log(localVehicles);
         const browseOptions = document.querySelector("#browse-options");
         if (localVehicles[0] == null) {
             while (browseOptions.firstChild) { browseOptions.removeChild(browseOptions.lastChild); }
@@ -866,7 +862,6 @@ function displayMatches() {
     fetch('/api/vehicles')
     .then((response) => response.json())
     .then((localVehicles) => {
-    console.log(localVehicles);
     let matchingVehicles = [];
     for (let i = 0; i < localVehicles.length; i++) {
         vehicle = localVehicles[i];
