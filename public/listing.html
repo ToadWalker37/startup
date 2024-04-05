@@ -14,7 +14,7 @@
         <script>
             let vehicleID = window.location.href.slice(47,53);
             vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-            if ("https://startup.swapcars.trade/listing.html?id=".localeCompare(window.location.href.slice(0,47)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(54)) != 0) { window.location.href = "listing-not-found.html"; }
+            if ("https://startup.swapcars.trade/listing.html?id=".localeCompare(window.location.href.slice(0,47)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(54)) !== 0) { window.location.href = "listing-not-found.html"; }
         </script>
         <script defer="defer" src="/main.js"></script>
         <style>
