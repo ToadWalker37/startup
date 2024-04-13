@@ -16,8 +16,8 @@ apiRouter.get('/vehicles', async (_req, res) => {
   res.send(vehicles);
 });
 
-apiRouter.get('/vehicle', async (_req, res) => {
-  let vehicle = await getVehicle(_req.ListingID);
+apiRouter.post('/vehicle', async (req, res) => {
+  let vehicle = await getVehicle(req.body);
   res.send(vehicle);
 });
 
@@ -96,7 +96,7 @@ async function getVehicle(id) {
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
-      const cursor = testCollection.find(id);
+      const cursor = testCollection.find({ ListingID: `${id.vehicleID}`});
       const allItems = await cursor.toArray();
       allItems.forEach((i) => {vehicle = i; });
       await client.close();

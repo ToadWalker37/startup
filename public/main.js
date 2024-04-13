@@ -345,8 +345,6 @@ function publishListing() {
 }
 
 async function saveVehicleData(vehicle, action) {
-    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-    
     if (action === 1) {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         currentUser.Listings.push(vehicle.ListingID);
@@ -369,10 +367,14 @@ function emptyVehicleListingInputError(fail) {
     displaynullVehicleDataErrorMessage();
 }
 
-function validateID(length) {
+async function validateID(length) {
     let potentialID = generateID(length);
-    if (localStorage.getItem(`${potentialID}`) == null) { return potentialID; }
-    else { return validateID(length); }
+    await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: potentialID })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data == null) { return potentialID; }
+        else { return validateID(length); }
+    });
 
     function generateID(length) {
         var result = '';
@@ -383,7 +385,7 @@ function validateID(length) {
     }
 }
 
-function displayInGarage() {
+async function displayInGarage() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let garage = document.querySelector("#garage");
     if (currentUser.Listings.length === 0) {
@@ -398,33 +400,35 @@ function displayInGarage() {
     else {
         for (let i = 0; i < currentUser.Listings.length; i++) {
             let vehicleID = currentUser.Listings[i];
-            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-            
-            let anchor = document.createElement("a");
-            anchor.href = `listing.html?id=${vehicle.ListingID}`;
-            anchor.style = "color: white; text-decoration: none;"
-            let displayCard = document.createElement("div");
-            displayCard.classList.add("display-card");
-            
-            let title = document.createElement("h4");
-            let snippets = document.createElement("p");
-            let vin = document.createElement("p");
-            
-            kify = (x) => `${Math.floor(x/1000)}k`;
-            title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp;</span> <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
-            snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
-            vin.innerHTML = `${vehicle.VIN}`;
+            await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+            .then((response) => response.json())
+            .then((vehicle) => {
+                let anchor = document.createElement("a");
+                anchor.href = `listing.html?id=${vehicle.ListingID}`;
+                anchor.style = "color: white; text-decoration: none;"
+                let displayCard = document.createElement("div");
+                displayCard.classList.add("display-card");
+                
+                let title = document.createElement("h4");
+                let snippets = document.createElement("p");
+                let vin = document.createElement("p");
+                
+                kify = (x) => `${Math.floor(x/1000)}k`;
+                title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp;</span> <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
+                snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+                vin.innerHTML = `${vehicle.VIN}`;
 
-            let image = document.createElement("img");
-            image.style.width = "150px";
-            image.src = "/assets/Coming Soon.png";
+                let image = document.createElement("img");
+                image.style.width = "150px";
+                image.src = "/assets/Coming Soon.png";
 
-            garage.appendChild(anchor);
-            anchor.appendChild(displayCard);
-            displayCard.appendChild(title);
-            displayCard.appendChild(snippets);
-            displayCard.appendChild(vin);
-            displayCard.appendChild(image);
+                garage.appendChild(anchor);
+                anchor.appendChild(displayCard);
+                displayCard.appendChild(title);
+                displayCard.appendChild(snippets);
+                displayCard.appendChild(vin);
+                displayCard.appendChild(image);
+            });
         }
     }
     let favorites = document.querySelector("#favorites");
@@ -436,217 +440,235 @@ function displayInGarage() {
     else {
         for (let i = 0; i < currentUser.Favorites.length; i++) {
             let vehicleID = currentUser.Favorites[i];
-            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-            
-            let anchor = document.createElement("a");
-            anchor.href = `listing.html?id=${vehicle.ListingID}`;
-            anchor.style = "color: white; text-decoration: none;"
-            let displayCard = document.createElement("div");
-            displayCard.classList.add("display-card");
-            
-            let title = document.createElement("h4");
-            let snippets = document.createElement("p");
-            let vin = document.createElement("p");
-            
-            kify = (x) => `${Math.floor(x/1000)}k`;
-            title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
-            snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
-            vin.innerHTML = `${vehicle.VIN}`;
+            await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+            .then((response) => response.json())
+            .then((vehicle) => {
+                let anchor = document.createElement("a");
+                anchor.href = `listing.html?id=${vehicle.ListingID}`;
+                anchor.style = "color: white; text-decoration: none;"
+                let displayCard = document.createElement("div");
+                displayCard.classList.add("display-card");
+                
+                let title = document.createElement("h4");
+                let snippets = document.createElement("p");
+                let vin = document.createElement("p");
+                
+                kify = (x) => `${Math.floor(x/1000)}k`;
+                title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+                snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
+                vin.innerHTML = `${vehicle.VIN}`;
 
-            let image = document.createElement("img");
-            image.style.width = "150px";
-            image.src = "/assets/Coming Soon.png";
+                let image = document.createElement("img");
+                image.style.width = "150px";
+                image.src = "/assets/Coming Soon.png";
 
-            favorites.appendChild(anchor);
-            anchor.appendChild(displayCard);
-            displayCard.appendChild(title);
-            displayCard.appendChild(snippets);
-            displayCard.appendChild(vin);
-            displayCard.appendChild(image);
+                favorites.appendChild(anchor);
+                anchor.appendChild(displayCard);
+                displayCard.appendChild(title);
+                displayCard.appendChild(snippets);
+                displayCard.appendChild(vin);
+                displayCard.appendChild(image);
+            });
         }
     }
 }
 
-function displayEditScreen(editOriginator) {
+async function displayEditScreen(editOriginator) {
     let vehicleID = editOriginator.id;
-    vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-    document.querySelector("#dashboard").style = "display:none";
-    
-    let announcementBig = document.createElement("h2");
-    announcementBig.style = "text-align: center; padding: 1vh;";
-    announcementBig.textContent = "Let's make things right on your";
-    let announcementLittle = document.createElement("p");
-    announcementLittle.textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
-    
-    let listing = document.querySelector("#listing");
-    listing.appendChild(announcementBig);
-    listing.appendChild(announcementLittle);
+    await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+    .then((response) => response.json())
+    .then((vehicle) => {
+        document.querySelector("#dashboard").style = "display:none";
+        
+        let announcementBig = document.createElement("h2");
+        announcementBig.style = "text-align: center; padding: 1vh;";
+        announcementBig.textContent = "Let's make things right on your";
+        let announcementLittle = document.createElement("p");
+        announcementLittle.textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+        
+        let listing = document.querySelector("#listing");
+        listing.appendChild(announcementBig);
+        listing.appendChild(announcementLittle);
 
-    let mileageLabel = document.createElement('label');
-    mileageLabel.textContent = "Mileage:";
-    let mileage = document.createElement('input');
-    mileage.type = "number";
-    mileage.min = 1;
-    mileage.max = 999999;
-    mileage.step = 1;
-    mileage.required = true;
-    mileage.id = "edit-mileage";
-    mileage.value = vehicle.Mileage;
-    listing.appendChild(mileageLabel);
-    listing.appendChild(mileage);
+        let mileageLabel = document.createElement('label');
+        mileageLabel.textContent = "Mileage:";
+        let mileage = document.createElement('input');
+        mileage.type = "number";
+        mileage.min = 1;
+        mileage.max = 999999;
+        mileage.step = 1;
+        mileage.required = true;
+        mileage.id = "edit-mileage";
+        mileage.value = vehicle.Mileage;
+        listing.appendChild(mileageLabel);
+        listing.appendChild(mileage);
 
-    let descriptionLabel = document.createElement('label');
-    descriptionLabel.textContent = "Description:";
-    let description = document.createElement('textarea');
-    description.required = true;
-    description.id = "edit-description";
-    description.value = vehicle.Description;
-    listing.appendChild(descriptionLabel);
-    listing.appendChild(description);
+        let descriptionLabel = document.createElement('label');
+        descriptionLabel.textContent = "Description:";
+        let description = document.createElement('textarea');
+        description.required = true;
+        description.id = "edit-description";
+        description.value = vehicle.Description;
+        listing.appendChild(descriptionLabel);
+        listing.appendChild(description);
 
-    // To do: Add image-editing functionality
+        // To do: Add image-editing functionality
 
-    let nullVehicleDataContainer = document.createElement('div');
-    nullVehicleDataContainer.id = 'null-vehicle';
-    listing.appendChild(nullVehicleDataContainer);
+        let nullVehicleDataContainer = document.createElement('div');
+        nullVehicleDataContainer.id = 'null-vehicle';
+        listing.appendChild(nullVehicleDataContainer);
 
-    let editButton = document.createElement('button');
-    editButton.classList.add('btn');
-    editButton.classList.add('edit');
-    editButton.textContent = "Save and update";
-    editButton.id = `${vehicleID}`;
-    editButton.onclick = editListing;
-    listing.appendChild(editButton);
+        let editButton = document.createElement('button');
+        editButton.classList.add('btn');
+        editButton.classList.add('edit');
+        editButton.textContent = "Save and update";
+        editButton.id = `${vehicleID}`;
+        editButton.onclick = editListing;
+        listing.appendChild(editButton);
 
-    let orText = document.createElement('p');
-    orText.textContent = "or, delete my listing.";
-    orText.style = "margin: 2vh";
-    listing.appendChild(orText);
+        let orText = document.createElement('p');
+        orText.textContent = "or, delete my listing.";
+        orText.style = "margin: 2vh";
+        listing.appendChild(orText);
 
-    let deleteButton = document.createElement('button');
-    deleteButton.classList.add('btn');
-    deleteButton.classList.add('delete');
-    deleteButton.textContent = "Delete";
-    deleteButton.id = `${vehicleID}`;
-    deleteButton.onclick = deleteListing;
-    listing.appendChild(deleteButton);
+        let deleteButton = document.createElement('button');
+        deleteButton.classList.add('btn');
+        deleteButton.classList.add('delete');
+        deleteButton.textContent = "Delete";
+        deleteButton.id = `${vehicleID}`;
+        deleteButton.onclick = deleteListing;
+        listing.appendChild(deleteButton);
 
-    function editListing() {
+    });
+
+    async function editListing() {
         const nullVehicleData = document.querySelector("#null-vehicle");
         while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
         let cantEdit = false;
     
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
-        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        
-        if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("mileage"); }
-        else { vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value); }
-        
-        if ("".localeCompare(document.querySelector("#edit-description").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("description"); }
-        else { vehicle.Description = sanitize(document.querySelector("#edit-description").value); }
-        
-        if (cantEdit === false) {
-            localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
-            const listing = document.querySelector("#listing");
-            window.location.assign("dashboard.html");
-        }
-        cantEdit = false;
+        await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+        .then((response) => response.json())
+        .then(async (vehicle) => {
+            if ("".localeCompare(document.querySelector("#edit-mileage").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("mileage"); }
+            else { vehicle.Mileage = sanitize(document.querySelector("#edit-mileage").value); }
+            
+            if ("".localeCompare(document.querySelector("#edit-description").value) === 0 ) { cantEdit = true; emptyVehicleListingInputError("description"); }
+            else { vehicle.Description = sanitize(document.querySelector("#edit-description").value); }
+            
+            if (cantEdit === false) {
+                await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+                .then((response) => response.json())
+                .then((vehicle) => {
+                    const listing = document.querySelector("#listing");
+                    window.location.assign("dashboard.html");
+                });
+            }
+            cantEdit = false;
+        });
     }
 
-    function deleteListing() {
+    async function deleteListing() {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
         let vehicleID = document.getElementsByClassName('btn edit').item(0).id;
-        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        if (currentUser.Listings.length === 1) {
-        currentUser.Listings = [];
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-    }
-    else {
-        const currentUserListingsIterator = currentUser.Listings.entries();
-        currentUser.Listings = [];
-        for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[1].localeCompare(vehicle.ListingID) !== 0) { currentUser.Listings.push(vehicleInList[1]); } }
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-    }
-    saveVehicleData(vehicle, 0);
-    localStorage.removeItem(`${vehicleID}`);
-    window.location.assign("dashboard.html");
+        await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+            .then((response) => response.json())
+            .then((vehicle) => {
+            if (currentUser.Listings.length === 1) {
+                currentUser.Listings = [];
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            }
+            else {
+                const currentUserListingsIterator = currentUser.Listings.entries();
+                currentUser.Listings = [];
+                for (let vehicleInList of currentUserListingsIterator) { if (vehicleInList[1].localeCompare(vehicle.ListingID) !== 0) { currentUser.Listings.push(vehicleInList[1]); } }
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+            }
+            saveVehicleData(vehicle, 0);
+            window.location.assign("dashboard.html");
+        });
     }
 }
 
-function displayListing() {
+async function displayListing() {
     let dev = 1;
     let vehicleID;
     if (dev === 1) { vehicleID = window.location.href.slice(38,44); }
     else { vehicleID = window.location.href.slice(47,53); }
-    vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-    let date = new Date(vehicle.Date.toLocaleString());
+    await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+    .then((response) => response.json())
+    .then(async (vehicle) => {
+        let date = new Date(vehicle.Date.toLocaleString());
 
-    document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
-    document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
-    
-    document.querySelector("#stats").innerHTML = `${vehicle.Location} &middot; ${vehicle.Favorites} <a href="#" style="text-align:center; text-decoration:none; color: white;" onclick="favorite()">&starf;</a> &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
-    vehicle.Views += 1;
+        document.querySelector("title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} - Dynamic Garage`;
+        document.querySelector("#title").textContent = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model}`;
+        
+        document.querySelector("#stats").innerHTML = `${vehicle.Location} &middot; ${vehicle.Favorites} <a href="#" style="text-align:center; text-decoration:none; color: white;" onclick="favorite()">&starf;</a> &middot; ${vehicle.Views} <span class="fa">&#xf06e;`;
+        vehicle.Views += 1;
 
-    document.querySelector("#posted-when").textContent = `Posted ${date}`;
-    
-    let engine;
-    let vehicleDisplacement;
-    if ("".localeCompare(vehicle.DisplacementL) !== 0) {
-        if (vehicle.DisplacementL.indexOf(".") === -1) { vehicleDisplacement = `${vehicle.DisplacementL}.0` }
-        else {
-            const round = (num) => Math.round(num * 10)/10;
-            vehicleDisplacement = round(vehicle.DisplacementL);
+        document.querySelector("#posted-when").textContent = `Posted ${date}`;
+        
+        let engine;
+        let vehicleDisplacement;
+        if ("".localeCompare(vehicle.DisplacementL) !== 0) {
+            if (vehicle.DisplacementL.indexOf(".") === -1) { vehicleDisplacement = `${vehicle.DisplacementL}.0` }
+            else {
+                const round = (num) => Math.round(num * 10)/10;
+                vehicleDisplacement = round(vehicle.DisplacementL);
+            }
         }
-    }
-    if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L I-${vehicle.EngineCylinders}`; }
-    else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L V${vehicle.EngineCylinders}`; }
-    else { engine = `${vehicleDisplacement}L ${vehicle.EngineCylinders}-cyl` }
+        if ("In-Line".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L I-${vehicle.EngineCylinders}`; }
+        else if ("V-Shaped".localeCompare(vehicle.EngineConfiguration) === 0) { engine = `${vehicleDisplacement}L V${vehicle.EngineCylinders}`; }
+        else { engine = `${vehicleDisplacement}L ${vehicle.EngineCylinders}-cyl` }
 
-    commify = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.querySelector("#mileage").textContent = `Miles: ${commify(vehicle.Mileage)}`;
-    document.querySelector("#transmission").textContent = `Transmission: ${vehicle.TransmissionStyle}`;
-    document.querySelector("#drivetrain").textContent = `Drivetrain: ${vehicle.DriveType}`;
-    document.querySelector("#engine").textContent = `Engine: ${engine}`;
-    document.querySelector("#fuel").textContent = `Fuel type: ${vehicle.FuelTypePrimary}`;
-    document.querySelector("#title-status").textContent = `Title status: ${vehicle.Title}`;
-    document.querySelector("#location").textContent = `Location: some miles from zip code ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
-    document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
-    document.querySelector("#description").textContent = `${vehicle.Description}`;
-    
-    let savedSearches = JSON.parse(localStorage.getItem(`${vehicle.Owner}`)).SavedSearches;
-    let savedSearchesDrivetrainList = savedSearches.drivetrainList;
-    for (let i = 0; i<savedSearchesDrivetrainList.length; i++) { savedSearchesDrivetrainList[i] = savedSearchesDrivetrainList[i].slice(0,3); }
-    if (savedSearches.makeList.length > 0) { document.querySelector("#looking-for-make").textContent = `${savedSearches.makeList}`; }
-    else { document.querySelector("#looking-for-make").textContent = `Any make`; }
-    if (savedSearches.modelList.length > 0) {
-        document.querySelector("ul").removeChild(document.querySelector("#looking-for-make"));
-        document.querySelector("ul").removeChild(document.querySelector("#looking-for-model"));
-        let modelListIterator = savedSearches.modelList.entries();
-        for (let makeModelPairs of modelListIterator) {
-            let li = document.createElement('li');
-            li.textContent = `${makeModelPairs[1]}`;
-            document.querySelector("#make-model-pairs").appendChild(li);
+        commify = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        document.querySelector("#mileage").textContent = `Miles: ${commify(vehicle.Mileage)}`;
+        document.querySelector("#transmission").textContent = `Transmission: ${vehicle.TransmissionStyle}`;
+        document.querySelector("#drivetrain").textContent = `Drivetrain: ${vehicle.DriveType}`;
+        document.querySelector("#engine").textContent = `Engine: ${engine}`;
+        document.querySelector("#fuel").textContent = `Fuel type: ${vehicle.FuelTypePrimary}`;
+        document.querySelector("#title-status").textContent = `Title status: ${vehicle.Title}`;
+        document.querySelector("#location").textContent = `Location: some miles from zip code ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
+        document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
+        document.querySelector("#description").textContent = `${vehicle.Description}`;
+        
+        let savedSearches = JSON.parse(localStorage.getItem(`${vehicle.Owner}`)).SavedSearches;
+        let savedSearchesDrivetrainList = savedSearches.drivetrainList;
+        for (let i = 0; i<savedSearchesDrivetrainList.length; i++) { savedSearchesDrivetrainList[i] = savedSearchesDrivetrainList[i].slice(0,3); }
+        if (savedSearches.makeList.length > 0) { document.querySelector("#looking-for-make").textContent = `${savedSearches.makeList}`; }
+        else { document.querySelector("#looking-for-make").textContent = `Any make`; }
+        if (savedSearches.modelList.length > 0) {
+            document.querySelector("ul").removeChild(document.querySelector("#looking-for-make"));
+            document.querySelector("ul").removeChild(document.querySelector("#looking-for-model"));
+            let modelListIterator = savedSearches.modelList.entries();
+            for (let makeModelPairs of modelListIterator) {
+                let li = document.createElement('li');
+                li.textContent = `${makeModelPairs[1]}`;
+                document.querySelector("#make-model-pairs").appendChild(li);
+            }
         }
-    }
-    else { document.querySelector("#looking-for-model").textContent = `Any model`; }
-    if (savedSearches.yearList.length > 0) { document.querySelector("#looking-for-year").textContent = `From ${savedSearches.yearList[0]} to ${savedSearches.yearList[1]}`; }
-    else { document.querySelector("#looking-for-year").textContent = `Any year`; }
-    if (savedSearches.mileageList.length > 0) { document.querySelector("#looking-for-mileage").textContent = `From ${savedSearches.mileageList[0]} to ${savedSearches.mileageList[1]} miles`; }
-    else { document.querySelector("#looking-for-mileage").textContent = `Any mileage`; }
-    if (savedSearches.fuelList.length > 0) { document.querySelector("#looking-for-fuel").textContent = `${savedSearches.fuelList.join(", ")}`; }
-    else { document.querySelector("#looking-for-fuel").textContent = `Any fuel type`; }
-    if (savedSearches.drivetrainList.length > 0) { document.querySelector("#looking-for-drivetrain").textContent = `${savedSearchesDrivetrainList.join(", ")}`; }
-    else { document.querySelector("#looking-for-drivetrain").textContent = `Any drivetrain`; }
-    if (savedSearches.transmissionList.length > 0) { document.querySelector("#looking-for-transmission").textContent = `${savedSearches.transmissionList.join(", ")}`; }
-    else { document.querySelector("#looking-for-transmission").textContent = `Any transmission style`; }
-    if (savedSearches.cylindersList.length > 0) { document.querySelector("#looking-for-cylinders").textContent = `${savedSearches.cylindersList.join(", ")} cylinders`; }
-    else { document.querySelector("#looking-for-cylinders").textContent = `Any amount of cylinders`; }
-    if (savedSearches.titleList.length > 0) { document.querySelector("#looking-for-title").textContent = `${savedSearches.titleList.join(", ")} title`; }
-    else { document.querySelector("#looking-for-title").textContent = `Any title status`; }
+        else { document.querySelector("#looking-for-model").textContent = `Any model`; }
+        if (savedSearches.yearList.length > 0) { document.querySelector("#looking-for-year").textContent = `From ${savedSearches.yearList[0]} to ${savedSearches.yearList[1]}`; }
+        else { document.querySelector("#looking-for-year").textContent = `Any year`; }
+        if (savedSearches.mileageList.length > 0) { document.querySelector("#looking-for-mileage").textContent = `From ${savedSearches.mileageList[0]} to ${savedSearches.mileageList[1]} miles`; }
+        else { document.querySelector("#looking-for-mileage").textContent = `Any mileage`; }
+        if (savedSearches.fuelList.length > 0) { document.querySelector("#looking-for-fuel").textContent = `${savedSearches.fuelList.join(", ")}`; }
+        else { document.querySelector("#looking-for-fuel").textContent = `Any fuel type`; }
+        if (savedSearches.drivetrainList.length > 0) { document.querySelector("#looking-for-drivetrain").textContent = `${savedSearchesDrivetrainList.join(", ")}`; }
+        else { document.querySelector("#looking-for-drivetrain").textContent = `Any drivetrain`; }
+        if (savedSearches.transmissionList.length > 0) { document.querySelector("#looking-for-transmission").textContent = `${savedSearches.transmissionList.join(", ")}`; }
+        else { document.querySelector("#looking-for-transmission").textContent = `Any transmission style`; }
+        if (savedSearches.cylindersList.length > 0) { document.querySelector("#looking-for-cylinders").textContent = `${savedSearches.cylindersList.join(", ")} cylinders`; }
+        else { document.querySelector("#looking-for-cylinders").textContent = `Any amount of cylinders`; }
+        if (savedSearches.titleList.length > 0) { document.querySelector("#looking-for-title").textContent = `${savedSearches.titleList.join(", ")} title`; }
+        else { document.querySelector("#looking-for-title").textContent = `Any title status`; }
 
-    localStorage.setItem(`${vehicle.ListingID}`, JSON.stringify(vehicle));
+        await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+            .then((response) => response.json())
+            .then((vehicle) => {});
+    });
 }
 
 async function displayAuthenticationError(buttonID) { await sleep(2000); document.querySelector(`#${buttonID}`).style = "background-color: hsl(54, 100%, 50%); color: black"; }
@@ -714,31 +736,37 @@ function signOut() {
     window.location.reload();
 }
 
-function favorite() {
+async function favorite() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if ("0".localeCompare(localStorage.getItem("signedIn")) === 0) { window.location.assign("must-sign-in.html"); }
     else {
         let vehicleID = window.location.href.slice(38,44);
-        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-        let currentUserFavoritesIndex = currentUser.Favorites.indexOf(vehicleID);
-        if (currentUserFavoritesIndex !== -1) {
-            const currentUserFavoritesIterator = currentUser.Favorites.entries();
-            currentUser.Favorites = [];
-            for (let vehicleInList of currentUserFavoritesIterator) { if (vehicleInList[0] !== currentUserFavoritesIndex) { currentUser.Favorites.push(vehicleInList[1]); } }
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+        await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+        .then((response) => response.json())
+        .then(async (vehicle) => {let currentUserFavoritesIndex = currentUser.Favorites.indexOf(vehicleID);
+            if (currentUserFavoritesIndex !== -1) {
+                const currentUserFavoritesIterator = currentUser.Favorites.entries();
+                currentUser.Favorites = [];
+                for (let vehicleInList of currentUserFavoritesIterator) { if (vehicleInList[0] !== currentUserFavoritesIndex) { currentUser.Favorites.push(vehicleInList[1]); } }
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
 
-            vehicle.Favorites--;
-            localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
-        }
-        else {
-            currentUser.Favorites.push(vehicleID);
-            vehicle.Favorites++;
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-            localStorage.setItem(`${vehicleID}`, JSON.stringify(vehicle));
-        }
-        window.location.reload();
+                vehicle.Favorites--;
+                await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+                .then((response) => response.json())
+                .then((vehicle) => {});
+            }
+            else {
+                currentUser.Favorites.push(vehicleID);
+                vehicle.Favorites++;
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+                await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+                .then((response) => response.json())
+                .then((vehicle) => {});
+            }
+            window.location.reload();
+        });
     }
 }
 
@@ -902,15 +930,18 @@ function displayMatches() {
         return checkedInputValues;
     }
 
-    function displayVehicle(vehicleID) {
-        vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`))
-        let anchor = document.createElement('a');
-        anchor.classList.add("listing-link");
-        anchor.href = `listing.html?id=${vehicleID}`;
-        let vehicleMake;
-        if ("Chevrolet".localeCompare(vehicle.Make) === 0) { vehicleMake = "Chevy"; }
-        else { vehicleMake = vehicle.Make; }
-        anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicleMake} ${vehicle.Model}</h3><img class="listing-image" src="/assets/Coming Soon.png" /></div>`
-        document.querySelector("#matches").appendChild(anchor);
+    async function displayVehicle(vehicleID) {
+        await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
+        .then((response) => response.json())
+        .then((vehicle) => {
+            let anchor = document.createElement('a');
+            anchor.classList.add("listing-link");
+            anchor.href = `listing.html?id=${vehicleID}`;
+            let vehicleMake;
+            if ("Chevrolet".localeCompare(vehicle.Make) === 0) { vehicleMake = "Chevy"; }
+            else { vehicleMake = vehicle.Make; }
+            anchor.innerHTML = `<div class="card" height="100%"><h3 class="listing-title">${vehicle.ModelYear} ${vehicleMake} ${vehicle.Model}</h3><img class="listing-image" src="/assets/Coming Soon.png" /></div>`
+            document.querySelector("#matches").appendChild(anchor);
+        });
     }
 }
