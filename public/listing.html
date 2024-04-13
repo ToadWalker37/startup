@@ -12,9 +12,16 @@
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="/style.css">
         <script>
+            let dev = 1;
+            if (dev === 1);
+            let vehicleID = window.location.href.slice(38,44);
+            vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
+            if (vehicle == null) { window.location.href = "listing-not-found.html"; }
+            else {
             let vehicleID = window.location.href.slice(47,53);
             vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
             if ("https://startup.swapcars.trade/listing.html?id=".localeCompare(window.location.href.slice(0,47)) !== 0 || vehicle == null || "".localeCompare(window.location.href.slice(54)) !== 0) { window.location.href = "listing-not-found.html"; }
+            }
         </script>
         <script defer="defer" src="/main.js"></script>
         <style>

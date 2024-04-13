@@ -16,6 +16,11 @@ apiRouter.get('/vehicles', async (_req, res) => {
   res.send(vehicles);
 });
 
+apiRouter.get('/vehicle', async (_req, res) => {
+  let vehicle = await getVehicle(_req.ListingID);
+  res.send(vehicle);
+});
+
 apiRouter.post('/vehicle-add', (req, res) => {
   addVehicles(req.body).catch(console.error);
 });
@@ -75,4 +80,34 @@ async function getVehicles() {
     process.exit(1);
   });
   return JSON.stringify(vehicles);
+}
+
+async function getVehicle(id) {
+  const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+  const client = new MongoClient(uri);
+  const db = client.db('testDatabase');
+  const testCollection = db.collection('testCollection');
+  let vehicle;
+  async function run() {
+    try {
+      // Connect the client to the server	(optional starting in v4.7)
+      await client.connect();
+      // Send a ping to confirm a successful connection
+      await client.db("admin").command({ ping: 1 });
+      console.log("Pinged your deployment. You successfully connected to MongoDB!");
+      const cursor = testCollection.find(id);
+      const allItems = await cursor.toArray();
+      allItems.forEach((i) => {vehicle = i; });
+      await client.close();
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
+  await run().catch((ex) => {
+    console.log(`Unable to connect to database with ${uri} because ${ex.message}`);
+    process.exit(1);
+  });
+  return JSON.stringify(vehicle);
 }
