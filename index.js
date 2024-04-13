@@ -14,13 +14,11 @@ app.use(`/api`, apiRouter);
 let vehicles = new Array();
 
 apiRouter.get('/vehicles', (_req, res) => {
-  res.send(JSON.stringify(vehicles));
+  res.send(getVehicles());
 });
 
 apiRouter.post('/vehicle-add', (req, res) => {
-  let currentVehicles = addVehicles(req.body);
-  main(currentVehicles[0]).catch(console.error);;
-  res.send(JSON.stringify(currentVehicles));
+  addVehicles(req.body).catch(console.error);
 });
 
 apiRouter.post('/vehicle-delete', (req, res) => {
@@ -31,12 +29,18 @@ app.use((_req, res) => { res.sendFile('index.html', { root: 'public' }); });
 
 app.listen(port, () => { console.log(`Listening on port ${port}`); });
 
-function addVehicles(vehicle) {
-  vehicles.push(vehicle);
-  return vehicles;
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const config = require('dbConfig.json');
+
+async function addVehicles(vehicle) {
+  const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(uri);
+  const db = client.db('testDatabase');
+  const testCollection = db.collection('testCollection');
+  await testCollection.insertOne(vehicle);
 }
 
-function deleteVehicles(vehicle) {
+async function deleteVehicles(vehicle) {
   let vehicleIndex = vehicles.indexOf(vehicle);
   const vehiclesIterator = vehicles.entries();
   vehicles = [];
@@ -44,11 +48,7 @@ function deleteVehicles(vehicle) {
   return vehicles;
 }
 
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const config = require('dbConfig.json');
-
-async function main(input) {
+async function getVehicles() {
   const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
   // Create a MongoClient with a MongoClientOptions object to set the Stable API version
   const client = new MongoClient(uri);
@@ -61,17 +61,27 @@ async function main(input) {
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
+      const cursor = tes
+      await testCollection.insertOne(input);
+      client.connect();
+      try {
+        await client.db("admin").command({ ping: 1 });
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+      }
+      catch {
+        console.log("You couldn't connect to MongoDB.");
+      }
+      await client.close();
+      testCollection.find();
+      const allItems = await cursor.toArray();
+      allItems.forEach((i) => console.log(i));
     } finally {
       // Ensures that the client will close when you finish/error
       await client.close();
     }
   }
   run().catch((ex) => {
-    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+    console.log(`Unable to connect to database with ${uri} because ${ex.message}`);
     process.exit(1);
   });
-  await testCollection.insertOne(input);
-  const cursor = testCollection.find(query, options);
-  const allItems = await cursor.toArray();
-  allItems.forEach((i) => console.log(i));
 }
