@@ -11,10 +11,9 @@ app.use(express.static('public'));
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-let vehicles = new Array();
-
-apiRouter.get('/vehicles', (_req, res) => {
-  res.send(getVehicles());
+apiRouter.get('/vehicles', async (_req, res) => {
+  let vehicles = await getVehicles();
+  res.send(vehicles);
 });
 
 apiRouter.post('/vehicle-add', (req, res) => {
@@ -54,6 +53,7 @@ async function getVehicles() {
   const client = new MongoClient(uri);
   const db = client.db('testDatabase');
   const testCollection = db.collection('testCollection');
+  let vehicles = new Array();
   async function run() {
     try {
       // Connect the client to the server	(optional starting in v4.7)
@@ -61,27 +61,18 @@ async function getVehicles() {
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
-      const cursor = tes
-      await testCollection.insertOne(input);
-      client.connect();
-      try {
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-      }
-      catch {
-        console.log("You couldn't connect to MongoDB.");
-      }
-      await client.close();
-      testCollection.find();
+      const cursor = testCollection.find();
       const allItems = await cursor.toArray();
-      allItems.forEach((i) => console.log(i));
+      allItems.forEach((i) => vehicles.push(i));
+      await client.close();
     } finally {
       // Ensures that the client will close when you finish/error
       await client.close();
     }
   }
-  run().catch((ex) => {
+  await run().catch((ex) => {
     console.log(`Unable to connect to database with ${uri} because ${ex.message}`);
     process.exit(1);
   });
+  return JSON.stringify(vehicles);
 }
