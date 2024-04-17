@@ -768,7 +768,6 @@ function websocket() {
         }
     };
     function update() {
-        console.log(msg);
         socket.send(`{"ua": "${navigator.userAgent}"}`);
     }
     this.waitForConnection(update, 500);
