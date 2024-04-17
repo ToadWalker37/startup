@@ -1,15 +1,55 @@
 const express = require('express');
-const app = express();
+const cookieParser = require('cookie-parser');
+const apiRouter = express.Router();
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const config = require('dbConfig.json');
+const ObjectID = require('mongodb').ObjectID;
+const uuid = require('uuid');
+const bcrypt = require('bcrypt');
 
-// The service port. In production the frontend code is statically hosted by the service on the same port.
+const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());
-
 app.use(express.static('public'));
-
-const apiRouter = express.Router();
+app.use(cookieParser());
 app.use(`/api`, apiRouter);
+
+app.post('/auth/create', async (req, res) => {
+  if (await getUser(req.body.email)) { res.status(409).send({ msg: 'Existing user' }); }
+  else {
+    const user = await createUser(req.body.email, req.body.password);
+    setAuthCookie(res, user.token);
+    res.send({id: user._id,});
+  }
+});
+
+// loginAuthorization from the given credentials
+app.post('/auth/login', async (req, res) => {
+  const user = await getUser(req.body.email);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      return;
+    }
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
+
+// getMe for the currently authenticated user
+app.get('/user/me', async (req, res) => {
+  const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(url);
+  const collection = client.db('authTest').collection('user');
+  authToken = req.cookies['token'];
+  const user = await collection.findOne({ token: authToken });
+  if (user) {
+    res.send({ email: user.email });
+    return;
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
 
 apiRouter.get('/vehicles', async (_req, res) => {
   let vehicles = await getVehicles();
@@ -38,9 +78,34 @@ app.use((_req, res) => { res.sendFile('index.html', { root: 'public' }); });
 
 app.listen(port, () => { console.log(`Listening on port ${port}`); });
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const config = require('dbConfig.json');
-const ObjectID = require('mongodb').ObjectID;
+function getUser(email) {
+  const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(url);
+  const collection = client.db('authTest').collection('user');
+  return collection.findOne({ email: email });
+}
+
+async function createUser(email, password) {
+  const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(url);
+  const collection = client.db('authTest').collection('user');
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = {
+    email: email,
+    password: passwordHash,
+    token: uuid.v4(),
+  };
+  await collection.insertOne(user);
+  return user;
+}
+
+function setAuthCookie(res, authToken) {
+  res.cookie('token', authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
 
 async function addVehicles(vehicle) {
   const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
