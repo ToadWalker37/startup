@@ -1,8 +1,5 @@
 let vehicle;
-let user = {};
-if (localStorage.getItem("signedIn") == null) { localStorage.setItem("signedIn", 0); }
-
-if ("1".localeCompare(localStorage.getItem("signedIn")) === 0) { document.querySelector("span").innerHTML = `${JSON.parse(localStorage.getItem("currentUser")).Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh; color: white; " class="fa">&#xf08b;</i></a>`; }
+// if (signed in) { document.querySelector("span").innerHTML = `${currentUser's Username}<a href="#" style="text-align:center; text-decoration:none;" onclick="signOut()"><i style="padding-left: 0.5em; padding-right: 0.5em; font-size: 2vh; color: white; " class="fa">&#xf08b;</i></a>`; }
 
 function sanitize(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
 
@@ -684,23 +681,34 @@ function emptyAuthenticationError(fail, nullDiv, authenticationErrorType) {
     displayAuthenticationError(authenticationErrorType);
 }
 
-function signIn() {   
+async function signIn() {   
     const nullSignInData = document.querySelector("#null-sign-in");
     while (nullSignInData.firstChild) { nullSignInData.removeChild(nullSignInData.lastChild); }
     
     if ("".localeCompare(document.querySelector("#signInUsername").value) === 0) { emptyAuthenticationError("Username missing! Please fill that in.", nullSignInData, "sign-in"); }
     else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) { emptyAuthenticationError("Password missing! Please fill that in.", nullSignInData, "sign-in"); }
     else {
-        if (localStorage.getItem(`${document.querySelector("#signInUsername").value}`) == null || document.querySelector("#signInPassword").value.localeCompare(JSON.parse(localStorage.getItem(`${document.querySelector("#signInUsername").value}`)).Password) !== 0) { emptyAuthenticationError("Email or password invalid.", nullSignInData, "sign-in"); }
-        else {
-            localStorage.setItem("signedIn", 1);
-            localStorage.setItem("currentUser", localStorage.getItem(`${document.querySelector("#signInUsername").value}`));
-            window.location.reload();
-        }
+        emptyAuthenticationError("Email or password invalid.", nullSignInData, "sign-in");
+        console.log(JSON.stringify({"email":`${document.querySelector("#signInUsername").value}`, "password":`${document.querySelector("#signInPassword").value}`}));
+        
+        await fetch('/auth/login', { 
+                method: 'POST', 
+                headers: 
+                { 'content-type': 'application/json' }, 
+                body: JSON.stringify({
+                    "username": `${document.querySelector("#signInUsername").value}`, 
+                    "password": `${document.querySelector("#signInPassword").value}`
+                }) 
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                window.location.reload();
+            });
     }
 }
 
-function signUp() {
+async function signUp() {
     const nullSignUpData = document.querySelector("#null-sign-up");
     while (nullSignUpData.firstChild) { nullSignUpData.removeChild(nullSignUpData.lastChild); }
     let cantAuthenticate = false;
@@ -716,6 +724,7 @@ function signUp() {
     if (localStorage.getItem(`${document.querySelector("#signUpUsername").value}`) != null) { cantAuthenticate = true; emptyAuthenticationError("Username taken! Please pick a different one.", nullSignUpData, "sign-up"); }
 
     if (cantAuthenticate === false) {
+        const user = {};
         user.FirstName = sanitize(document.querySelector("#signUpFirstName").value);
         user.LastName = sanitize(document.querySelector("#signUpLastName").value);
         user.Username = sanitize(document.querySelector("#signUpUsername").value);
@@ -726,11 +735,17 @@ function signUp() {
         user.Listings = new Array();
         user.Favorites = new Array();
         user.SavedSearches = new Map();
-        localStorage.setItem(`${user.Username}`, JSON.stringify(user));
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        localStorage.setItem("signedIn", 1);
-        window.location.reload();
+        await fetch('/auth/create', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(user) })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            window.location.reload();
+        });
     }
+}
+
+async function verifyAuthentication() {
+    if (1 === 0) { window.location.assign("must-sign-in.html"); }
 }
 
 function signOut() {

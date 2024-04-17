@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const apiRouter = express.Router();
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const config = require('dbConfig.json');
+const config = require('./dbConfig.json');
 const ObjectID = require('mongodb').ObjectID;
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
@@ -16,26 +16,34 @@ app.use(cookieParser());
 app.use(`/api`, apiRouter);
 
 app.post('/auth/create', async (req, res) => {
-  if (await getUser(req.body.email)) { res.status(409).send({ msg: 'Existing user' }); }
+  if (await getUser(req.body.Username)) { res.status(409).send({ msg: 'Existing user' }); }
   else {
-    const user = await createUser(req.body.email, req.body.password);
+    const user = await createUser(req.body.Username, req.body.Password);
     setAuthCookie(res, user.token);
-    res.send({id: user._id,});
+    res.send(JSON.stringify({ id: user._id }));
   }
 });
 
 // loginAuthorization from the given credentials
 app.post('/auth/login', async (req, res) => {
-  const user = await getUser(req.body.email);
+  console.log(req.body);
+
+  const user = await getUser(req.body.username);
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       setAuthCookie(res, user.token);
-      res.send({ id: user._id });
+      res.send(JSON.stringify({ id: user._id }));
       return;
     }
   }
   res.status(401).send({ msg: 'Unauthorized' });
 });
+
+// DeleteAuth token if stored in cookie
+// apiRouter.delete('/auth/logout', (_req, res) => {
+//   res.clearCookie(authCookieName);
+//   res.status(204).end();
+// });
 
 // getMe for the currently authenticated user
 app.get('/user/me', async (req, res) => {
@@ -51,26 +59,51 @@ app.get('/user/me', async (req, res) => {
   res.status(401).send({ msg: 'Unauthorized' });
 });
 
-apiRouter.get('/vehicles', async (_req, res) => {
+// GetUser returns information about a user
+apiRouter.get('/user/:email', async (req, res) => {
+  const user = await DB.getUser(req.params.email);
+  if (user) {
+    const token = req?.cookies.token;
+    res.send({ email: user.email, authenticated: token === user.token });
+    return;
+  }
+  res.status(404).send({ msg: 'Unknown' });
+});
+
+// secureApiRouter verifies credentials for endpoints
+var secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+secureApiRouter.get('/vehicles', async (_req, res) => {
   let vehicles = await getVehicles();
   res.send(vehicles);
 });
 
-apiRouter.post('/vehicle', async (req, res) => {
+secureApiRouter.post('/vehicle', async (req, res) => {
   let vehicle = await getVehicle(req.body);
   res.send(vehicle);
 });
 
-apiRouter.post('/vehicle-update', async (req, res) => {
+secureApiRouter.post('/vehicle-update', async (req, res) => {
   let vehicle = await updateVehicle(req.body);
   res.send(vehicle);
 });
 
-apiRouter.post('/vehicle-add', (req, res) => {
+secureApiRouter.post('/vehicle-add', (req, res) => {
   addVehicles(req.body).catch(console.error);
 });
 
-apiRouter.post('/vehicle-delete', (req, res) => {
+secureApiRouter.post('/vehicle-delete', (req, res) => {
   res.send(JSON.stringify(deleteVehicles(req.body)));
 });
 
@@ -204,3 +237,18 @@ async function updateVehicle(vehicle) {
     { upsert: true }
   );
 }
+
+const { WebSocketServer } = require('ws');
+
+const wss = new WebSocketServer({ port: 9900 });
+
+wss.on('connection', (ws) => {
+  ws.on('message', (data) => {
+    const msg = String.fromCharCode(...data);
+    console.log('received: %s', msg);
+
+    ws.send(`I heard you say "${msg}"`);
+  });
+
+  ws.send('Hello webSocket');
+});
