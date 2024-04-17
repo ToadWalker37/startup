@@ -734,7 +734,6 @@ async function signUp() {
         await fetch('/auth/create', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(user) })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             window.location.reload();
         });
     }
@@ -744,7 +743,6 @@ function websocket() {
     const socket = new WebSocket('ws://localhost:8080');
     socket.onmessage = async (event) => {
         const text = await event.data.text();
-        console.log(text);
         const chat = JSON.parse(text);
         const ua = document.createElement('p');
         ua.textContent = `${chat.ua}`;
