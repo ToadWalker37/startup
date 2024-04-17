@@ -398,11 +398,9 @@ async function displayInGarage() {
     else {
         for (let i = 0; i < currentUser.Listings.length; i++) {
             let vehicleID = currentUser.Listings[i];
-            console.log(`vehicleID: ${JSON.stringify(vehicleID)}`);
             await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
             .then((response) => response.json())
             .then((vehicle) => {
-                console.log(vehicle);
                 let anchor = document.createElement("a");
                 anchor.href = `listing.html?id=${vehicle.ListingID}`;
                 anchor.style = "color: white; text-decoration: none;"
