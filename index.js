@@ -21,6 +21,11 @@ apiRouter.post('/vehicle', async (req, res) => {
   res.send(vehicle);
 });
 
+apiRouter.post('/vehicle-update', async (req, res) => {
+  let vehicle = await updateVehicle(req.body);
+  res.send(vehicle);
+});
+
 apiRouter.post('/vehicle-add', (req, res) => {
   addVehicles(req.body).catch(console.error);
 });
@@ -35,6 +40,7 @@ app.listen(port, () => { console.log(`Listening on port ${port}`); });
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const config = require('dbConfig.json');
+const ObjectID = require('mongodb').ObjectID;
 
 async function addVehicles(vehicle) {
   const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
@@ -109,5 +115,27 @@ async function getVehicle(id) {
     console.log(`Unable to connect to database with ${uri} because ${ex.message}`);
     process.exit(1);
   });
-  return JSON.stringify(vehicle);
+  if (vehicle == null) {
+    return JSON.stringify({"header":null});
+  }
+  else {
+    return JSON.stringify(vehicle);
+  }
+}
+
+async function updateVehicle(vehicle) {
+  const uri = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(uri);
+  const db = client.db('testDatabase');
+  const testCollection = db.collection('testCollection');
+  await testCollection.updateOne(
+    { _id: { $toObjectId : `${vehicle._id}` } },
+    { $set: {
+      "Mileage" : vehicle.Mileage,
+      "Description" : vehicle.Description,
+      "Favorites" : vehicle.Favorites,
+      "Views" : vehicle.Views
+    } },
+    { upsert: true }
+  );
 }

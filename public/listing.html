@@ -16,7 +16,6 @@
             if (dev === 1) {
                 let vehicleID = window.location.href.slice(38,44);
                 vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
-                if (vehicle == null) { window.location.href = "listing-not-found.html"; }
             }
             else {
             let vehicleID = window.location.href.slice(47,53);

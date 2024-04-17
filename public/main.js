@@ -241,7 +241,7 @@ function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 async function displaynullVehicleDataErrorMessage() { await sleep(2000); document.querySelector("#create-listing").style = "background-color: hsl(54, 100%, 50%); color: black"; }
 
-function publishListing() {
+async function publishListing() {
     const nullVehicleData = document.querySelector("#null-vehicle");
     while (nullVehicleData.firstChild) { nullVehicleData.removeChild(nullVehicleData.lastChild); }
 
@@ -333,11 +333,9 @@ function publishListing() {
             vehicle.Views = 0;
             vehicle.ZipCode = currentUser.ZipCode;
             vehicle.Location = vehicle.ZipCode;
-            vehicle.ListingID = validateID(6);
+            vehicle.ListingID = await validateID(6);
 
-            saveVehicleData(vehicle, 1);
-            
-            window.location.assign("dashboard.html");
+            await saveVehicleData(vehicle, 1);
         }
         
         cantPublish = false;
@@ -350,9 +348,10 @@ async function saveVehicleData(vehicle, action) {
         currentUser.Listings.push(vehicle.ListingID);
         localStorage.setItem("currentUser", JSON.stringify(currentUser));
         localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
-        await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) });
+        await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) })
+        .then(window.location.assign("dashboard.html"));
     }
-    else { await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) }); }
+    else { console.log("Vehicle was not deleted"); } // await fetch('/api/vehicle-delete', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) }); }
 }
 
 function emptyVehicleListingInputError(fail) {
@@ -368,13 +367,15 @@ function emptyVehicleListingInputError(fail) {
 }
 
 async function validateID(length) {
-    let potentialID = generateID(length);
-    await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: potentialID })
-    .then((response) => response.json())
-    .then((data) => {
-        if (data == null) { return potentialID; }
-        else { return validateID(length); }
-    });
+    let potentialID = await generateID(length);
+    return potentialID;
+    // await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": potentialID }) })
+    // .then((response) => response.json())
+    // .then((data) => {
+    //     console.log(JSON.stringify(data));
+    //     if (data.header == null) { return potentialID; }
+    //     else { console.log(JSON.stringify(data)); return validateID(length); }
+    // });
 
     function generateID(length) {
         var result = '';
@@ -400,9 +401,11 @@ async function displayInGarage() {
     else {
         for (let i = 0; i < currentUser.Listings.length; i++) {
             let vehicleID = currentUser.Listings[i];
+            console.log(`vehicleID: ${JSON.stringify(vehicleID)}`);
             await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
             .then((response) => response.json())
             .then((vehicle) => {
+                console.log(vehicle);
                 let anchor = document.createElement("a");
                 anchor.href = `listing.html?id=${vehicle.ListingID}`;
                 anchor.style = "color: white; text-decoration: none;"
@@ -414,7 +417,7 @@ async function displayInGarage() {
                 let vin = document.createElement("p");
                 
                 kify = (x) => `${Math.floor(x/1000)}k`;
-                title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp;</span> <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
+                title.innerHTML = `${vehicle.ModelYear} ${vehicle.Make} ${vehicle.Model} &middot; ${vehicle.Favorites} &starf; &middot; ${vehicle.Views} <span class="fa">&#xf06e; &nbsp;</span>`;// Allows editing <a href="#" id="${vehicle.ListingID}" onclick="displayEditScreen(this)">Edit</a>`;
                 snippets.innerHTML = `<span>${kify(vehicle.Mileage)} mi</span> &middot; <span>${vehicle.TransmissionStyle}</span> &middot; <span>${vehicle.FuelTypePrimary}</span> &middot; <span>${vehicle.DriveType.slice(0,3)}</span></span>`;
                 vin.innerHTML = `${vehicle.VIN}`;
 
@@ -557,12 +560,13 @@ async function displayEditScreen(editOriginator) {
             else { vehicle.Description = sanitize(document.querySelector("#edit-description").value); }
             
             if (cantEdit === false) {
-                await fetch('/api/vehicle', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ "vehicleID": vehicleID }) })
-                .then((response) => response.json())
-                .then((vehicle) => {
-                    const listing = document.querySelector("#listing");
-                    window.location.assign("dashboard.html");
-                });
+                await fetch('/api/vehicle-update', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) })
+                .then(window.location.assign("dashboard.html"));
+                // .then((response) => response.json())
+                // .then((vehicle) => {
+                //     const listing = document.querySelector("#listing");
+                //     window.location.assign("dashboard.html");
+                // });
             }
             cantEdit = false;
         });
@@ -587,7 +591,6 @@ async function displayEditScreen(editOriginator) {
                 localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
             }
             saveVehicleData(vehicle, 0);
-            window.location.assign("dashboard.html");
         });
     }
 }
