@@ -73,3 +73,23 @@ For this deliverable I added backend endpoints that receives votes and returns t
 - Calls to third party endpoints - Vehicle data is populated with a fetch call to an API from the US Department of Transportation
 - Backend service endpoints - The list of all vehicle objects is stored on the backend, with endpoints for the frontend to grab vehicle data as needed
 - Frontend calls service endpoints - I did this using the fetch function. GET and POST requests to create, delete, and display listings
+
+## DB/Login deliverable
+
+For this deliverable I associate the votes with the logged in user. I stored the votes in the database.
+
+- MongoDB Atlas database created - done!
+- Stores data in MongoDB - done!
+- User registration - Creates a new account in the database.
+- Existing user authentication - You can sign in with an existing account.
+- Use MongoDB to store credentials - Stores both user credentials and posted vehicles.
+- Restricts functionality - You cannot view listings in the Browse page until you have logged in. This is restricted on the backend. Unauthorized users are shown the page as if there are no listings.
+
+## WebSocket deliverable
+
+For this deliverable I used webSocket to create a sense of community among veicle browsers by displayig user agents on the frontend in realtime.
+
+- Backend listens for WebSocket connection - done!
+- Frontend makes WebSocket connection - done!
+- Data sent over WebSocket connection - done!
+- WebSocket data displayed - User agents are displayed of fellow vehicle browsers who started browsing after you started browsing.

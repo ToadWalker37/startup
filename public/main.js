@@ -323,12 +323,11 @@ async function publishListing() {
         else { vehicle.Description = sanitize(document.querySelector("#description").value); }
         
         if (cantPublish === false) {
-            let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            vehicle.Owner = currentUser.Username;
+            //vehicle.Owner = currentUser.Username;
             vehicle.Date = new Date();
             vehicle.Favorites = 0;
             vehicle.Views = 0;
-            vehicle.ZipCode = currentUser.ZipCode;
+            //vehicle.ZipCode = currentUser.ZipCode;
             vehicle.Location = vehicle.ZipCode;
             vehicle.ListingID = await validateID(6);
 
@@ -341,10 +340,10 @@ async function publishListing() {
 
 async function saveVehicleData(vehicle, action) {
     if (action === 1) {
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        currentUser.Listings.push(vehicle.ListingID);
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
+        // let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        // currentUser.Listings.push(vehicle.ListingID);
+        // localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        // localStorage.setItem(`${currentUser.Username}`, JSON.stringify(currentUser));
         await fetch('/api/vehicle-add', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(vehicle) })
         .then(window.location.assign("dashboard.html"));
     }
@@ -384,7 +383,9 @@ async function validateID(length) {
 }
 
 async function displayInGarage() {
-    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let dev = 1;
+    if (dev === 1) {document.querySelector("#mygarage").textContent = "Add a vehicle"; }
+    let currentUser = {"Listings": [1,2]};
     let garage = document.querySelector("#garage");
     if (currentUser.Listings.length === 0) {
         let noVehicles = document.createElement("p");
@@ -628,7 +629,7 @@ async function displayListing() {
         document.querySelector("#engine").textContent = `Engine: ${engine}`;
         document.querySelector("#fuel").textContent = `Fuel type: ${vehicle.FuelTypePrimary}`;
         document.querySelector("#title-status").textContent = `Title status: ${vehicle.Title}`;
-        document.querySelector("#location").textContent = `Location: some miles from zip code ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
+        document.querySelector("#location").textContent = `Location: some miles from a zip code`;// ${JSON.parse(localStorage.getItem("currentUser")).ZipCode}`;
         document.querySelector("#vin").textContent = `VIN: ${vehicle.VIN}`;
         document.querySelector("#description").textContent = `${vehicle.Description}`;
         
