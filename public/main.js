@@ -740,7 +740,10 @@ async function signUp() {
 }
 
 function websocket() {
-    const socket = new WebSocket('ws://localhost:8080');
+    let dev = 0;
+    let socket;
+    if (dev === 1) { socket = new WebSocket('ws://localhost:8080'); }
+    else { socket = new WebSocket('ws://startup.swapcars.trade:8080'); }
     socket.onmessage = async (event) => {
         const text = await event.data.text();
         const chat = JSON.parse(text);
