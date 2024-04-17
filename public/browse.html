@@ -40,7 +40,7 @@
             }
         </style>
     </head>
-    <body onload="displayBrowseOptions()">
+    <body onload="websocket(); displayBrowseOptions()">
         <header class="sticky-top">
             <h1 class="home-banner"><a href="index.html">Dynamic Garage</a></h1>
             <h5 class="home-banner"><a href="index.html">Get your dream car</a></h5>
@@ -56,6 +56,8 @@
         <main>
             <h2 style="text-align: center; padding: 1vh;" id="browse-header">What car do you want?</h2>
             <p style="text-align: center;">Options only listed when such cars are available</p>
+            <p style="text-align: center;">The following other people started browsing since you reloaded the page!</p>
+            <div id="websocket"></div>
             <div id="browse-options">
                 <div class="fieldset">
                     <div style="display:none">

@@ -744,6 +744,36 @@ async function signUp() {
     }
 }
 
+function websocket() {
+    const socket = new WebSocket('ws://localhost:8080');
+    socket.onmessage = async (event) => {
+        const text = await event.data.text();
+        console.log(text);
+        const chat = JSON.parse(text);
+        const ua = document.createElement('p');
+        ua.textContent = `${chat.ua}`;
+        websock.appendChild(ua);
+};
+    const websock = document.querySelector('#websocket');
+    const msg = websock.innerHTML;
+    this.waitForConnection = function (callback, interval) {
+        if (socket.readyState === 1) {
+            callback();
+        } else {
+            var that = this;
+            // optional: implement backoff for interval here
+            setTimeout(function () {
+                that.waitForConnection(callback, interval);
+            }, interval);
+        }
+    };
+    function update() {
+        console.log(msg);
+        socket.send(`{"ua": "${navigator.userAgent}"}`);
+    }
+    this.waitForConnection(update, 500);
+}
+
 async function verifyAuthentication() {
     if (1 === 0) { window.location.assign("must-sign-in.html"); }
 }

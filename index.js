@@ -248,8 +248,6 @@ async function updateVehicle(vehicle) {
 
 const { WebSocketServer } = require('ws');
 
-const wss = new WebSocketServer({ port: 9900 });
-
 function peerProxy(httpServer) {
   // Create a websocket object
   const wss = new WebSocketServer({ noServer: true });
