@@ -6,6 +6,7 @@ const config = require('./dbConfig.json');
 const ObjectID = require('mongodb').ObjectID;
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
+const authCookieName = 'token';
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -40,10 +41,10 @@ app.post('/auth/login', async (req, res) => {
 });
 
 // DeleteAuth token if stored in cookie
-// apiRouter.delete('/auth/logout', (_req, res) => {
-//   res.clearCookie(authCookieName);
-//   res.status(204).end();
-// });
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
 
 // getMe for the currently authenticated user
 app.get('/user/me', async (req, res) => {
@@ -61,7 +62,7 @@ app.get('/user/me', async (req, res) => {
 
 // GetUser returns information about a user
 apiRouter.get('/user/:email', async (req, res) => {
-  const user = await DB.getUser(req.params.email);
+  const user = await getUser(req.params.email);
   if (user) {
     const token = req?.cookies.token;
     res.send({ email: user.email, authenticated: token === user.token });
@@ -74,9 +75,16 @@ apiRouter.get('/user/:email', async (req, res) => {
 var secureApiRouter = express.Router();
 apiRouter.use(secureApiRouter);
 
+function getUserByToken(token) {
+  const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
+  const client = new MongoClient(url);
+  const collection = client.db('authTest').collection('user');
+  return collection.findOne({ token: token });
+}
+
 secureApiRouter.use(async (req, res, next) => {
   authToken = req.cookies[authCookieName];
-  const user = await DB.getUserByToken(authToken);
+  const user = await getUserByToken(authToken);
   if (user) {
     next();
   } else {
