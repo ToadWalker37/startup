@@ -591,7 +591,7 @@ async function displayEditScreen(editOriginator) {
 }
 
 async function displayListing() {
-    let dev = 1;
+    let dev = 0;
     let vehicleID;
     if (dev === 1) { vehicleID = window.location.href.slice(38,44); }
     else { vehicleID = window.location.href.slice(47,53); }

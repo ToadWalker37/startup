@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://getbootstrap.com/docs/5.1/assets/css/docs.css">
         <link rel="stylesheet" href="/style.css">
         <script>
-            let dev = 1;
+            let dev = 0;
             if (dev === 1) {
                 let vehicleID = window.location.href.slice(38,44);
                 vehicle = JSON.parse(localStorage.getItem(`${vehicleID}`));
