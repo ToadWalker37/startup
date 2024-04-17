@@ -687,7 +687,6 @@ async function signIn() {
     else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) { emptyAuthenticationError("Password missing! Please fill that in.", nullSignInData, "sign-in"); }
     else {
         emptyAuthenticationError("Email or password invalid.", nullSignInData, "sign-in");
-        console.log(JSON.stringify({"email":`${document.querySelector("#signInUsername").value}`, "password":`${document.querySelector("#signInPassword").value}`}));
         
         await fetch('/auth/login', { 
                 method: 'POST', 
@@ -700,7 +699,6 @@ async function signIn() {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 window.location.reload();
             });
     }
