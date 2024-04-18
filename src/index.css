@@ -140,6 +140,21 @@ span.option {
   padding-right: 0.5em;
 }
 
+#about {
+  padding: 1vh;
+  text-align: center;
+}
+
+.aboutButton {
+  padding: 5vh;
+  text-align: center;
+}
+
+.writeDev {
+  padding: 2vh;
+  text-align: center;
+}
+
 input, select, option {
   border: 1px solid #ccc;
   border-radius: 4px;
