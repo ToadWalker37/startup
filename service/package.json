@@ -1,0 +1,21 @@
+{
+  "name": "startup",
+  "version": "1.0.0",
+  "description": "Have you ever wanted to replace your car? Not just sell your car for cash and hunt separately for a new vehicle? This website will allow you to save money compared to a trade-in at the dealership, because you can connect with other car owners who want to trade their car for yours.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "mongodb": "^6.5.0",
+    "uuid": "^9.0.1",
+    "websocket": "^1.0.34",
+    "ws": "^8.16.0"
+  }
+}

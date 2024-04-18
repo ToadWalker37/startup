@@ -687,8 +687,7 @@ async function signIn() {
     if ("".localeCompare(document.querySelector("#signInUsername").value) === 0) { emptyAuthenticationError("Username missing! Please fill that in.", nullSignInData, "sign-in"); }
     else if ("".localeCompare(document.querySelector("#signInPassword").value) === 0) { emptyAuthenticationError("Password missing! Please fill that in.", nullSignInData, "sign-in"); }
     else {
-        emptyAuthenticationError("Email or password invalid.", nullSignInData, "sign-in");
-        
+             
         await fetch('/auth/login', { 
                 method: 'POST', 
                 headers: 
@@ -700,7 +699,8 @@ async function signIn() {
             })
             .then((response) => response.json())
             .then((data) => {
-                window.location.reload();
+                if (data.id == null) {emptyAuthenticationError("Username or password invalid.", nullSignInData, "sign-in");}
+                else {window.location.reload();}
             });
     }
 }
