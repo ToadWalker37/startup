@@ -93,3 +93,12 @@ For this deliverable I used webSocket to create a sense of community among veicl
 - Frontend makes WebSocket connection - done!
 - Data sent over WebSocket connection - done!
 - WebSocket data displayed - User agents are displayed of fellow vehicle browsers who started browsing after you started browsing.
+
+## React deliverable
+
+For this deliverable I converted part of the application over to use React.
+
+-  Bundled and transpiled - done!
+-  Components - About and home are all components.
+-  Router - Routing between home and about components.
+-  Hooks - Didn't have time to complete!
