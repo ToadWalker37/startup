@@ -90,7 +90,7 @@ nav {
   background-color:hsl(54, 100%, 50%);
 }
 
-li.nav  {
+li.nav, NavLink  {
   float:left;
   display: flex;
   align-items: center;
